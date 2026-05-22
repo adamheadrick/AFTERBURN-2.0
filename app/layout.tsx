@@ -1,20 +1,22 @@
 import type { Metadata } from "next";
+import { ChunkLoadRecovery } from "@/components/chunk-load-recovery";
 import "./globals.css";
-import { Navigation } from "./components/navigation";
-import { Footer } from "./components/footer";
 
 export const metadata: Metadata = {
-  title: "AFTERBURN 2.0",
-  description: "Exercise lifecycle intelligence platform."
+  title: "AFTERBURN",
+  description: "Exercise lifecycle intelligence for planning, execution, evaluation, and improvement"
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default function RootLayout({
+  children
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
     <html lang="en">
       <body>
-        <Navigation />
-        <main className="container">{children}</main>
-        <Footer />
+        <ChunkLoadRecovery />
+        {children}
       </body>
     </html>
   );
