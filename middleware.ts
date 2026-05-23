@@ -15,9 +15,20 @@ function basicAuthChallenge(request: NextRequest) {
   const expectedUser = process.env.BASIC_AUTH_USER;
   const expectedPassword = process.env.BASIC_AUTH_PASSWORD;
   const isDevelopment = process.env.NODE_ENV === "development";
+  const isPreviewBypassEnabled =
+    process.env.VERCEL_ENV === "preview" &&
+    process.env.BASIC_AUTH_DISABLED_FOR_PREVIEW === "true";
+
+  if (isDevelopment) {
+    return null;
+  }
+
+  if (isPreviewBypassEnabled) {
+    return null;
+  }
 
   if (!expectedUser || !expectedPassword) {
-    return isDevelopment ? null : unauthorized();
+    return unauthorized();
   }
 
   const header = request.headers.get("authorization");
