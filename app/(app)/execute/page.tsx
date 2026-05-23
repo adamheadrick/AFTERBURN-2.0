@@ -12,10 +12,10 @@ export default async function ExecutePage() {
   const latestObservation = feedbackEntries[0];
   const executionSteps = [
     { label: "Live Dashboard", href: "/execute", status: activeRows ? "Active" : "Ready" },
-    { label: "Lane / Event Tracking", href: "/sync-matrix", status: syncMatrixEntries.length ? "Open" : "Needed" },
+    { label: "Lane / Event Tracking", href: "/sync-matrix", status: syncMatrixEntries.length ? "Tracking" : "Needed" },
     { label: "Evaluator Input", href: "/feedback", status: evaluatorAssignments.length ? "Covered" : "Needed" },
     { label: "Issue Capture", href: "/feedback", status: highPriorityFeedback ? "Active" : "Ready" },
-    { label: "Dropoff Intake", href: "/admin/dropoff", status: dropoffSubmissions.length ? "Review" : "Ready" },
+    { label: "Dropoff Intake", href: "/admin/dropoff", status: dropoffSubmissions.length ? "Screening" : "Ready" },
     { label: "Hotwash", href: "/feedback", status: feedbackEntries.length ? "Capturing" : "Ready" },
     { label: "Execution Gate", href: "/execute", status: feedbackEntries.length ? "Evidence" : "Pending" }
   ];
@@ -28,7 +28,7 @@ export default async function ExecutePage() {
       status: activeRows ? "Active" : "Ready",
       evidence: latestInject ? `${latestInject.inject_time} ${latestInject.inject_type}: ${latestInject.description}` : "No active inject selected",
       href: "/white-cell",
-      action: "Open",
+      action: "Generate draft",
       tone: "ready" as const
     },
     {
@@ -38,7 +38,7 @@ export default async function ExecutePage() {
       status: syncGaps ? "Friction" : "Ready",
       evidence: `${syncMatrixEntries.length} sync rows; ${syncGaps} gaps/unassigned rows`,
       href: "/sync-matrix",
-      action: "Track",
+      action: "Close gap",
       tone: syncGaps ? "friction" as const : "ready" as const
     },
     {
@@ -48,7 +48,7 @@ export default async function ExecutePage() {
       status: evaluatorAssignments.length ? "Covered" : "Needs coverage",
       evidence: `${evaluatorAssignments.length} observer/evaluator assignments`,
       href: "/feedback",
-      action: "Capture",
+      action: "Assign owner",
       tone: evaluatorAssignments.length ? "ready" as const : "risk" as const
     },
     {
@@ -58,7 +58,7 @@ export default async function ExecutePage() {
       status: highPriorityFeedback ? "Active issues" : "Monitoring",
       evidence: `${highPriorityFeedback} high/critical feedback entries`,
       href: "/feedback",
-      action: "Open",
+      action: "Convert to finding",
       tone: highPriorityFeedback ? "friction" as const : "ready" as const
     },
     {
@@ -68,7 +68,7 @@ export default async function ExecutePage() {
       status: recentDropoffs.length ? "Receiving" : "Ready",
       evidence: `${dropoffSubmissions.length} dropoff submissions; AI screening lifecycle retained`,
       href: "/admin/dropoff",
-      action: "Review",
+      action: "Route to Library",
       tone: "open" as const
     },
     {
@@ -78,7 +78,7 @@ export default async function ExecutePage() {
       status: feedbackEntries.length ? "Capturing" : "Ready",
       evidence: latestObservation ? latestObservation.friction || latestObservation.what_happened : "Awaiting first observation",
       href: "/feedback",
-      action: "Open",
+      action: "Convert to finding",
       tone: feedbackEntries.length ? "ready" as const : "friction" as const
     },
     {
@@ -88,7 +88,7 @@ export default async function ExecutePage() {
       status: feedbackEntries.length && evaluatorAssignments.length ? "Evidence flowing" : "Needs signal",
       evidence: `${feedbackEntries.length} observations; ${decisionPoints.length} decision points`,
       href: "/execute",
-      action: "Review",
+      action: "Map evidence",
       tone: feedbackEntries.length ? "ready" as const : "friction" as const
     }
   ];
@@ -101,7 +101,7 @@ export default async function ExecutePage() {
       status: `${syncGaps} rows`,
       recommendation: "Assign lead entity, task/purpose, personnel, location, and reporting requirement before the next time block.",
       href: "/sync-matrix",
-      action: "Fix",
+      action: "Close gap",
       tone: syncGaps ? "risk" as const : "ready" as const
     },
     {
@@ -111,7 +111,7 @@ export default async function ExecutePage() {
       status: `${feedbackEntries.length} observations`,
       recommendation: "Ensure every note references lane, objective, agency, evidence, severity, and follow-up.",
       href: "/feedback",
-      action: "Capture",
+      action: "Convert to finding",
       tone: feedbackEntries.length ? "friction" as const : "risk" as const
     },
     {
@@ -121,7 +121,7 @@ export default async function ExecutePage() {
       status: `${decisionPoints.length} tracked`,
       recommendation: "Record authority, information available, actual decision, outcome, and evidence link.",
       href: "/decision-points",
-      action: "Review",
+      action: "Map evidence",
       tone: "friction" as const
     },
     {
@@ -131,7 +131,7 @@ export default async function ExecutePage() {
       status: `${dropoffSubmissions.length} submissions`,
       recommendation: "Screen, sanitize, and route submissions to AAR, POA&M, or Library as appropriate.",
       href: "/admin/dropoff",
-      action: "Screen",
+      action: "Route to Library",
       tone: "open" as const
     }
   ];
@@ -142,9 +142,9 @@ export default async function ExecutePage() {
         eyebrow="Execute"
         title="Run the Exercise and Capture Reality"
         question="What is happening and what evidence are we capturing?"
-        description="Execute supports the control team, evaluator cell, participating agencies, and white cell during live or near-real-time exercise play."
+        description="Use Execute as a live issue board: track lanes, injects, observers, friction, hotwash/dropoff intake, and evidence tied to objective, agency, severity, and follow-up."
         primaryHref="/feedback"
-        primaryAction="Capture observation"
+        primaryAction="Capture evidence"
         steps={executionSteps}
       />
       <GatePanel
@@ -154,16 +154,16 @@ export default async function ExecutePage() {
         risk="Observations lose AAR value if they are not tied to objective, lane, agency, severity, and evidence."
         nextAction="Capture objective-linked observations and close active sync-matrix ownership gaps."
         actionHref="/feedback"
-        actionLabel="Add observation"
+        actionLabel="Convert to finding"
       />
+      <IssueTable title="Execution Issues" description="Friction capture should behave like an operational issue list: owner, status, recommendation, and direct action." issues={issues} />
       <MetricStrip metrics={[
         { label: "Active lanes", value: activeRows || "Ready", note: "sync matrix status" },
         { label: "Injects", value: injects.length, note: "MSEL events" },
         { label: "Observations", value: feedbackEntries.length, note: "captured inputs" },
         { label: "Urgent flags", value: highPriorityFeedback, note: "high/critical entries" }
       ]} />
-      <PhaseSectionTable title="Execution Workstreams" description="Capture the event as it actually unfolds, with enough structure to support defensible AAR findings." sections={sections} />
-      <IssueTable title="Execution Issues" description="Friction capture should behave like an operational issue list: owner, status, recommendation, and direct action." issues={issues} />
+      <PhaseSectionTable title="Execution Workstreams" description="Detailed execution tools remain available here after the live issue board." sections={sections} />
       <LifecycleChain items={[
         { label: "Objectives", value: evaluatorAssignments.length, href: "/evaluators" },
         { label: "Observations", value: feedbackEntries.length, href: "/feedback" },

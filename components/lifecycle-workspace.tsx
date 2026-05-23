@@ -62,20 +62,19 @@ export function PhaseHero({
   steps?: PhaseStep[];
 }) {
   return (
-    <section className="border-b border-line pb-4">
-      <div className="flex flex-wrap items-end justify-between gap-3">
+    <section className="border-b border-line pb-3">
+      <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="max-w-3xl">
-          <p className="text-xs font-semibold text-steel">{eyebrow}</p>
-          <h1 className="mt-1 text-xl font-semibold text-ink">{title}</h1>
-          <p className="mt-1 text-sm font-normal leading-6 text-steel">{description}</p>
+          <p className="text-xs font-semibold text-steel">{eyebrow} · {title}</p>
+          <h1 className="mt-1 text-xl font-semibold tracking-tight text-ink">{question}</h1>
+          <p className="mt-1 max-w-2xl text-sm font-normal leading-6 text-steel">{description}</p>
         </div>
         <ButtonLink href={primaryHref} variant="subtle" className="min-h-8 px-3 py-1.5">{primaryAction}</ButtonLink>
       </div>
-      <p className="mt-3 rounded-md border border-line bg-panel px-3 py-2 text-sm font-normal text-ink">{question}</p>
       {steps.length ? (
-        <details className="mt-3 rounded-md border border-line bg-night">
+        <details className="mt-3 rounded-md border border-line bg-night/80">
           <summary className="cursor-pointer px-3 py-2 text-sm font-normal text-steel transition hover:text-ink">
-            Phase map
+            Phase sequence
           </summary>
           <nav aria-label={`${eyebrow} sequence`} className="grid gap-1.5 border-t border-line p-2 text-xs font-normal text-steel sm:grid-cols-2 xl:grid-cols-3">
             {steps.map((step, index) => (
@@ -112,7 +111,7 @@ export function GatePanel({
   actionLabel: string;
 }) {
   return (
-    <section className="grid gap-3 rounded-md border border-line bg-panel p-3 lg:grid-cols-[11rem_minmax(0,1fr)_minmax(0,1fr)_auto] lg:items-center">
+    <section className="grid gap-3 rounded-md border border-line bg-panel p-3 lg:grid-cols-[10rem_minmax(0,1fr)_minmax(0,1fr)_auto] lg:items-center">
       <div>
         <p className="text-xs font-semibold text-steel">{label}</p>
         <span className={`mt-1 inline-flex rounded-md border px-2 py-0.5 text-xs font-semibold ${toneStyles[statusTone]}`}>{status}</span>
@@ -125,14 +124,14 @@ export function GatePanel({
         <p className="text-xs font-semibold text-steel">Next action</p>
         <p className="mt-1 text-sm font-normal text-ink">{nextAction}</p>
       </div>
-      <ButtonLink href={actionHref} variant="flame" className="w-fit justify-self-start">{actionLabel}</ButtonLink>
+      <ButtonLink href={actionHref} variant="flame" className="w-fit justify-self-start whitespace-nowrap">{actionLabel}</ButtonLink>
     </section>
   );
 }
 
 export function MetricStrip({ metrics }: { metrics: Metric[] }) {
   return (
-    <section className="grid overflow-hidden rounded-md border border-line bg-panel sm:grid-cols-2 lg:grid-cols-4">
+    <section className="grid overflow-hidden rounded-md border border-line bg-night/75 sm:grid-cols-2 lg:grid-cols-4">
       {metrics.map((metric) => (
         <div key={metric.label} className="border-line px-3 py-2.5 sm:border-l sm:first:border-l-0 lg:border-l">
           <p className="text-xs font-semibold text-steel">{metric.label}</p>
@@ -162,7 +161,7 @@ export function PhaseSectionTable({
         <span className="mt-1 block text-sm font-normal text-steel">{description}</span>
       </summary>
       <div className="overflow-hidden border-t border-line">
-        <div className="grid gap-2 border-b border-line bg-night px-2.5 py-1.5 text-[0.72rem] font-semibold text-steel max-lg:hidden lg:grid-cols-[1fr_8rem_9rem_1.05fr_6rem]">
+        <div className="grid gap-2 border-b border-line bg-night px-2.5 py-1.5 text-[0.72rem] font-semibold text-steel max-lg:hidden lg:grid-cols-[1fr_8rem_9rem_1.05fr_9rem]">
           <span>Workstream</span>
           <span>Status</span>
           <span>Owner</span>
@@ -170,7 +169,7 @@ export function PhaseSectionTable({
           <span className="text-right">Action</span>
         </div>
         {sections.map((section, index) => (
-          <div key={section.title} className={`${index > 0 ? "border-t border-line" : ""} grid gap-2 px-2.5 py-2 transition hover:bg-field/70 lg:grid-cols-[1fr_8rem_9rem_1.05fr_6rem] lg:items-center`}>
+          <div key={section.title} className={`${index > 0 ? "border-t border-line" : ""} grid gap-2 px-2.5 py-2 transition hover:bg-field/70 lg:grid-cols-[1fr_8rem_9rem_1.05fr_9rem] lg:items-center`}>
             <div>
               <p className="text-sm font-semibold text-ink">{section.title}</p>
               <p className="mt-0.5 text-xs font-normal leading-5 text-steel">{section.description}</p>
@@ -178,7 +177,7 @@ export function PhaseSectionTable({
             <span className={`w-fit rounded-md border px-2 py-0.5 text-xs font-semibold ${toneStyles[section.tone ?? "open"]}`}>{section.status}</span>
             <p className="text-xs font-normal text-steel">{section.owner}</p>
             <p className="text-xs font-normal leading-5 text-steel">{section.evidence}</p>
-            <ButtonLink href={section.href} variant="ghost" className="justify-self-start lg:justify-self-end">{section.action ?? "Open"}</ButtonLink>
+            <ButtonLink href={section.href} variant="ghost" className="justify-self-start whitespace-nowrap lg:justify-self-end">{section.action ?? "Open"}</ButtonLink>
           </div>
         ))}
       </div>
@@ -202,7 +201,7 @@ export function IssueTable({
         <p className="mt-1 text-sm font-normal text-steel">{description}</p>
       </div>
       <div className="overflow-hidden border-t border-line">
-        <div className="grid gap-2 border-b border-line bg-night px-2.5 py-1.5 text-[0.72rem] font-semibold text-steel max-lg:hidden lg:grid-cols-[6rem_1fr_8rem_7rem_1.2fr_7rem]">
+        <div className="grid gap-2 border-b border-line bg-night px-2.5 py-1.5 text-[0.72rem] font-semibold text-steel max-lg:hidden lg:grid-cols-[6rem_1fr_8rem_7rem_1.2fr_9rem]">
           <span>Severity</span>
           <span>Issue</span>
           <span>Owner</span>
@@ -211,13 +210,13 @@ export function IssueTable({
           <span className="text-right">Action</span>
         </div>
         {issues.map((issue, index) => (
-          <div key={issue.issue} className={`${index > 0 ? "border-t border-line" : ""} grid gap-2 px-2.5 py-2 transition hover:bg-field/70 lg:grid-cols-[6rem_1fr_8rem_7rem_1.2fr_7rem] lg:items-center`}>
+          <div key={issue.issue} className={`${index > 0 ? "border-t border-line" : ""} grid gap-2 px-2.5 py-2 transition hover:bg-field/70 lg:grid-cols-[6rem_1fr_8rem_7rem_1.2fr_9rem] lg:items-center`}>
             <span className={`w-fit rounded-md border px-2 py-0.5 text-xs font-semibold ${toneStyles[issue.tone ?? "open"]}`}>{issue.severity}</span>
             <p className="text-sm font-semibold text-ink">{issue.issue}</p>
             <p className="text-xs font-normal text-steel">{issue.owner}</p>
             <p className="text-xs font-normal text-steel">{issue.status}</p>
             <p className="text-xs font-normal leading-5 text-steel">{issue.recommendation}</p>
-            <ButtonLink href={issue.href} variant={issue.tone === "risk" ? "ember" : "subtle"} className="justify-self-start lg:justify-self-end">{issue.action}</ButtonLink>
+            <ButtonLink href={issue.href} variant={issue.tone === "risk" ? "ember" : "subtle"} className="justify-self-start whitespace-nowrap lg:justify-self-end">{issue.action}</ButtonLink>
           </div>
         ))}
       </div>
@@ -231,7 +230,7 @@ export function LifecycleChain({
   items: Array<{ label: string; value: string | number; href: string }>;
 }) {
   return (
-    <section className="rounded-md border border-line bg-night px-3 py-2.5">
+    <section className="rounded-md border border-line bg-night/80 px-3 py-2.5">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div>
           <h2 className="text-sm font-semibold text-ink">Traceability Chain</h2>

@@ -20,7 +20,7 @@ export default async function PlanPage() {
     { label: "Objectives", href: "/objectives", status: objectives.length ? "Ready" : "Needed" },
     { label: "Scenario / MSEL", href: "/scenario-builder", status: scenario.generated_narrative || injects.length ? "Draft" : "Needed" },
     { label: "Participants", href: "/sync-matrix", status: agencyCount ? "Open" : "Needed" },
-    { label: "Timeline", href: "/sync-matrix", status: syncMatrixEntries.length ? "Draft" : "Needed" },
+    { label: "Rehearsal Timeline", href: "/sync-matrix", status: syncMatrixEntries.length ? "Draft" : "Needed" },
     { label: "Comms / COP", href: "/mission-assignment", status: commsReady ? "Draft" : "Needed" },
     { label: "UAS / Airspace", href: "/sync-matrix", status: uasRows ? "Draft" : "Needed" },
     { label: "Safety / Legal", href: "/red-team", status: scenario.legal_policy_constraints ? "Draft" : "Needed" },
@@ -45,7 +45,7 @@ export default async function PlanPage() {
       status: objectives.length ? "Ready" : "Not ready",
       evidence: `${objectives.length} objectives; ${evaluatorCoverage}/${objectives.length} covered by evaluators`,
       href: "/objectives",
-      action: "Open",
+      action: "Assign owner",
       tone: evaluatorGaps ? "friction" as const : "ready" as const
     },
     {
@@ -55,7 +55,7 @@ export default async function PlanPage() {
       status: scenario.generated_narrative && injects.length ? "Ready" : "Needs build",
       evidence: `${injects.length} injects; scenario narrative ${scenario.generated_narrative ? "available" : "missing"}`,
       href: "/injects",
-      action: "Open",
+      action: "Generate draft",
       tone: scenario.generated_narrative && injects.length ? "ready" as const : "friction" as const
     },
     {
@@ -65,17 +65,17 @@ export default async function PlanPage() {
       status: syncGaps ? "Ready with friction" : "Ready",
       evidence: `${agencyCount} agencies; ${syncGaps} missing lead/task/purpose items`,
       href: "/sync-matrix",
-      action: "Fix",
+      action: "Close gap",
       tone: syncGaps ? "friction" as const : "ready" as const
     },
     {
-      title: "Timeline / Battle Rhythm",
-      description: "Phase-by-phase timeline, sync matrix, decision windows, and reporting rhythm.",
+      title: "Rehearsal Timeline / Execution Script",
+      description: "Phase-by-phase sync matrix showing who is doing what, where, when, with what assets, for what purpose, reporting to whom, and what output is expected.",
       owner: "Planning Cell",
       status: syncMatrixEntries.length ? "Ready with friction" : "Not ready",
       evidence: `${syncMatrixEntries.length} sync rows; ${syncGaps} unresolved rows`,
       href: "/sync-matrix",
-      action: "Open",
+      action: "Close gap",
       tone: syncGaps ? "friction" as const : "ready" as const
     },
     {
@@ -85,7 +85,7 @@ export default async function PlanPage() {
       status: commsReady ? "Ready with friction" : "Incomplete",
       evidence: missionAssignment.communications_requirements || "Communications requirements need definition",
       href: "/mission-assignment",
-      action: "Review",
+      action: "Close gap",
       tone: commsReady ? "friction" as const : "risk" as const
     },
     {
@@ -95,7 +95,7 @@ export default async function PlanPage() {
       status: uasRows ? "Ready with friction" : "Needs coordination",
       evidence: `${uasRows} UAS/airspace sync rows detected`,
       href: "/sync-matrix",
-      action: "Open",
+      action: "Assign owner",
       tone: uasRows ? "friction" as const : "risk" as const
     },
     {
@@ -105,7 +105,7 @@ export default async function PlanPage() {
       status: scenario.legal_policy_constraints ? "Ready with friction" : "Needs review",
       evidence: scenario.legal_policy_constraints || "Legal / policy constraints not captured",
       href: "/red-team",
-      action: "Check",
+      action: "Generate draft",
       tone: "friction" as const
     },
     {
@@ -115,7 +115,7 @@ export default async function PlanPage() {
       status: readinessScore.label,
       evidence: readinessScore.summary,
       href: "/readiness",
-      action: "Open gate",
+      action: "Close gap",
       tone: readinessScore.score >= 85 ? "ready" as const : "friction" as const
     }
   ];
@@ -128,7 +128,7 @@ export default async function PlanPage() {
       status: commsReady ? "Drafted" : "Incomplete",
       recommendation: "Confirm primary/alternate nets, reporting paths, COP/TAK data flow, and update rhythm.",
       href: "/mission-assignment",
-      action: "Review",
+      action: "Close gap",
       tone: "risk" as const
     },
     {
@@ -138,17 +138,17 @@ export default async function PlanPage() {
       status: `${evaluatorGaps} gaps`,
       recommendation: "Assign observer/evaluator coverage to every major objective and lane.",
       href: "/evaluators",
-      action: "Assign",
+      action: "Assign owner",
       tone: evaluatorGaps ? "friction" as const : "ready" as const
     },
     {
       severity: "Medium",
-      issue: "Timeline rows missing lead, task, or purpose",
+      issue: "Rehearsal timeline rows missing lead, task, or purpose",
       owner: "Planning Cell",
       status: `${syncGaps} rows`,
       recommendation: "Close each sync row with lead entity, task, purpose, location, personnel, and reporting requirement.",
       href: "/sync-matrix",
-      action: "Fix",
+      action: "Close gap",
       tone: syncGaps ? "friction" as const : "ready" as const
     },
     {
@@ -158,7 +158,7 @@ export default async function PlanPage() {
       status: uasRows ? "In plan" : "Unassigned",
       recommendation: "Confirm flight windows, launch/recovery, deconfliction, collection limits, and data delivery.",
       href: "/sync-matrix",
-      action: "Open",
+      action: "Assign owner",
       tone: uasRows ? "friction" as const : "risk" as const
     }
   ];
@@ -169,9 +169,9 @@ export default async function PlanPage() {
         eyebrow="Plan"
         title="Build and Validate the Exercise"
         question="Are we ready to execute?"
-        description="Plan turns emergency response exercise concepts into a validated package: objectives, scenario, agencies, lanes, communications, UAS/airspace, safety, legal authorities, and readiness gates."
+        description="Use Plan as a readiness decision tool: confirm purpose, objectives, scenario/MSEL, partners, rehearsal timeline, communications/COP, UAS/airspace, evaluator coverage, and safety/legal constraints."
         primaryHref="/readiness"
-        primaryAction="Open readiness gate"
+        primaryAction="Assess readiness"
         steps={planningSteps}
       />
       <GatePanel
@@ -181,16 +181,16 @@ export default async function PlanPage() {
         risk="Communications, evaluator coverage, timeline ownership, and UAS/airspace integration need final confirmation."
         nextAction="Assign owners to unresolved planning gaps before final rehearsal."
         actionHref="/readiness"
-        actionLabel="Fix planning gaps"
+        actionLabel="Close gap"
       />
+      <IssueTable title="Planning Issues" description="Issue/action view for what must be fixed before execution." issues={issues} />
       <MetricStrip metrics={[
         { label: "Objectives", value: objectives.length, note: "evaluation targets" },
         { label: "Injects", value: injects.length, note: "MSEL events" },
         { label: "Agencies", value: agencyCount, note: "participating organizations" },
         { label: "Planning gaps", value: syncGaps + evaluatorGaps, note: "coverage and sync issues" }
       ]} />
-      <PhaseSectionTable title="Planning Workstreams" description="Each workstream should be ready enough to support exercise execution and later AAR evidence." sections={sections} />
-      <IssueTable title="Planning Issues" description="Issue/action view for what must be fixed before execution." issues={issues} />
+      <PhaseSectionTable title="Planning Workstreams" description="Detailed planning workstreams remain available here without crowding the readiness decision." sections={sections} />
       <LifecycleChain items={[
         { label: "Objectives", value: objectives.length, href: "/objectives" },
         { label: "Observations", value: 0, href: "/feedback" },

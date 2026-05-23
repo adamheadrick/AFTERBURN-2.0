@@ -10,11 +10,11 @@ export default async function LibraryPage() {
   const reusableExercises = exercises.filter((item) => item.status === "complete" || item.status === "exsum").length;
   const repositoryCandidates = dropoffSubmissions.filter((item) => item.status === "Cleared for Review" || item.status === "Approved for Repository" || item.status === "Added to Repository").length;
   const librarySteps = [
-    { label: "Lessons Repository", href: "/lessons", status: lessonsRepositoryItems.length ? "Open" : "Needed" },
+    { label: "Lessons Repository", href: "/lessons", status: lessonsRepositoryItems.length ? "Curating" : "Needed" },
     { label: "Exercise Archive", href: "/exercises", status: exercises.length ? "Available" : "Empty" },
     { label: "Templates", href: "/advanced", status: "Ready" },
     { label: "Gap Knowledge Base", href: "/lessons", status: capabilityGaps.length ? "Tracking" : "Needed" },
-    { label: "Search / Ask", href: "/ask-exercise", status: repositoryCandidates ? "Review" : "Ready" }
+    { label: "Search / Ask", href: "/ask-exercise", status: repositoryCandidates ? "Screening" : "Ready" }
   ];
 
   const sections = [
@@ -25,7 +25,7 @@ export default async function LibraryPage() {
       status: lessonsRepositoryItems.length ? "Active" : "Needs entries",
       evidence: `${lessonsRepositoryItems.length} lesson records; ${approvedLessons} adopted or in progress`,
       href: "/lessons",
-      action: "Open",
+      action: "Route to Library",
       tone: lessonsRepositoryItems.length ? "ready" as const : "friction" as const
     },
     {
@@ -35,7 +35,7 @@ export default async function LibraryPage() {
       status: exercises.length ? "Available" : "Empty",
       evidence: `${exercises.length} exercises; ${reusableExercises} reusable completed packages`,
       href: "/exercises",
-      action: "Open",
+      action: "Route to Library",
       tone: exercises.length ? "ready" as const : "open" as const
     },
     {
@@ -45,7 +45,7 @@ export default async function LibraryPage() {
       status: "Starters ready",
       evidence: "Planning checklist, observer guide, MSEL, sync matrix, communications, UAS, ICS, interagency invite, and POA&M templates",
       href: "/advanced",
-      action: "Browse",
+      action: "Generate draft",
       tone: "ready" as const
     },
     {
@@ -55,7 +55,7 @@ export default async function LibraryPage() {
       status: capabilityGaps.length ? "Tracking" : "Needs gaps",
       evidence: `${capabilityGaps.length} capability gaps; ${analysis.gaps.length} current exercise gaps`,
       href: "/lessons",
-      action: "Open",
+      action: "Close gap",
       tone: capabilityGaps.length ? "friction" as const : "open" as const
     },
     {
@@ -78,7 +78,7 @@ export default async function LibraryPage() {
       status: `${lessonsRepositoryItems.length} records`,
       recommendation: "Approve, sanitize, tag, and mark each lesson as internal, interagency-shareable, or public/unclassified export eligible.",
       href: "/lessons",
-      action: "Review",
+      action: "Route to Library",
       tone: "friction" as const
     },
     {
@@ -88,7 +88,7 @@ export default async function LibraryPage() {
       status: `${openPoamHistory} open`,
       recommendation: "Pull unresolved corrective actions into future readiness gates, objectives, MSEL injects, and re-test plans.",
       href: "/poam",
-      action: "Carry",
+      action: "Convert to POA&M",
       tone: openPoamHistory ? "friction" as const : "ready" as const
     },
     {
@@ -98,7 +98,7 @@ export default async function LibraryPage() {
       status: `${capabilityGaps.length} gaps`,
       recommendation: "Tag gaps by civilian function, capability area, affected agencies, mission area, and recurrence count.",
       href: "/lessons",
-      action: "Tag",
+      action: "Close gap",
       tone: capabilityGaps.length ? "friction" as const : "open" as const
     },
     {
@@ -108,7 +108,7 @@ export default async function LibraryPage() {
       status: `${repositoryCandidates} candidates`,
       recommendation: "Convert cleared submissions into lessons, best practices, capability gaps, POA&M items, future injects, or planning considerations.",
       href: "/admin/dropoff",
-      action: "Route",
+      action: "Route to Library",
       tone: repositoryCandidates ? "open" as const : "ready" as const
     }
   ];
@@ -127,9 +127,9 @@ export default async function LibraryPage() {
         eyebrow="Library"
         title="Preserve and Reuse Institutional Knowledge"
         question="What should we preserve and reuse?"
-        description="Library makes prior exercises, validated lessons, POA&M history, capability gaps, templates, and best practices searchable for future planners."
+        description="Use Library as institutional memory: preserve lessons, EXSUM/AAR outputs, templates, findings, POA&M history, capability gaps, and future exercise inputs."
         primaryHref="/ask-exercise"
-        primaryAction="Ask library"
+        primaryAction="Search knowledge"
         steps={librarySteps}
       />
       <GatePanel
@@ -139,16 +139,16 @@ export default async function LibraryPage() {
         risk="Knowledge gets lost when findings, evidence, POA&M outcomes, and screened submissions are not approved, tagged, and made reusable."
         nextAction="Route validated lessons and unresolved POA&M items into searchable planning material for the next exercise."
         actionHref="/lessons"
-        actionLabel="Open lessons"
+        actionLabel="Route to Library"
       />
+      <IssueTable title="Library Issues" description="Keep the repository clean, screened, searchable, and useful to planners who did not attend the original exercise." issues={issues} />
       <MetricStrip metrics={[
         { label: "Exercises", value: exercises.length, note: "archive records" },
         { label: "Lesson records", value: lessonsRepositoryItems.length, note: "repository items" },
         { label: "Capability gaps", value: capabilityGaps.length, note: "tracked risks" },
         { label: "Open POA&M", value: openPoamHistory, note: "carry-forward actions" }
       ]} />
-      <PhaseSectionTable title="Library Workstreams" description="This is not document storage. It is the reusable knowledge layer for future planning and operational improvement." sections={sections} />
-      <IssueTable title="Library Issues" description="Keep the repository clean, screened, searchable, and useful to planners who did not attend the original exercise." issues={issues} />
+      <PhaseSectionTable title="Library Workstreams" description="Detailed repository tools stay available here without turning the Library into a file dump." sections={sections} />
       <section className="rounded-md border border-line bg-panel p-4">
         <h2 className="text-base font-semibold text-ink">Ask Library Prompts</h2>
         <p className="mt-1 text-sm font-semibold text-steel">Example searches should retrieve lessons, evidence, POA&M history, templates, and recurring gaps rather than static files.</p>

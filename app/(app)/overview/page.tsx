@@ -18,7 +18,7 @@ const issueRows = [
     phase: "Plan",
     owner: "Comms lead",
     status: "Open",
-    action: "Assign",
+    action: "Assign owner",
     href: "/plan"
   },
   {
@@ -27,7 +27,7 @@ const issueRows = [
     phase: "Execute",
     owner: "Evaluator lead",
     status: "Needs coverage",
-    action: "Open",
+    action: "Close gap",
     href: "/execute"
   },
   {
@@ -36,7 +36,7 @@ const issueRows = [
     phase: "Execute",
     owner: "Planning cell",
     status: "In progress",
-    action: "Fix",
+    action: "Close gap",
     href: "/sync-matrix"
   },
   {
@@ -45,7 +45,7 @@ const issueRows = [
     phase: "Plan",
     owner: "UAS/Airspace cell",
     status: "Review",
-    action: "Open",
+    action: "Generate draft",
     href: "/plan"
   },
   {
@@ -54,7 +54,7 @@ const issueRows = [
     phase: "Improve",
     owner: "Improvement lead",
     status: "Ready",
-    action: "Convert",
+    action: "Convert to POA&M",
     href: "/improve"
   }
 ];
@@ -81,9 +81,8 @@ const issueDotClass = {
 
 export default async function OverviewPage() {
   const data = await getAppData();
-  const { exercise, readinessScore, analysis, poamItems } = data;
+  const { exercise, readinessScore } = data;
   const hasActiveExercise = data.exercises.length > 0 && exercise.id !== "instructional-exercise";
-  const openPoam = poamItems.filter((item) => item.status !== "complete").length;
 
   if (!hasActiveExercise) {
     return (
@@ -116,14 +115,14 @@ export default async function OverviewPage() {
         </div>
         <div className="flex flex-wrap gap-2">
           <ButtonLink href="/ask-exercise" variant="ghost">Ask AFTERBURN</ButtonLink>
+          <ButtonLink href="/exsum" variant="ghost">Generate EXSUM draft</ButtonLink>
           <PlacematExportButton />
         </div>
       </header>
 
-      <section className="relative overflow-hidden rounded-lg border border-line bg-panel">
-        <div className="absolute inset-0 opacity-[0.16] [background-image:linear-gradient(rgba(203,213,225,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(203,213,225,0.08)_1px,transparent_1px)] [background-size:32px_32px]" />
-        <div className="relative grid gap-0 lg:grid-cols-[1fr_20rem]">
-          <div className="p-4 sm:p-5">
+      <section className="rounded-lg border border-line bg-panel p-4 sm:p-5">
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2">
               <h2 className="text-xl font-semibold tracking-tight text-ink">{shortExerciseName(exercise.name)}</h2>
               <span className="rounded-md border border-line bg-night px-2 py-0.5 text-xs font-semibold text-steel">Review Phase</span>
@@ -134,53 +133,26 @@ export default async function OverviewPage() {
             <p className="mt-2 text-sm leading-6 text-steel">
               Updated {formatDate(exercise.updated_at)} · Exercise Date {formatDate(exercise.date)} · {exercise.location}
             </p>
+          </div>
+          <ButtonLink href="/exsum" variant="ghost" className="print-hidden">Export EXSUM</ButtonLink>
+        </div>
 
-            <div className="mt-5 max-w-3xl">
-              <p className="text-sm leading-6 text-ink">
-                Core planning products are usable, but rehearsal friction remains. Communications interoperability, observer/evaluator coverage,
-                and entity-specific task ownership need confirmation before final rehearsal.
+        <div className="mt-5 grid gap-4 lg:grid-cols-[1fr_1.1fr]">
+          <div>
+            <p className="text-xs font-semibold text-steel">Biggest risk</p>
+            <p className="mt-1 text-sm leading-6 text-ink">
+              Rehearsal friction remains around communications ownership, observer/evaluator coverage, and entity-specific task/purpose confirmation.
+            </p>
+          </div>
+          <div className="rounded-md border border-line bg-night/75 p-3">
+            <p className="text-xs font-semibold text-steel">Next best action</p>
+            <div className="mt-1 flex flex-wrap items-center justify-between gap-3">
+              <p className="max-w-2xl text-sm leading-6 text-ink">
+                Assign the communications lead, confirm evaluator coverage, and close sync matrix ownership gaps before final rehearsal.
               </p>
-            </div>
-
-            <div className="mt-5 rounded-md border border-line bg-night/80 p-3">
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                <div>
-                  <p className="text-xs text-steel">Next best action</p>
-                  <p className="mt-1 max-w-2xl text-sm leading-6 text-ink">
-                    Assign communications lead, confirm observer coverage, and close timeline ownership gaps before final rehearsal.
-                  </p>
-                </div>
-                <ButtonLink href="/plan" variant="flame">Fix Priority Issues</ButtonLink>
-              </div>
+              <ButtonLink href="/plan" variant="flame">Close gap</ButtonLink>
             </div>
           </div>
-
-          <aside className="border-t border-line bg-night/70 p-4 lg:border-l lg:border-t-0">
-            <p className="text-xs text-steel">Readiness pulse</p>
-            <div className="mt-3 flex items-end justify-between gap-3">
-              <p className="text-4xl font-semibold tracking-tight text-ink">{readinessScore.score}%</p>
-              <p className="pb-1 text-right text-xs font-semibold text-flare">{readinessScore.label}</p>
-            </div>
-            <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-field">
-              <div className="h-full rounded-full bg-flare" style={{ width: `${readinessScore.score}%` }} />
-            </div>
-            <div className="mt-5 grid grid-cols-3 gap-2 text-center">
-              {[
-                ["Sustains", analysis.sustains.length],
-                ["Improves", analysis.improves.length],
-                ["POA&M", openPoam]
-              ].map(([label, value]) => (
-                <div key={label} className="rounded-md border border-line bg-panel px-2 py-2">
-                  <p className="text-base font-semibold text-ink">{value}</p>
-                  <p className="mt-1 text-[0.7rem] text-steel">{label}</p>
-                </div>
-              ))}
-            </div>
-            <div className="print-hidden mt-4 grid gap-2">
-              <ButtonLink href="/review" variant="subtle">Open Review</ButtonLink>
-              <ButtonLink href="/exsum" variant="ghost">Generate Summary</ButtonLink>
-            </div>
-          </aside>
         </div>
       </section>
 
@@ -193,7 +165,7 @@ export default async function OverviewPage() {
           <Link href="/advanced" className="print-hidden text-xs font-semibold text-steel transition hover:text-ink">Open Full Workspace</Link>
         </div>
 
-        <div className="hidden grid-cols-[5rem_1fr_5.5rem_9rem_7rem_5rem] border-b border-line bg-night/70 px-3 py-2 text-xs text-steel md:grid">
+        <div className="hidden grid-cols-[5rem_1fr_5.5rem_9rem_7rem_8.5rem] border-b border-line bg-night/70 px-3 py-2 text-xs text-steel md:grid">
           <span>Severity</span>
           <span>Issue</span>
           <span>Phase</span>
@@ -202,7 +174,7 @@ export default async function OverviewPage() {
           <span className="text-right">Action</span>
         </div>
         {issueRows.map((issue) => (
-          <div key={issue.issue} className="grid gap-2 border-b border-line px-3 py-2.5 transition last:border-b-0 hover:bg-field/55 md:grid-cols-[5rem_1fr_5.5rem_9rem_7rem_5rem] md:items-center">
+          <div key={issue.issue} className="grid gap-2 border-b border-line px-3 py-2.5 transition last:border-b-0 hover:bg-field/55 md:grid-cols-[5rem_1fr_5.5rem_9rem_7rem_8.5rem] md:items-center">
             <span className={`inline-flex w-fit items-center gap-1.5 rounded-md border px-2 py-0.5 text-xs font-semibold ${severityClass[issue.severity as keyof typeof severityClass]}`}>
               <span className={`h-1.5 w-1.5 rounded-full ${issueDotClass[issue.severity as keyof typeof issueDotClass]}`} />
               {issue.severity}

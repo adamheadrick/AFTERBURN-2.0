@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { signOut } from "@/lib/actions/auth";
 import { BrandMark, BrandWordmark } from "@/components/brand-mark";
 import { BreadcrumbTrail } from "@/components/breadcrumb-trail";
@@ -25,11 +26,70 @@ import { NavLink } from "@/components/nav-link";
 
 const nav = [
   { href: "/overview", label: "Command Center", icon: Gauge, activePaths: ["/overview", "/dashboard", "/readiness"] },
-  { href: "/plan", label: "Plan", icon: Route, activePaths: ["/advanced", "/plan", "/exercises/new", "/scenario-builder", "/graphic-overview", "/mission-assignment", "/objectives", "/red-team", "/briefing"] },
-  { href: "/execute", label: "Execute", icon: RadioTower, activePaths: ["/execute", "/injects", "/sync-matrix", "/evaluators", "/decision-points", "/white-cell", "/participant-portal", "/feedback"] },
-  { href: "/review", label: "Review", icon: FileText, activePaths: ["/review", "/analysis", "/exsum", "/evidence", "/exercise-package", "/ask-exercise"] },
-  { href: "/improve", label: "Improve", icon: ClipboardCheck, activePaths: ["/improve", "/poam", "/lessons", "/insights"] },
-  { href: "/library", label: "Library", icon: Archive, activePaths: ["/library", "/exercises"], excludePaths: ["/exercises/new"] }
+  {
+    href: "/plan",
+    label: "Plan",
+    icon: Route,
+    activePaths: ["/advanced", "/plan", "/exercises/new", "/scenario-builder", "/graphic-overview", "/mission-assignment", "/objectives", "/red-team", "/briefing"],
+    children: [
+      { href: "/exercises/new", label: "Exercise Setup" },
+      { href: "/scenario-builder", label: "Scenario / MSEL" },
+      { href: "/mission-assignment", label: "Mission Assignment" },
+      { href: "/objectives", label: "Objectives" },
+      { href: "/graphic-overview", label: "Graphic Overview" },
+      { href: "/red-team", label: "AI Red Team" }
+    ]
+  },
+  {
+    href: "/execute",
+    label: "Execute",
+    icon: RadioTower,
+    activePaths: ["/execute", "/injects", "/sync-matrix", "/evaluators", "/decision-points", "/white-cell", "/participant-portal", "/feedback"],
+    children: [
+      { href: "/injects", label: "MSEL / Injects" },
+      { href: "/sync-matrix", label: "Sync Matrix" },
+      { href: "/evaluators", label: "Evaluator Coverage" },
+      { href: "/decision-points", label: "Decisions" },
+      { href: "/white-cell", label: "White Cell" },
+      { href: "/feedback", label: "Feedback" }
+    ]
+  },
+  {
+    href: "/review",
+    label: "Review",
+    icon: FileText,
+    activePaths: ["/review", "/analysis", "/exsum", "/evidence", "/exercise-package", "/ask-exercise"],
+    children: [
+      { href: "/analysis", label: "Analysis" },
+      { href: "/evidence", label: "Evidence Map" },
+      { href: "/exsum", label: "EXSUM / AAR" },
+      { href: "/exercise-package", label: "Package" },
+      { href: "/ask-exercise", label: "Ask Exercise" }
+    ]
+  },
+  {
+    href: "/improve",
+    label: "Improve",
+    icon: ClipboardCheck,
+    activePaths: ["/improve", "/poam", "/lessons", "/insights"],
+    children: [
+      { href: "/poam", label: "POA&M Tracker" },
+      { href: "/lessons", label: "Lessons Learned" },
+      { href: "/insights", label: "Trends" }
+    ]
+  },
+  {
+    href: "/library",
+    label: "Library",
+    icon: Archive,
+    activePaths: ["/library", "/exercises"],
+    excludePaths: ["/exercises/new"],
+    children: [
+      { href: "/library", label: "Repository" },
+      { href: "/exercises", label: "Exercise Archive" },
+      { href: "/advanced", label: "Full Workspace" }
+    ]
+  }
 ];
 
 const sidebarStorageKey = "afterburn.sidebarCollapsed";
@@ -41,6 +101,7 @@ export function AppShellClient({
   authEnabled: boolean;
   children: React.ReactNode;
 }) {
+  const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const labelsVisible = !collapsed;
@@ -55,11 +116,20 @@ export function AppShellClient({
     localStorage.setItem(sidebarStorageKey, String(nextValue));
   }
 
+  function isActiveHref(href: string) {
+    return pathname === href || pathname.startsWith(`${href}/`);
+  }
+
+  function isActiveItem(item: (typeof nav)[number]) {
+    const excluded = item.excludePaths?.some((path) => pathname === path || pathname.startsWith(`${path}/`));
+    return !excluded && item.activePaths.some((path) => pathname === path || pathname.startsWith(`${path}/`));
+  }
+
   return (
     <div className="min-h-screen bg-night text-ink">
       <div className={`grid min-h-screen transition-[grid-template-columns] ${collapsed ? "md:grid-cols-[72px_1fr]" : "md:grid-cols-[236px_1fr] xl:grid-cols-[248px_1fr]"}`}>
         <aside
-          className={`${mobileMenuOpen ? "fixed inset-x-0 top-[2.75rem] z-30 max-h-[calc(100vh-2.75rem)] overflow-y-auto border-b border-line" : "hidden"} border-line bg-night transition-[width] md:sticky md:top-0 md:z-20 md:block md:h-screen md:overflow-visible md:border-b-0 md:border-r ${collapsed ? "md:w-[72px]" : ""}`}
+          className={`${mobileMenuOpen ? "fixed inset-x-0 top-[2.75rem] z-30 max-h-[calc(100vh-2.75rem)] overflow-y-auto border-b border-line" : "hidden"} border-line bg-night transition-[width] md:sticky md:top-0 md:z-20 md:block md:h-screen md:border-b-0 md:border-r ${collapsed ? "md:w-[72px] md:overflow-visible" : "md:overflow-y-auto"}`}
         >
           <div className="flex h-full flex-col">
             <div className={`grid justify-items-center gap-2 border-b border-line ${railCollapsed ? "p-3" : "p-4"}`}>
@@ -79,11 +149,37 @@ export function AppShellClient({
               </button>
             </div>
             <nav className={`${mobileMenuOpen ? "grid" : "hidden"} gap-1.5 md:grid ${railCollapsed ? "p-2" : "p-3"}`}>
-              {nav.map((item) => (
-                <NavLink key={item.href} href={item.href} label={item.label} collapsed={railCollapsed} activePaths={item.activePaths} excludePaths={item.excludePaths}>
-                  <item.icon size={18} />
-                </NavLink>
-              ))}
+              {nav.map((item) => {
+                const Icon = item.icon;
+                const activeItem = isActiveItem(item);
+                return (
+                  <div key={item.href}>
+                    <NavLink href={item.href} label={item.label} collapsed={railCollapsed} activePaths={item.activePaths} excludePaths={item.excludePaths}>
+                      <Icon size={18} />
+                    </NavLink>
+                    {!railCollapsed && activeItem && item.children?.length ? (
+                      <div className="ml-[1.1rem] mt-1 grid gap-0.5 border-l border-line/80 pl-3">
+                        {item.children.map((child) => {
+                          const active = isActiveHref(child.href);
+                          return (
+                            <Link
+                              key={child.href}
+                              href={child.href}
+                              className={`rounded-md px-2 py-1.5 text-[0.78rem] font-medium transition ${
+                                active
+                                  ? "bg-field text-ink"
+                                  : "text-steel hover:bg-field hover:text-ink"
+                              }`}
+                            >
+                              {child.label}
+                            </Link>
+                          );
+                        })}
+                      </div>
+                    ) : null}
+                  </div>
+                );
+              })}
             </nav>
             <div className={`${mobileMenuOpen ? "grid" : "hidden"} mt-auto gap-2 border-t border-line md:grid ${railCollapsed ? "p-2" : "p-3"}`}>
               <Link
