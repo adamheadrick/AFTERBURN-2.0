@@ -40,6 +40,7 @@ OPENAI_MODEL="gpt-4.1-mini"
 NEXT_PUBLIC_SITE_URL="http://localhost:3000"
 BASIC_AUTH_USER="your-demo-username"
 BASIC_AUTH_PASSWORD="your-demo-password"
+BASIC_AUTH_DISABLED_FOR_PREVIEW="false"
 ```
 
 When Supabase or OpenAI keys are absent, the app runs in local demo mode with mock data and deterministic AI outputs.
@@ -52,6 +53,8 @@ The deployed MVP is protected by app-level Basic Auth before the site loads. Set
 - `BASIC_AUTH_PASSWORD`
 
 Do not use public or shared credentials. If either variable is missing in production, the middleware fails closed with a browser username/password challenge. Local development is allowed without these variables so the app remains easy to run on your machine.
+
+For temporary preview inspection without a browser password popup, set `BASIC_AUTH_DISABLED_FOR_PREVIEW=true` for the Vercel Preview environment only. Do not set this variable in Production. Production remains protected because the bypass only works when `VERCEL_ENV` is `preview`.
 
 This is lightweight demo protection for near-term sharing. A production subscription product should still use full account-based auth and roles through Supabase Auth, Auth.js, Clerk, enterprise SSO, or a similar identity system.
 
