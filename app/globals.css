@@ -221,12 +221,12 @@ select.text-ink {
 
 .brand-gradient-line {
   display: inline-block;
-  width: clamp(1.75rem, 4vw, 3.25rem);
-  height: 0.12em;
+  width: clamp(0.28rem, 0.7vw, 0.45rem);
+  height: 1em;
   border-radius: 999px;
-  background: linear-gradient(90deg, #c2412d 0%, #f08a4f 52%, #ffd166 100%);
-  opacity: 0.9;
-  transform: translateY(0.02em);
+  background: linear-gradient(180deg, #c2412d 0%, #f08a4f 52%, #ffd166 100%);
+  opacity: 0.95;
+  transform: translateY(0);
 }
 
 .brand-a-mark {
