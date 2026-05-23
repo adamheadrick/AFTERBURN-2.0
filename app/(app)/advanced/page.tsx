@@ -82,7 +82,7 @@ export default function AdvancedWorkspacePage() {
           <div>
             <h2 className="text-base font-semibold text-ink">2.0 stays briefable; 1.0 stays complete.</h2>
             <p className="mt-1 text-sm font-semibold leading-6 text-steel">
-              Use Command Center for the placemat view and executive export. Use Advanced Workspace when a planner needs to adjust the scenario, sync matrix, MSEL, evaluator plan, analysis, EXSUM, POA&M, library, or administration details.
+              Use Command Center for the exercise status board and one-page brief export. Use Advanced Workspace when a planner needs to adjust the scenario, sync matrix, MSEL, evaluator plan, analysis, EXSUM, POA&M, library, or administration details.
             </p>
           </div>
         </div>

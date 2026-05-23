@@ -21,11 +21,11 @@ export default async function LibraryPage() {
     {
       title: "Lessons Learned Repository",
       description: "Preserve lessons with source exercise, category, evidence, mission area, agencies involved, applicability, reuse guidance, confidence, and approval status.",
-      owner: "Library Manager",
+      owner: "Preserve Manager",
       status: lessonsRepositoryItems.length ? "Active" : "Needs entries",
       evidence: `${lessonsRepositoryItems.length} lesson records; ${approvedLessons} adopted or in progress`,
       href: "/lessons",
-      action: "Route to Library",
+      action: "Route to Preserve",
       tone: lessonsRepositoryItems.length ? "ready" as const : "friction" as const
     },
     {
@@ -35,7 +35,7 @@ export default async function LibraryPage() {
       status: exercises.length ? "Available" : "Empty",
       evidence: `${exercises.length} exercises; ${reusableExercises} reusable completed packages`,
       href: "/exercises",
-      action: "Route to Library",
+      action: "Route to Preserve",
       tone: exercises.length ? "ready" as const : "open" as const
     },
     {
@@ -59,7 +59,7 @@ export default async function LibraryPage() {
       tone: capabilityGaps.length ? "friction" as const : "open" as const
     },
     {
-      title: "Search / Ask Library",
+      title: "Search / Ask Preserve",
       description: "Ask across exercises, lessons, POA&M history, templates, findings, evidence, and recurring friction patterns.",
       owner: "All Planners",
       status: repositoryCandidates ? "Review inputs" : "Ready",
@@ -74,11 +74,11 @@ export default async function LibraryPage() {
     {
       severity: "High",
       issue: "Validated lessons need approval and export eligibility",
-      owner: "Library Manager",
+      owner: "Preserve Manager",
       status: `${lessonsRepositoryItems.length} records`,
       recommendation: "Approve, sanitize, tag, and mark each lesson as internal, interagency-shareable, or public/unclassified export eligible.",
       href: "/lessons",
-      action: "Route to Library",
+      action: "Route to Preserve",
       tone: "friction" as const
     },
     {
@@ -108,7 +108,7 @@ export default async function LibraryPage() {
       status: `${repositoryCandidates} candidates`,
       recommendation: "Convert cleared submissions into lessons, best practices, capability gaps, POA&M items, future injects, or planning considerations.",
       href: "/admin/dropoff",
-      action: "Route to Library",
+      action: "Route to Preserve",
       tone: repositoryCandidates ? "open" as const : "ready" as const
     }
   ];
@@ -124,33 +124,33 @@ export default async function LibraryPage() {
   return (
     <div className="grid gap-4">
       <PhaseHero
-        eyebrow="Library"
+        eyebrow="Preserve"
         title="Preserve and Reuse Institutional Knowledge"
         question="What should we preserve and reuse?"
-        description="Use Library as institutional memory: preserve lessons, EXSUM/AAR outputs, templates, findings, POA&M history, capability gaps, and future exercise inputs."
+        description="Use Preserve as institutional memory: store lessons, EXSUM/AAR outputs, templates, findings, POA&M history, capability gaps, and future exercise inputs."
         primaryHref="/ask-exercise"
         primaryAction="Search knowledge"
         steps={librarySteps}
       />
       <GatePanel
-        label="Library Gate"
+        label="Preserve Gate"
         status={`${lessonsRepositoryItems.length} repository items`}
         statusTone={lessonsRepositoryItems.length ? "ready" : "friction"}
         risk="Knowledge gets lost when findings, evidence, POA&M outcomes, and screened submissions are not approved, tagged, and made reusable."
         nextAction="Route validated lessons and unresolved POA&M items into searchable planning material for the next exercise."
         actionHref="/lessons"
-        actionLabel="Route to Library"
+        actionLabel="Route to Preserve"
       />
-      <IssueTable title="Library Issues" description="Keep the repository clean, screened, searchable, and useful to planners who did not attend the original exercise." issues={issues} />
+      <IssueTable title="Preserve Issues" description="Keep the repository clean, screened, searchable, and useful to planners who did not attend the original exercise." issues={issues} />
       <MetricStrip metrics={[
         { label: "Exercises", value: exercises.length, note: "archive records" },
         { label: "Lesson records", value: lessonsRepositoryItems.length, note: "repository items" },
         { label: "Capability gaps", value: capabilityGaps.length, note: "tracked risks" },
         { label: "Open POA&M", value: openPoamHistory, note: "carry-forward actions" }
       ]} />
-      <PhaseSectionTable title="Library Workstreams" description="Detailed repository tools stay available here without turning the Library into a file dump." sections={sections} />
+      <PhaseSectionTable title="Preserve Workstreams" description="Detailed repository tools stay available here without turning Preserve into a file dump." sections={sections} />
       <section className="rounded-md border border-line bg-panel p-4">
-        <h2 className="text-base font-semibold text-ink">Ask Library Prompts</h2>
+        <h2 className="text-base font-semibold text-ink">Ask Preserve Prompts</h2>
         <p className="mt-1 text-sm font-semibold text-steel">Example searches should retrieve lessons, evidence, POA&M history, templates, and recurring gaps rather than static files.</p>
         <div className="mt-3 grid gap-2 md:grid-cols-2">
           {prompts.map((prompt) => (

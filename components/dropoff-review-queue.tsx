@@ -181,7 +181,7 @@ export function DropoffReviewQueue({
           <div>
             <p className="text-xs font-black uppercase tracking-[0.14em] text-flare">Dropoff lifecycle</p>
             <p className="mt-2 text-sm font-semibold leading-6 text-ink">
-              Dropoff → Screening → Review → Sanitization → Repository / Library → AAR, EXSUM, improvement plan, or future exercise input.
+              Dropoff → Screening → Review → Sanitization → Preserve repository → AAR, EXSUM, improvement plan, or future exercise input.
             </p>
           </div>
           <div className="rounded-md border border-line bg-night px-3 py-2 text-sm font-black text-ink">

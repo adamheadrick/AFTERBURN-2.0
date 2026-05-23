@@ -215,8 +215,18 @@ select.text-ink {
 .brand-type {
   font-family: var(--font-brand);
   font-weight: 800;
-  letter-spacing: 0.095em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
+}
+
+.brand-gradient-line {
+  display: inline-block;
+  width: clamp(1.75rem, 4vw, 3.25rem);
+  height: 0.12em;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #c2412d 0%, #f08a4f 52%, #ffd166 100%);
+  opacity: 0.9;
+  transform: translateY(0.02em);
 }
 
 .brand-a-mark {
@@ -225,16 +235,6 @@ select.text-ink {
 
 .brand-a-mark svg {
   display: block;
-  overflow: visible;
-}
-
-.brand-a-glyph {
-  display: inline-block;
-  width: 0.8em;
-  height: 1em;
-  margin-right: 0.035em;
-  color: currentColor;
-  transform: translateY(-0.04em);
   overflow: visible;
 }
 
@@ -530,32 +530,32 @@ select option:hover {
     padding: 0 !important;
   }
 
-  .placemat-print {
+  .status-brief-print {
     gap: 0.16in !important;
     color: #111827 !important;
   }
 
-  .placemat-print *,
-  .placemat-print .text-ink,
-  .placemat-print .text-steel,
-  .placemat-print .text-flare {
+  .status-brief-print *,
+  .status-brief-print .text-ink,
+  .status-brief-print .text-steel,
+  .status-brief-print .text-flare {
     color: #111827 !important;
   }
 
-  .placemat-print .bg-panel,
-  .placemat-print .bg-night,
-  .placemat-print .bg-field {
+  .status-brief-print .bg-panel,
+  .status-brief-print .bg-night,
+  .status-brief-print .bg-field {
     background: #ffffff !important;
   }
 
-  .placemat-print .border-line,
-  .placemat-print .border-flare,
-  .placemat-print [class*="border-"] {
+  .status-brief-print .border-line,
+  .status-brief-print .border-flare,
+  .status-brief-print [class*="border-"] {
     border-color: #cbd5e1 !important;
   }
 
-  .placemat-print section,
-  .placemat-print div {
+  .status-brief-print section,
+  .status-brief-print div {
     box-shadow: none !important;
   }
 }

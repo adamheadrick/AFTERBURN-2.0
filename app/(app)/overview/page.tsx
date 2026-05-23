@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ButtonLink } from "@/components/button";
-import { PlacematExportButton } from "@/components/placemat-export-button";
+import { StatusBriefExportButton } from "@/components/status-brief-export-button";
 import { getAppData } from "@/lib/data";
 
 function formatDate(value: string) {
@@ -64,7 +64,7 @@ const lifecycleSteps = [
   { label: "Execute", status: "Complete", href: "/execute" },
   { label: "Review", status: "In progress", href: "/review", active: true },
   { label: "Improve", status: "Started", href: "/improve" },
-  { label: "Library", status: "Capturing", href: "/library" }
+  { label: "Preserve", status: "Capturing", href: "/library" }
 ];
 
 const severityClass = {
@@ -81,8 +81,15 @@ const issueDotClass = {
 
 export default async function OverviewPage() {
   const data = await getAppData();
-  const { exercise, readinessScore } = data;
+  const { exercise, readinessScore, feedbackEntries, analysis, evidenceItems, exsum, poamItems } = data;
   const hasActiveExercise = data.exercises.length > 0 && exercise.id !== "instructional-exercise";
+  const outputReadiness = [
+    { label: "Observations captured", value: feedbackEntries.length, status: feedbackEntries.length ? "Available" : "Needed" },
+    { label: "Findings drafted", value: analysis?.themes?.length ?? 0, status: analysis?.themes?.length ? "In review" : "Draft needed" },
+    { label: "Evidence mapped", value: evidenceItems.length, status: evidenceItems.length ? "Mapped" : "Map evidence" },
+    { label: "EXSUM/AAR status", value: exsum?.content ? "Draft" : "Pending", status: exsum?.content ? "Ready to refine" : "Generate draft" },
+    { label: "POA&M conversion", value: poamItems.length, status: poamItems.length ? "Started" : "Convert findings" }
+  ];
 
   if (!hasActiveExercise) {
     return (
@@ -106,22 +113,22 @@ export default async function OverviewPage() {
   }
 
   return (
-    <div className="placemat-print mx-auto grid max-w-6xl gap-4">
+    <div className="status-brief-print mx-auto grid max-w-6xl gap-4">
       <header className="print-hidden flex flex-wrap items-end justify-between gap-3 border-b border-line pb-4">
         <div>
-          <p className="text-xs text-steel">Active exercise placemat</p>
+          <p className="text-xs text-steel">Exercise status board</p>
           <h1 className="mt-1 text-xl font-semibold text-ink">Command Center</h1>
           <p className="mt-1 text-sm leading-6 text-steel">Status, risk, next action, and briefable outputs for the active exercise.</p>
         </div>
         <div className="flex flex-wrap gap-2">
           <ButtonLink href="/ask-exercise" variant="ghost">Ask AFTERBURN</ButtonLink>
           <ButtonLink href="/exsum" variant="ghost">Generate EXSUM draft</ButtonLink>
-          <PlacematExportButton />
+          <StatusBriefExportButton />
         </div>
       </header>
 
-      <section className="rounded-lg border border-line bg-panel p-4 sm:p-5">
-        <div className="flex flex-wrap items-start justify-between gap-4">
+      <section className="grid gap-4 lg:grid-cols-[1.05fr_0.95fr]">
+        <div className="rounded-lg border border-line bg-panel p-4 sm:p-5">
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2">
               <h2 className="text-xl font-semibold tracking-tight text-ink">{shortExerciseName(exercise.name)}</h2>
@@ -134,25 +141,41 @@ export default async function OverviewPage() {
               Updated {formatDate(exercise.updated_at)} · Exercise Date {formatDate(exercise.date)} · {exercise.location}
             </p>
           </div>
-          <ButtonLink href="/exsum" variant="ghost" className="print-hidden">Export EXSUM</ButtonLink>
-        </div>
 
-        <div className="mt-5 grid gap-4 lg:grid-cols-[1fr_1.1fr]">
-          <div>
+          <div className="mt-5">
             <p className="text-xs font-semibold text-steel">Biggest risk</p>
             <p className="mt-1 text-sm leading-6 text-ink">
-              Rehearsal friction remains around communications ownership, observer/evaluator coverage, and entity-specific task/purpose confirmation.
+              Communications/COP ownership, observer/evaluator coverage, and entity-specific task/purpose confirmation need validation before final rehearsal.
             </p>
           </div>
-          <div className="rounded-md border border-line bg-night/75 p-3">
-            <p className="text-xs font-semibold text-steel">Next best action</p>
-            <div className="mt-1 flex flex-wrap items-center justify-between gap-3">
-              <p className="max-w-2xl text-sm leading-6 text-ink">
-                Assign the communications lead, confirm evaluator coverage, and close sync matrix ownership gaps before final rehearsal.
-              </p>
-              <ButtonLink href="/plan" variant="flame">Close gap</ButtonLink>
-            </div>
+        </div>
+
+        <div className="rounded-lg border border-line bg-panel p-4 sm:p-5">
+          <p className="text-xs font-semibold text-steel">Next best action</p>
+          <p className="mt-2 text-sm leading-6 text-ink">
+            Assign the communications lead and close observer coverage gaps before generating the EXSUM/AAR draft.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            <ButtonLink href="/plan" variant="flame">Address next action</ButtonLink>
+            <ButtonLink href="/exsum" variant="ghost" className="print-hidden">Generate EXSUM/AAR</ButtonLink>
           </div>
+        </div>
+      </section>
+
+      <section className="rounded-lg border border-line bg-panel px-3 py-3">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-steel">
+          <span className="text-xs text-steel">Lifecycle</span>
+          {lifecycleSteps.map((step, index) => (
+            <span key={`${step.label}-${step.status}`} className="flex items-center gap-3">
+              <Link
+                href={step.href}
+                className={`rounded-md border px-2 py-1 text-xs transition hover:bg-field hover:text-ink ${step.active ? "border-flare/25 bg-flare/10 text-flare" : "border-line bg-night text-steel"}`}
+              >
+                {step.label} <span className={step.active ? "text-flare" : "text-steel"}>{step.status}</span>
+              </Link>
+              {index < lifecycleSteps.length - 1 ? <span className="hidden h-px w-4 bg-line sm:inline-block" /> : null}
+            </span>
+          ))}
         </div>
       </section>
 
@@ -190,19 +213,21 @@ export default async function OverviewPage() {
         ))}
       </section>
 
-      <section className="rounded-lg border border-line bg-panel px-3 py-3">
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-steel">
-          <span className="text-xs text-steel">Lifecycle</span>
-          {lifecycleSteps.map((step, index) => (
-            <span key={step.label} className="flex items-center gap-3">
-              <Link
-                href={step.href}
-                className={`rounded-md border px-2 py-1 text-xs transition hover:bg-field hover:text-ink ${step.active ? "border-flare/25 bg-flare/10 text-flare" : "border-line bg-night text-steel"}`}
-              >
-                {step.label} <span className={step.active ? "text-flare" : "text-steel"}>{step.status}</span>
-              </Link>
-              {index < lifecycleSteps.length - 1 ? <span className="hidden h-px w-5 bg-line sm:inline-block" /> : null}
-            </span>
+      <section className="rounded-lg border border-line bg-panel p-4">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 className="text-sm font-semibold text-ink">EXSUM/AAR readiness</h2>
+            <p className="mt-0.5 text-xs text-steel">Output progress from observation capture through POA&M conversion.</p>
+          </div>
+          <ButtonLink href="/review" variant="ghost" className="print-hidden">Open Review</ButtonLink>
+        </div>
+        <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-5">
+          {outputReadiness.map((item) => (
+            <div key={item.label} className="rounded-md border border-line bg-night px-3 py-3">
+              <p className="text-xs text-steel">{item.label}</p>
+              <p className="mt-1 text-sm font-semibold text-ink">{item.value}</p>
+              <p className="mt-0.5 text-xs text-steel">{item.status}</p>
+            </div>
           ))}
         </div>
       </section>

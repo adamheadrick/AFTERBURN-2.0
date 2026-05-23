@@ -68,7 +68,7 @@ export default async function ExecutePage() {
       status: recentDropoffs.length ? "Receiving" : "Ready",
       evidence: `${dropoffSubmissions.length} dropoff submissions; AI screening lifecycle retained`,
       href: "/admin/dropoff",
-      action: "Route to Library",
+      action: "Route to Preserve",
       tone: "open" as const
     },
     {
@@ -129,9 +129,9 @@ export default async function ExecutePage() {
       issue: "Dropoff items require screening before reuse",
       owner: "Review Team",
       status: `${dropoffSubmissions.length} submissions`,
-      recommendation: "Screen, sanitize, and route submissions to AAR, POA&M, or Library as appropriate.",
+      recommendation: "Screen, sanitize, and route submissions to AAR, POA&M, or Preserve as appropriate.",
       href: "/admin/dropoff",
-      action: "Route to Library",
+      action: "Route to Preserve",
       tone: "open" as const
     }
   ];

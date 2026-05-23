@@ -2,34 +2,34 @@ import Link from "next/link";
 
 const steps = [
   {
-    label: "Frame",
-    formal: "Exercise setup + scenario",
-    href: "/exercises/new",
-    note: "Define the event, hazard, participants, location, assumptions, and operating picture."
+    label: "Plan",
+    formal: "Build and validate",
+    href: "/plan",
+    note: "Define purpose, objectives, scenario, partners, and readiness."
   },
   {
-    label: "Align",
-    formal: "Tasking + objectives",
-    href: "/mission-assignment",
-    note: "Clarify who does what, why it matters, and what the exercise must test."
-  },
-  {
-    label: "Rehearse",
-    formal: "Injects + sync matrix",
-    href: "/sync-matrix",
-    note: "Sequence injects, organization task/purpose, personnel, locations, and reporting."
-  },
-  {
-    label: "Capture",
-    formal: "Evaluators + feedback",
-    href: "/feedback",
-    note: "Collect observations, decisions, friction, evidence, and participant feedback."
+    label: "Execute",
+    formal: "Capture reality",
+    href: "/execute",
+    note: "Run the event, track lanes, capture friction, and preserve evidence."
   },
   {
     label: "Review",
-    formal: "AAR + improvement plan",
-    href: "/exsum",
-    note: "Generate findings, EXSUM/AAR outputs, lessons, owners, and corrective actions."
+    formal: "Generate EXSUM/AAR",
+    href: "/review",
+    note: "Validate findings, cluster themes, and generate after-action outputs."
+  },
+  {
+    label: "Improve",
+    formal: "Track accountability",
+    href: "/improve",
+    note: "Convert recommendations into POA&M owners, due dates, and milestones."
+  },
+  {
+    label: "Preserve",
+    formal: "Reuse knowledge",
+    href: "/library",
+    note: "Store lessons, templates, prior outputs, findings, and capability gaps."
   }
 ];
 

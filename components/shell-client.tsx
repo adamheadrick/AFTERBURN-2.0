@@ -71,21 +71,21 @@ const nav = [
     href: "/improve",
     label: "Improve",
     icon: ClipboardCheck,
-    activePaths: ["/improve", "/poam", "/lessons", "/insights"],
+    activePaths: ["/improve", "/poam", "/insights"],
     children: [
       { href: "/poam", label: "POA&M Tracker" },
-      { href: "/lessons", label: "Lessons Learned" },
       { href: "/insights", label: "Trends" }
     ]
   },
   {
     href: "/library",
-    label: "Library",
+    label: "Preserve",
     icon: Archive,
-    activePaths: ["/library", "/exercises"],
+    activePaths: ["/library", "/exercises", "/lessons"],
     excludePaths: ["/exercises/new"],
     children: [
       { href: "/library", label: "Repository" },
+      { href: "/lessons", label: "Lessons Learned" },
       { href: "/exercises", label: "Exercise Archive" },
       { href: "/advanced", label: "Full Workspace" }
     ]

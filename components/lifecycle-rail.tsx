@@ -6,7 +6,7 @@ import { Archive, BarChart3, FileCheck2, Gauge, RadioTower, Route } from "lucide
 
 const phases = [
   {
-    label: "Command",
+    label: "Command Center",
     meta: "Status + risk",
     href: "/overview",
     paths: ["/overview", "/dashboard", "/readiness"],
@@ -41,10 +41,10 @@ const phases = [
     icon: FileCheck2
   },
   {
-    label: "Library",
-    meta: "Reuse",
+    label: "Preserve",
+    meta: "Reuse knowledge",
     href: "/library",
-    paths: ["/library", "/exercises"],
+    paths: ["/library", "/exercises", "/lessons"],
     excludePaths: ["/exercises/new"],
     icon: Archive
   }

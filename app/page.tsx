@@ -1,11 +1,10 @@
 import {
   ArrowRight,
-  BookOpen,
+  Archive,
   CheckCircle2,
   ClipboardCheck,
   FileCheck2,
   FileText,
-  MapPinned,
   RadioTower,
   Route,
   Search,
@@ -15,31 +14,36 @@ import Link from "next/link";
 import { BrandWordmark } from "@/components/brand-mark";
 import { ButtonLink } from "@/components/button";
 
-const capabilityCards = [
+const workflowSections = [
   {
     title: "Plan",
-    body: "Build objectives, scenarios, injects, participants, communications plans, and readiness gates.",
+    body: "Build and validate the exercise.",
+    action: "Purpose, objectives, scenario, partners, and readiness gate.",
     icon: Route
   },
   {
     title: "Execute",
-    body: "Capture observer input, live friction, lane activity, hotwash comments, and evidence.",
+    body: "Run the event and capture reality.",
+    action: "Lane activity, injects, observations, friction, hotwash, and evidence.",
     icon: RadioTower
   },
   {
     title: "Review",
-    body: "Turn observations into validated findings, themes, AAR content, and executive summaries.",
+    body: "Validate findings and generate EXSUM/AAR outputs.",
+    action: "Observations become findings, themes, summaries, and AAR language.",
     icon: FileCheck2
   },
   {
     title: "Improve",
-    body: "Convert findings into POA&M items, owners, due dates, milestones, and capability gaps.",
+    body: "Assign corrective action and track accountability.",
+    action: "Recommendations become POA&M items, owners, due dates, and milestones.",
     icon: ClipboardCheck
   },
   {
     title: "Preserve",
-    body: "Store lessons, templates, exercise archives, and reusable institutional knowledge.",
-    icon: BookOpen
+    body: "Store lessons and reusable institutional knowledge.",
+    action: "Reusable lessons, templates, prior outputs, findings, and capability gaps.",
+    icon: Archive
   }
 ];
 
@@ -60,19 +64,16 @@ const learningChain = ["Objective", "Observation", "Finding", "Recommendation", 
 
 const outputs = [
   { title: "Commander Summary", note: "Leader-ready status and risk brief" },
-  { title: "Exercise Placemat", note: "One-page operational snapshot" },
-  { title: "AAR Draft", note: "Structured after-action narrative" },
-  { title: "Executive Summary", note: "Concise senior-level synthesis" },
-  { title: "POA&M Tracker", note: "Owners, dates, milestones, evidence" },
+  { title: "EXSUM/AAR Draft", note: "Validated narrative with themes and findings" },
   { title: "Findings Matrix", note: "Validated issues tied to evidence" },
-  { title: "Lessons Learned Library", note: "Reusable institutional knowledge" },
-  { title: "Capability Gap Report", note: "Recurring risk and resourcing signals" }
+  { title: "POA&M Tracker", note: "Owners, dates, milestones, evidence" },
+  { title: "Lessons Library", note: "Reusable institutional knowledge" }
 ];
 
 const heroIssues = [
-  ["High", "Communications plan ownership"],
-  ["Medium", "Observer coverage by lane"],
-  ["Medium", "UAS / airspace coordination"]
+  ["High", "Communications/COP ownership", "Assign comms lead"],
+  ["Medium", "Observer coverage by lane", "Close coverage gap"],
+  ["Medium", "UAS / airspace coordination", "Validate rehearsal check"]
 ];
 
 const topNavLinks = [
@@ -87,13 +88,13 @@ const footerPlatformLinks = [
   { label: "Home", href: "/home" },
   { label: "Command Center", href: "/overview" },
   { label: "Lifecycle", href: "#lifecycle" },
-  { label: "Library", href: "/library" }
+  { label: "Preserve", href: "/library" }
 ];
 
 const footerOutputLinks = [
   { label: "Commander Summary", href: "/exsum" },
-  { label: "Exercise Placemat", href: "/overview" },
-  { label: "AAR Generator", href: "/review" },
+  { label: "Status Brief", href: "/overview" },
+  { label: "EXSUM / AAR Generator", href: "/review" },
   { label: "POA&M Tracker", href: "/poam" }
 ];
 
@@ -110,7 +111,7 @@ const faqs = [
   },
   {
     question: "What does AFTERBURN generate?",
-    answer: "It supports commander summaries, exercise placemats, AAR drafts, executive summaries, findings matrices, POA&M items, and lessons learned records."
+    answer: "It supports commander summaries, one-page status briefs, EXSUM/AAR drafts, findings matrices, POA&M items, and lessons learned records."
   },
   {
     question: "Who is AFTERBURN designed for?",
@@ -118,64 +119,65 @@ const faqs = [
   }
 ];
 
-function OperationalMapPanel() {
+function ProductSurfacePanel() {
   return (
-    <div className="relative overflow-hidden rounded-lg border border-line bg-panel p-4 shadow-panel">
-      <div className="absolute inset-0 opacity-[0.24] [background-image:linear-gradient(rgba(203,213,225,0.075)_1px,transparent_1px),linear-gradient(90deg,rgba(203,213,225,0.075)_1px,transparent_1px)] [background-size:26px_26px]" />
-      <svg className="absolute inset-0 h-full w-full opacity-[0.16]" viewBox="0 0 520 420" aria-hidden="true">
-        <path d="M-20 95 C75 42 148 142 238 82 S405 18 540 82" stroke="#cbd5e1" strokeWidth="1" fill="none" />
-        <path d="M-34 164 C84 111 170 214 270 148 S430 92 548 154" stroke="#cbd5e1" strokeWidth="1" fill="none" />
-        <path d="M-12 238 C112 178 182 288 304 218 S438 162 552 235" stroke="#cbd5e1" strokeWidth="1" fill="none" />
-        <path d="M-20 316 C78 265 196 356 296 298 S432 244 538 308" stroke="#cbd5e1" strokeWidth="1" fill="none" />
-      </svg>
+    <div className="relative overflow-hidden rounded-xl border border-line bg-panel p-4 shadow-panel">
+      <div className="absolute inset-0 opacity-[0.16] [background-image:linear-gradient(rgba(203,213,225,0.07)_1px,transparent_1px),linear-gradient(90deg,rgba(203,213,225,0.07)_1px,transparent_1px)] [background-size:28px_28px]" />
+      <div className="absolute -right-20 -top-20 h-56 w-56 rounded-full bg-flare/10 blur-3xl" />
 
-      <div className="relative grid gap-3">
+      <div className="relative grid gap-4">
         <div className="flex items-start justify-between gap-3 border-b border-line pb-3">
           <div>
-            <p className="text-sm font-semibold text-ink">LIGHTNING STRIKE</p>
-            <p className="mt-1 text-xs text-steel">Review Phase · 82% Ready with Friction</p>
+            <p className="text-xs text-steel">Exercise Status Board</p>
+            <p className="mt-1 text-base font-semibold text-ink">LIGHTNING STRIKE</p>
+            <p className="mt-1 text-xs text-steel">Review Phase · 82% Ready with friction</p>
           </div>
-          <span className="rounded-md border border-flare/25 bg-flare/10 px-2 py-1 text-xs font-semibold text-flare">Placemat</span>
+          <span className="rounded-md border border-flare/25 bg-flare/10 px-2 py-1 text-xs font-semibold text-flare">Active</span>
         </div>
 
-        <div className="relative h-64 overflow-hidden rounded-md border border-line bg-night/80">
-          <svg className="absolute inset-0 h-full w-full" viewBox="0 0 420 230" aria-hidden="true">
-            <path
-              d="M92 50 260 49 302 84 286 115 324 141 292 178 160 170 140 151 105 160 78 128 98 108 82 86Z"
-              fill="rgba(246,199,104,0.045)"
-              stroke="rgba(246,199,104,0.5)"
-              strokeWidth="1.5"
-            />
-            <path d="M110 137 C154 106 208 98 272 76" stroke="rgba(91,214,178,0.72)" strokeWidth="1.5" fill="none" strokeDasharray="4 5" />
-            <path d="M144 78 C190 126 226 148 290 164" stroke="rgba(240,138,79,0.68)" strokeWidth="1.5" fill="none" />
-            <path d="M84 130 C130 150 206 162 292 177" stroke="rgba(203,213,225,0.35)" strokeWidth="1" fill="none" />
-            <circle cx="122" cy="139" r="5" fill="#f6c768" />
-            <circle cx="272" cy="82" r="5" fill="#5bd6b2" />
-            <circle cx="286" cy="164" r="5" fill="#f08a4f" />
-            <circle cx="146" cy="79" r="4" fill="#cbd5e1" />
-          </svg>
-          <div className="absolute left-4 top-4 max-w-[12rem] rounded-md border border-line bg-panel/95 px-3 py-2">
-            <p className="text-xs text-steel">Current status</p>
-            <p className="mt-0.5 text-sm font-semibold text-ink">Ready with friction</p>
+        <div className="grid gap-3 sm:grid-cols-3">
+          {[
+            ["Readiness", "82%", "Ready with friction"],
+            ["Biggest risk", "COP", "Ownership unclear"],
+            ["Next action", "Comms", "Assign lead"]
+          ].map(([label, value, note]) => (
+            <div key={label} className="rounded-md border border-line bg-night/70 p-3">
+              <p className="text-xs text-steel">{label}</p>
+              <p className="mt-1 text-lg font-semibold text-ink">{value}</p>
+              <p className="mt-0.5 text-xs text-steel">{note}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="overflow-hidden rounded-md border border-line bg-night/75">
+          <div className="border-b border-line px-3 py-2 text-xs font-semibold text-ink">Priority issues</div>
+          {heroIssues.map(([severity, issue, action]) => (
+            <div key={issue} className="grid grid-cols-[4.5rem_1fr_auto] gap-2 border-b border-line px-3 py-2 text-xs last:border-b-0">
+              <span className={severity === "High" ? "text-flare" : "text-steel"}>{severity}</span>
+              <span className="text-ink">{issue}</span>
+              <span className="hidden text-steel sm:inline">{action}</span>
+            </div>
+          ))}
+        </div>
+
+        <div className="rounded-md border border-line bg-night/75 p-3">
+          <div className="mb-2 flex items-center justify-between gap-3">
+            <p className="text-xs font-semibold text-ink">EXSUM/AAR progress</p>
+            <p className="text-xs text-steel">Draft pending</p>
           </div>
-          <div className="absolute right-4 top-4 rounded-md border border-line bg-panel/95 px-3 py-2">
-            <p className="text-xs text-steel">Next action</p>
-            <p className="mt-0.5 text-xs font-semibold text-ink">Assign comms lead</p>
-          </div>
-          <div className="absolute bottom-4 left-4 right-4 overflow-hidden rounded-md border border-line bg-panel/95">
-            <div className="border-b border-line px-3 py-2 text-xs font-semibold text-ink">Priority issues</div>
-            {heroIssues.map(([severity, issue]) => (
-              <div key={issue} className="grid grid-cols-[4.5rem_1fr] gap-2 border-b border-line px-3 py-2 text-xs last:border-b-0">
-                <span className={severity === "High" ? "text-flare" : "text-steel"}>{severity}</span>
-                <span className="text-ink">{issue}</span>
+          <div className="grid grid-cols-4 gap-1">
+            {["Observations", "Findings", "Draft", "POA&M"].map((item, index) => (
+              <div key={item} className="min-w-0">
+                <div className={`h-1 rounded-full ${index < 2 ? "bg-flare" : "bg-field"}`} />
+                <p className="mt-1 truncate text-[0.68rem] text-steel">{item}</p>
               </div>
             ))}
           </div>
         </div>
 
         <div className="grid gap-2 text-xs text-steel sm:grid-cols-4">
-          {["Plan complete", "Execute complete", "Review active", "Improve started"].map((item, index) => (
-            <span key={item} className={`rounded-md border px-2 py-1 text-center ${index === 2 ? "border-flare/25 bg-flare/10 text-flare" : "border-line bg-night"}`}>
+          {["Plan ready", "Execute complete", "Review active", "Improve started", "Preserve capturing"].map((item, index) => (
+            <span key={item} className={`rounded-md border px-2 py-1 text-center ${index === 2 ? "border-flare/25 bg-flare/10 text-flare" : "border-line bg-night/80"}`}>
               {item}
             </span>
           ))}
@@ -221,16 +223,15 @@ export default function LandingPage() {
         <div className="absolute inset-0 opacity-[0.16] [background-image:radial-gradient(circle_at_30%_20%,rgba(246,199,104,0.18),transparent_30%),linear-gradient(rgba(203,213,225,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(203,213,225,0.04)_1px,transparent_1px)] [background-size:auto,46px_46px,46px_46px]" />
         <div className="relative mx-auto grid max-w-6xl gap-10 px-5 py-16 sm:py-20 lg:grid-cols-[1fr_0.86fr] lg:items-center">
           <div>
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="rounded-full border border-line bg-panel/70 px-2.5 py-1 text-xs text-steel">Demo mode · no external keys required</span>
-              <span className="text-sm font-semibold text-flare">Exercise lifecycle intelligence</span>
-            </div>
+            <span className="inline-flex rounded-full border border-line bg-panel/70 px-2.5 py-1 text-xs text-steel">
+              Exercise lifecycle intelligence
+            </span>
             <h1 className="mt-4 max-w-3xl text-4xl font-semibold leading-tight text-ink sm:text-5xl">
-              Exercise lifecycle intelligence for modern response operations.
+              Turn exercise chaos into accountable improvement.
             </h1>
             <p className="mt-5 max-w-[39rem] text-base leading-7 text-steel">
-              AFTERBURN helps military, emergency management, law enforcement, and interagency teams plan exercises,
-              capture observations, validate findings, generate summaries, and track improvements from one streamlined platform.
+              AFTERBURN helps military, emergency management, public safety, and interagency teams plan exercises,
+              capture reality, generate EXSUM/AAR products, and track corrective action from one clean workspace.
             </p>
             <div className="mt-7 flex flex-wrap gap-2">
               <ButtonLink href="/overview" variant="flame">
@@ -240,26 +241,33 @@ export default function LandingPage() {
               <ButtonLink href="#lifecycle" variant="ghost">View Lifecycle</ButtonLink>
             </div>
           </div>
-          <OperationalMapPanel />
+          <ProductSurfacePanel />
         </div>
       </section>
 
       <section id="product" className="mx-auto max-w-6xl scroll-mt-24 px-5 py-14">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div className="max-w-2xl">
-            <h2 className="text-2xl font-semibold text-ink">What AFTERBURN does</h2>
+            <h2 className="text-2xl font-semibold text-ink">How AFTERBURN works</h2>
             <p className="mt-3 text-sm leading-6 text-steel">
-              A minimal surface for the full exercise lifecycle, with operational depth available when the team needs it.
+              Minimal surface, full depth underneath. Each phase moves the team from planning intent to validated improvement.
             </p>
           </div>
           <Sparkles size={18} className="text-flare" />
         </div>
-        <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-          {capabilityCards.map((card) => (
-            <article key={card.title} className="rounded-md border border-line bg-panel p-4 transition hover:-translate-y-0.5 hover:border-[#3a4658]">
-              <card.icon size={18} className="text-flare" />
-              <h3 className="mt-3 text-sm font-semibold text-ink">{card.title}</h3>
-              <p className="mt-2 text-[0.82rem] leading-5 text-steel">{card.body}</p>
+        <div className="mt-8 grid gap-2 lg:grid-cols-5">
+          {workflowSections.map((section, index) => (
+            <article key={section.title} className="relative rounded-lg border border-line bg-panel p-4">
+              {index < workflowSections.length - 1 ? <div className="absolute left-[calc(100%-0.25rem)] top-7 hidden h-px w-3 bg-line lg:block" /> : null}
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex h-8 w-8 items-center justify-center rounded-md border border-line bg-night text-flare">
+                  <section.icon size={16} />
+                </div>
+                <span className="text-xs text-steel">{index + 1}</span>
+              </div>
+              <h3 className="mt-3 text-sm font-semibold text-ink">{section.title}</h3>
+              <p className="mt-2 text-sm leading-5 text-ink">{section.body}</p>
+              <p className="mt-2 text-xs leading-5 text-steel">{section.action}</p>
             </article>
           ))}
         </div>
@@ -335,7 +343,7 @@ export default function LandingPage() {
         </div>
         <div className="flex flex-wrap gap-2 lg:justify-end">
           <ButtonLink href="/overview" variant="flame">
-            <MapPinned size={15} />
+            <CheckCircle2 size={15} />
             Open Command Center
           </ButtonLink>
           <ButtonLink href="/exercises/new" variant="subtle">
@@ -344,7 +352,7 @@ export default function LandingPage() {
           </ButtonLink>
           <ButtonLink href="/library" variant="ghost">
             <Search size={15} />
-            View Library
+            Open Preserve
           </ButtonLink>
         </div>
       </section>
@@ -372,10 +380,7 @@ export default function LandingPage() {
         <div className="mx-auto grid max-w-6xl gap-7 px-5 py-8 sm:grid-cols-2 lg:grid-cols-[1.25fr_0.62fr_0.75fr_0.8fr]">
           <div>
             <BrandWordmark className="text-[1.05rem]" />
-            <p className="mt-3 max-w-sm text-sm leading-6 text-steel">
-              Exercise lifecycle intelligence for modern response operations.
-            </p>
-            <p className="mt-2 text-xs text-steel">Plan better. Capture reality. Drive improvement.</p>
+            <p className="mt-3 max-w-sm text-sm leading-6 text-steel">Exercise lifecycle intelligence.</p>
           </div>
 
           <nav aria-label="Platform links">

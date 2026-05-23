@@ -35,9 +35,9 @@ export function BrandMark({ className = "h-10 w-10" }: { className?: string }) {
 
 export function BrandWordmark({ className = "" }: { className?: string }) {
   return (
-    <span className={`brand-type inline-flex items-center leading-none text-ink ${className}`} aria-label="AFTERBURN">
-      <AfterburnAGlyph className="brand-a-glyph" />
-      <span>FTERBURN</span>
+    <span className={`brand-type inline-flex items-center gap-2 leading-none text-ink ${className}`} aria-label="AFTERBURN">
+      <span>AFTERBURN</span>
+      <span className="brand-gradient-line" aria-hidden="true" />
     </span>
   );
 }

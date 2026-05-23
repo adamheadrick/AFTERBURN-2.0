@@ -38,9 +38,22 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY="your-anon-key"
 OPENAI_API_KEY="sk-..."
 OPENAI_MODEL="gpt-4.1-mini"
 NEXT_PUBLIC_SITE_URL="http://localhost:3000"
+BASIC_AUTH_USER="your-demo-username"
+BASIC_AUTH_PASSWORD="your-demo-password"
 ```
 
 When Supabase or OpenAI keys are absent, the app runs in local demo mode with mock data and deterministic AI outputs.
+
+## Basic Auth MVP Protection
+
+The deployed MVP is protected by app-level Basic Auth before the site loads. Set these variables in Vercel under Project Settings → Environment Variables for Preview and Production:
+
+- `BASIC_AUTH_USER`
+- `BASIC_AUTH_PASSWORD`
+
+Do not use public or shared credentials. If either variable is missing in production, the middleware fails closed with a browser username/password challenge. Local development is allowed without these variables so the app remains easy to run on your machine.
+
+This is lightweight demo protection for near-term sharing. A production subscription product should still use full account-based auth and roles through Supabase Auth, Auth.js, Clerk, enterprise SSO, or a similar identity system.
 
 ## Database
 
@@ -83,7 +96,7 @@ The global `Dropoff` button is available in the application header from every wo
 
 Each submission follows this lifecycle:
 
-`Dropoff → Screening → Review → Sanitization → Repository / Library → AAR, EXSUM, POA&M, or future exercise input`
+`Dropoff → Screening → Review → Sanitization → Preserve repository → AAR, EXSUM, POA&M, or future exercise input`
 
 Dropoff screening is AI-assisted when `OPENAI_API_KEY` is configured and falls back to deterministic local screening in demo mode. AI screening is advisory only; items are never auto-published to the repository.
 
