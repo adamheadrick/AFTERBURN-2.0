@@ -197,7 +197,7 @@ export default async function PlanPage() {
         { label: "Findings", value: "pending", href: "/analysis" },
         { label: "Recommendations", value: readinessScore.recommendations.length, href: "/readiness" },
         { label: "POA&M", value: "next phase", href: "/poam" },
-        { label: "Lessons", value: "Preserve-ready", href: "/lessons" }
+        { label: "Lessons", value: "Library-ready", href: "/lessons" }
       ]} />
     </div>
   );
