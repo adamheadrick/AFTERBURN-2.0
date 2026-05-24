@@ -8,8 +8,8 @@ const phases = [
   {
     label: "Command Center",
     meta: "Status + risk",
-    href: "/overview",
-    paths: ["/overview", "/dashboard", "/readiness"],
+    href: "/command-center",
+    paths: ["/command-center", "/overview", "/dashboard", "/readiness"],
     icon: Gauge
   },
   {
