@@ -40,7 +40,7 @@ const workflowSections = [
     icon: ClipboardCheck
   },
   {
-    title: "Preserve",
+    title: "Library",
     body: "Store lessons and reusable institutional knowledge.",
     action: "Reusable lessons, templates, prior outputs, findings, and capability gaps.",
     icon: Archive
@@ -56,7 +56,7 @@ const audienceTags = [
   "Critical Infrastructure",
   "Interagency Exercises",
   "UAS/Airspace Integration",
-  "ICS",
+  "ICS / NIMS",
   "Common Operating Picture Workflows"
 ];
 
@@ -64,6 +64,7 @@ const learningChain = ["Objective", "Observation", "Finding", "Recommendation", 
 
 const outputs = [
   { title: "Commander Summary", note: "Leader-ready status and risk brief" },
+  { title: "Status Brief / Placemat", note: "One-page exercise status product" },
   { title: "EXSUM/AAR Draft", note: "Validated narrative with themes and findings" },
   { title: "Findings Matrix", note: "Validated issues tied to evidence" },
   { title: "POA&M Tracker", note: "Owners, dates, milestones, evidence" },
@@ -80,6 +81,7 @@ const topNavLinks = [
   { label: "Home", href: "#home" },
   { label: "Lifecycle", href: "#lifecycle" },
   { label: "Outputs", href: "#outputs" },
+  { label: "Integration", href: "#integration" },
   { label: "FAQ", href: "#faq" },
   { label: "Contact", href: "#contact" }
 ];
@@ -88,7 +90,7 @@ const footerPlatformLinks = [
   { label: "Home", href: "/home" },
   { label: "Command Center", href: "/overview" },
   { label: "Lifecycle", href: "#lifecycle" },
-  { label: "Preserve", href: "/library" }
+  { label: "Library", href: "/library" }
 ];
 
 const footerOutputLinks = [
@@ -116,6 +118,21 @@ const faqs = [
   {
     question: "Who is AFTERBURN designed for?",
     answer: "Military, emergency management, law enforcement, homeland defense, critical infrastructure, and interagency response organizations."
+  }
+];
+
+const integrationTiles = [
+  {
+    title: "Exercise lifecycle intelligence",
+    body: "Plan, execute, review, improve, and preserve lessons from complex interagency exercises."
+  },
+  {
+    title: "Doctrine-grounded IC support",
+    body: "A TE/NIMS concept could add NIMS/ICS-aligned decision support, forms, and response workflows."
+  },
+  {
+    title: "Evidence-to-action loop",
+    body: "Validated observations and findings become corrective action, training updates, and reusable operational knowledge."
   }
 ];
 
@@ -176,7 +193,7 @@ function ProductSurfacePanel() {
         </div>
 
         <div className="grid gap-2 text-xs text-steel sm:grid-cols-4">
-          {["Plan ready", "Execute complete", "Review active", "Improve started", "Preserve capturing"].map((item, index) => (
+          {["Plan ready", "Execute complete", "Review active", "Improve started", "Library capturing"].map((item, index) => (
             <span key={item} className={`rounded-md border px-2 py-1 text-center ${index === 2 ? "border-flare/25 bg-flare/10 text-flare" : "border-line bg-night/80"}`}>
               {item}
             </span>
@@ -334,6 +351,30 @@ export default function LandingPage() {
         </div>
       </section>
 
+      <section id="integration" className="mx-auto max-w-6xl scroll-mt-24 px-5 py-14">
+        <div className="grid gap-8 lg:grid-cols-[0.75fr_1fr] lg:items-start">
+          <div>
+            <span className="inline-flex rounded-full border border-line bg-panel/70 px-2.5 py-1 text-xs text-steel">
+              Partner integration concept
+            </span>
+            <h2 className="mt-3 text-2xl font-semibold text-ink">AFTERBURN + TE/NIMS</h2>
+            <p className="mt-3 text-sm leading-6 text-steel">
+              AFTERBURN manages the exercise lifecycle. A TE/NIMS integration concept could connect validated exercise
+              knowledge to doctrine-grounded incident command support, ICS/NIMS workflows, forms, geospatial context, and
+              reusable response playbooks.
+            </p>
+          </div>
+          <div className="grid gap-3 md:grid-cols-3">
+            {integrationTiles.map((tile) => (
+              <article key={tile.title} className="rounded-md border border-line bg-panel p-4">
+                <h3 className="text-sm font-semibold text-ink">{tile.title}</h3>
+                <p className="mt-2 text-xs leading-5 text-steel">{tile.body}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className="mx-auto grid max-w-6xl gap-6 px-5 py-14 lg:grid-cols-[1fr_auto] lg:items-center">
         <div>
           <h2 className="text-2xl font-semibold text-ink">Move from exercise activity to operational improvement.</h2>
@@ -352,7 +393,7 @@ export default function LandingPage() {
           </ButtonLink>
           <ButtonLink href="/library" variant="ghost">
             <Search size={15} />
-            Open Preserve
+            Open Library
           </ButtonLink>
         </div>
       </section>
