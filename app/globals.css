@@ -212,30 +212,53 @@ select.text-ink {
   color: #f8fafc !important;
 }
 
-.brand-type {
+.brand-logo {
+  min-height: 1.9em;
+  border: 1px solid rgb(255 255 255 / 0.13);
+  border-radius: 0.46em;
+  background:
+    linear-gradient(90deg, rgb(88 27 21 / 0.92) 0%, rgb(194 65 45 / 0.94) 38%, rgb(240 138 79 / 0.94) 70%, rgb(255 209 102 / 0.92) 100%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.14),
+    0 10px 24px rgb(0 0 0 / 0.18);
+  padding: 0.34em 0.66em;
+}
+
+.brand-logo-compact {
+  min-height: 1.72em;
+  padding: 0.28em 0.52em;
+}
+
+.brand-logo-text {
+  color: #ffffff;
   font-family: var(--font-brand);
-  font-weight: 800;
-  letter-spacing: 0.12em;
+  font-size: 0.72em;
+  font-weight: 850;
+  letter-spacing: 0.16em;
+  line-height: 1;
   text-transform: uppercase;
+  text-shadow: 0 1px 1px rgb(0 0 0 / 0.22);
+}
+
+.brand-mark {
+  border: 1px solid rgb(255 255 255 / 0.13);
+  border-radius: 0.54rem;
+  background:
+    linear-gradient(135deg, rgb(88 27 21 / 0.94) 0%, rgb(194 65 45 / 0.95) 42%, rgb(240 138 79 / 0.95) 73%, rgb(255 209 102 / 0.92) 100%);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.14);
+}
+
+.brand-mark span {
+  color: #fff;
+  font-family: var(--font-brand);
+  font-size: 0.86rem;
+  font-weight: 850;
+  line-height: 1;
+  text-shadow: 0 1px 1px rgb(0 0 0 / 0.22);
 }
 
 .brand-gradient-line {
-  display: inline-block;
-  width: clamp(0.28rem, 0.7vw, 0.45rem);
-  height: 1em;
-  border-radius: 999px;
-  background: linear-gradient(180deg, #c2412d 0%, #f08a4f 52%, #ffd166 100%);
-  opacity: 0.95;
-  transform: translateY(0);
-}
-
-.brand-a-mark {
-  color: #f8fafc;
-}
-
-.brand-a-mark svg {
-  display: block;
-  overflow: visible;
+  display: none;
 }
 
 /* Slightly calmer display type for dense operational screens. */
