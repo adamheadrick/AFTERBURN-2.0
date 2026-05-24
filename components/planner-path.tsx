@@ -26,7 +26,7 @@ const steps = [
     note: "Convert recommendations into POA&M owners, due dates, and milestones."
   },
   {
-    label: "Preserve",
+    label: "Library",
     formal: "Reuse knowledge",
     href: "/library",
     note: "Store lessons, templates, prior outputs, findings, and capability gaps."
