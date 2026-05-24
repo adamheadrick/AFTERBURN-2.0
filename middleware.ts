@@ -19,11 +19,7 @@ function basicAuthChallenge(request: NextRequest) {
     process.env.VERCEL_ENV === "preview" &&
     process.env.BASIC_AUTH_DISABLED_FOR_PREVIEW === "true";
 
-  if (isDevelopment) {
-    return null;
-  }
-
-  if (isPreviewBypassEnabled) {
+  if (isDevelopment || isPreviewBypassEnabled) {
     return null;
   }
 
