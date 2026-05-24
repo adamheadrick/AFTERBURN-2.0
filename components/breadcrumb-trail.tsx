@@ -11,10 +11,11 @@ type Breadcrumb = {
 
 const routeCrumbs: Record<string, Breadcrumb[]> = {
   "/home": [{ label: "Home" }],
+  "/command-center": [{ label: "Command Center" }],
   "/overview": [{ label: "Command Center" }],
   "/advanced": [{ label: "Advanced Workspace" }],
-  "/dashboard": [{ label: "Command Center", href: "/overview" }, { label: "Dashboard" }],
-  "/readiness": [{ label: "Command Center", href: "/overview" }, { label: "Readiness" }],
+  "/dashboard": [{ label: "Command Center", href: "/command-center" }, { label: "Dashboard" }],
+  "/readiness": [{ label: "Command Center", href: "/command-center" }, { label: "Readiness" }],
   "/plan": [{ label: "Plan" }],
   "/scenario-builder": [{ label: "Plan", href: "/plan" }, { label: "Scenario Builder" }],
   "/mission-assignment": [{ label: "Plan", href: "/plan" }, { label: "Tasking / Mission Assignment" }],
@@ -61,7 +62,7 @@ function getBreadcrumbs(pathname: string): Breadcrumb[] {
     return [{ label: "Review", href: "/review" }, { label: "Summary Record" }];
   }
 
-  return routeCrumbs[pathname] ?? [{ label: "Command Center", href: "/overview" }, { label: "Workspace" }];
+  return routeCrumbs[pathname] ?? [{ label: "Command Center", href: "/command-center" }, { label: "Workspace" }];
 }
 
 export function BreadcrumbTrail() {
@@ -78,7 +79,7 @@ export function BreadcrumbTrail() {
         {contextCrumbs.map((crumb, index) => (
           <li key={`${crumb.label}-${index}`} className="flex items-center gap-2">
             <Link
-              href={crumb.href ?? "/overview"}
+              href={crumb.href ?? "/command-center"}
               className="rounded px-2 py-0.5 text-steel transition hover:bg-field hover:text-ink"
             >
               {crumb.label}
