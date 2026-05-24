@@ -25,7 +25,7 @@ import { DropoffDrawer } from "@/components/dropoff-drawer";
 import { NavLink } from "@/components/nav-link";
 
 const nav = [
-  { href: "/overview", label: "Command Center", icon: Gauge, activePaths: ["/overview", "/dashboard", "/readiness"] },
+  { href: "/command-center", label: "Command Center", icon: Gauge, activePaths: ["/command-center", "/overview", "/dashboard", "/readiness"] },
   {
     href: "/plan",
     label: "Plan",
@@ -134,7 +134,7 @@ export function AppShellClient({
           <div className="flex h-full flex-col">
             <div className={`grid justify-items-center gap-2 border-b border-line ${railCollapsed ? "p-3" : "p-4"}`}>
               <Link href="/" className="flex justify-center" title="AFTERBURN Home">
-                <BrandMark className={railCollapsed ? "h-8 w-8" : "h-9 w-9"} />
+                {railCollapsed ? <BrandMark className="h-8 w-8" /> : <BrandWordmark className="text-[0.98rem]" />}
               </Link>
               <button
                 className="nav-tooltip-host relative hidden rounded-md border border-line bg-field p-1.5 text-steel transition hover:bg-[#151c28] hover:text-ink md:inline-flex"
@@ -213,9 +213,15 @@ export function AppShellClient({
         <div className="min-w-0">
           <header className="sticky top-0 z-10 border-b border-line bg-night/95 backdrop-blur">
             <div className="flex min-h-[2.75rem] items-center justify-between gap-4 px-4 sm:px-5 lg:px-6">
-              <Link href="/" title="AFTERBURN Home" className="block rounded-md px-2 py-1 transition hover:bg-field">
-                <BrandWordmark className="text-[1.25rem]" />
-              </Link>
+              <div className="flex min-w-0 items-center gap-3">
+                <Link href="/" title="AFTERBURN Home" className="block rounded-md py-1 transition md:hidden">
+                  <BrandWordmark className="text-[0.96rem]" />
+                </Link>
+                <div className="hidden min-w-0 items-center gap-2 md:flex">
+                  <span className="rounded-md border border-line bg-panel px-2 py-1 text-xs font-semibold text-ink">LIGHTNING STRIKE</span>
+                  <span className="text-xs text-steel">Review Phase · Demo Mode</span>
+                </div>
+              </div>
               <div className="flex items-center gap-2">
                 <DropoffDrawer />
                 <button
