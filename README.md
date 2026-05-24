@@ -99,7 +99,7 @@ The global `Dropoff` button is available in the application header from every wo
 
 Each submission follows this lifecycle:
 
-`Dropoff → Screening → Review → Sanitization → Preserve repository → AAR, EXSUM, POA&M, or future exercise input`
+`Dropoff → Screening → Review → Sanitization → Library repository → AAR, EXSUM, POA&M, or future exercise input`
 
 Dropoff screening is AI-assisted when `OPENAI_API_KEY` is configured and falls back to deterministic local screening in demo mode. AI screening is advisory only; items are never auto-published to the repository.
 
