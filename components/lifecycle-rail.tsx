@@ -41,7 +41,7 @@ const phases = [
     icon: FileCheck2
   },
   {
-    label: "Preserve",
+    label: "Library",
     meta: "Reuse knowledge",
     href: "/library",
     paths: ["/library", "/exercises", "/lessons"],
