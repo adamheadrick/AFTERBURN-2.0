@@ -79,7 +79,7 @@ const nav = [
   },
   {
     href: "/library",
-    label: "Preserve",
+    label: "Library",
     icon: Archive,
     activePaths: ["/library", "/exercises", "/lessons"],
     excludePaths: ["/exercises/new"],
