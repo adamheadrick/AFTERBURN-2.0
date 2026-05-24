@@ -54,7 +54,7 @@ export default async function LoginPage({
             </form>
           ) : (
             <div className="mt-8 grid gap-4">
-              <ButtonLink href="/overview" variant="flame">
+              <ButtonLink href="/command-center" variant="flame">
                 Continue Preview
               </ButtonLink>
               <p className="text-sm leading-6 text-steel">
