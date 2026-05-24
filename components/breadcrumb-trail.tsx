@@ -39,10 +39,10 @@ const routeCrumbs: Record<string, Breadcrumb[]> = {
   "/ask-exercise": [{ label: "Review", href: "/review" }, { label: "Ask Exercise" }],
   "/improve": [{ label: "Improve" }],
   "/poam": [{ label: "Improve", href: "/improve" }, { label: "Improvement Plan / POA&M" }],
-  "/lessons": [{ label: "Preserve", href: "/library" }, { label: "Lessons Learned" }],
+  "/lessons": [{ label: "Library", href: "/library" }, { label: "Lessons Learned" }],
   "/insights": [{ label: "Improve", href: "/improve" }, { label: "Trend Analysis" }],
-  "/library": [{ label: "Preserve" }],
-  "/exercises": [{ label: "Preserve", href: "/library" }, { label: "Exercise Archive" }],
+  "/library": [{ label: "Library" }],
+  "/exercises": [{ label: "Library", href: "/library" }, { label: "Exercise Archive" }],
   "/admin": [{ label: "Admin" }],
   "/admin/dropoff": [{ label: "Admin", href: "/admin" }, { label: "Dropoff Review Queue" }],
   "/settings": [{ label: "Admin", href: "/admin" }, { label: "Settings" }]
@@ -54,7 +54,7 @@ function getBreadcrumbs(pathname: string): Breadcrumb[] {
   }
 
   if (pathname.startsWith("/exercises/")) {
-    return [{ label: "Preserve", href: "/library" }, { label: "Exercise Record" }];
+    return [{ label: "Library", href: "/library" }, { label: "Exercise Record" }];
   }
 
   if (pathname.startsWith("/summaries/")) {
