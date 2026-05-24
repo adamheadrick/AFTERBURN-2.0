@@ -56,7 +56,7 @@ export default async function ImprovePage() {
       status: doctrineUpdates ? "Candidates" : "Needs review",
       evidence: `${doctrineUpdates} doctrine, SOP, or checklist candidates detected`,
       href: "/lessons",
-      action: "Route to Preserve",
+      action: "Route to Library",
       tone: doctrineUpdates ? "friction" as const : "open" as const
     },
     {
@@ -115,11 +115,11 @@ export default async function ImprovePage() {
     {
       severity: "Medium",
       issue: "Validated lessons need repository disposition",
-      owner: "Preserve Manager",
+      owner: "Library Manager",
       status: `${lessonsRepositoryItems.length} items`,
       recommendation: "Approve, tag, and preserve lessons as planning considerations, best practices, or future injects.",
       href: "/library",
-      action: "Route to Preserve",
+      action: "Route to Library",
       tone: "open" as const
     }
   ];
@@ -130,7 +130,7 @@ export default async function ImprovePage() {
         eyebrow="Improve"
         title="Convert Findings Into Accountable Action"
         question="Who owns the fix and how will we track it?"
-        description="Use Improve as the accountability layer: convert validated findings into owned corrective actions, milestones, evidence of completion, re-test inputs, and Preserve-ready lessons."
+        description="Use Improve as the accountability layer: convert validated findings into owned corrective actions, milestones, evidence of completion, re-test inputs, and Library-ready lessons."
         primaryHref="/poam"
         primaryAction="Convert to POA&M"
         steps={improveSteps}
@@ -140,7 +140,7 @@ export default async function ImprovePage() {
         status={unassignedPoam ? "Needs ownership" : "Actions assigned"}
         statusTone={unassignedPoam ? "friction" : "ready"}
         risk="The AAR loses value if recommendations are not assigned, resourced, tracked, re-tested, and preserved for future planners."
-        nextAction="Assign owners and due dates to open corrective actions, then route validated lessons into Preserve."
+        nextAction="Assign owners and due dates to open corrective actions, then route validated lessons into Library."
         actionHref="/poam"
         actionLabel="Assign owner"
       />
