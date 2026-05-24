@@ -64,7 +64,7 @@ const lifecycleSteps = [
   { label: "Execute", status: "Complete", href: "/execute" },
   { label: "Review", status: "In progress", href: "/review", active: true },
   { label: "Improve", status: "Started", href: "/improve" },
-  { label: "Preserve", status: "Capturing", href: "/library" }
+  { label: "Library", status: "Capturing", href: "/library" }
 ];
 
 const severityClass = {
@@ -116,13 +116,11 @@ export default async function OverviewPage() {
     <div className="status-brief-print mx-auto grid max-w-6xl gap-4">
       <header className="print-hidden flex flex-wrap items-end justify-between gap-3 border-b border-line pb-4">
         <div>
-          <p className="text-xs text-steel">Exercise status board</p>
           <h1 className="mt-1 text-xl font-semibold text-ink">Command Center</h1>
           <p className="mt-1 text-sm leading-6 text-steel">Status, risk, next action, and briefable outputs for the active exercise.</p>
         </div>
         <div className="flex flex-wrap gap-2">
           <ButtonLink href="/ask-exercise" variant="ghost">Ask AFTERBURN</ButtonLink>
-          <ButtonLink href="/exsum" variant="ghost">Generate EXSUM draft</ButtonLink>
           <StatusBriefExportButton />
         </div>
       </header>
@@ -143,10 +141,15 @@ export default async function OverviewPage() {
           </div>
 
           <div className="mt-5">
-            <p className="text-xs font-semibold text-steel">Biggest risk</p>
+            <p className="text-xs font-semibold text-steel">Status summary</p>
             <p className="mt-1 text-sm leading-6 text-ink">
-              Communications/COP ownership, observer/evaluator coverage, and entity-specific task/purpose confirmation need validation before final rehearsal.
+              Core planning products are usable, but communications/COP ownership, observer/evaluator coverage, and
+              entity-specific task/purpose confirmation need validation before the final rehearsal.
             </p>
+          </div>
+          <div className="mt-4 rounded-md border border-line bg-night px-3 py-2">
+            <p className="text-xs font-semibold text-steel">Biggest risk</p>
+            <p className="mt-1 text-sm text-ink">Communications/COP ownership is still unclear.</p>
           </div>
         </div>
 
@@ -156,8 +159,9 @@ export default async function OverviewPage() {
             Assign the communications lead and close observer coverage gaps before generating the EXSUM/AAR draft.
           </p>
           <div className="mt-4 flex flex-wrap gap-2">
-            <ButtonLink href="/plan" variant="flame">Address next action</ButtonLink>
-            <ButtonLink href="/exsum" variant="ghost" className="print-hidden">Generate EXSUM/AAR</ButtonLink>
+            <ButtonLink href="/plan" variant="flame">Fix Issues</ButtonLink>
+            <ButtonLink href="/review" variant="subtle" className="print-hidden">Open Review</ButtonLink>
+            <ButtonLink href="/exsum" variant="ghost" className="print-hidden">Generate Commander Summary</ButtonLink>
           </div>
         </div>
       </section>
@@ -229,6 +233,22 @@ export default async function OverviewPage() {
               <p className="mt-0.5 text-xs text-steel">{item.status}</p>
             </div>
           ))}
+        </div>
+      </section>
+
+      <section className="print-hidden rounded-lg border border-line bg-panel p-4">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div className="max-w-3xl">
+            <h2 className="text-sm font-semibold text-ink">Partner integration concept</h2>
+            <p className="mt-1 text-sm leading-6 text-steel">
+              AFTERBURN captures exercise evidence, findings, and POA&M items. A TE/NIMS integration concept could
+              connect that validated knowledge to doctrine-grounded Incident Command support, ICS/NIMS workflows,
+              geospatial context, and reusable response playbooks.
+            </p>
+          </div>
+          <Link href="/library" className="rounded-md border border-line bg-field px-3 py-1.5 text-xs font-semibold text-ink transition hover:bg-[#151c28]">
+            Route to Library
+          </Link>
         </div>
       </section>
     </div>
