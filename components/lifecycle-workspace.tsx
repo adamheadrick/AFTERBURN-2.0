@@ -69,7 +69,7 @@ export function PhaseHero({
           <h1 className="mt-1 text-xl font-semibold tracking-tight text-ink">{question}</h1>
           <p className="mt-1 max-w-2xl text-sm font-normal leading-6 text-steel">{description}</p>
         </div>
-        <ButtonLink href={primaryHref} variant="subtle" className="min-h-8 px-3 py-1.5">{primaryAction}</ButtonLink>
+        <ButtonLink href={primaryHref} variant="subtle" className="min-h-7 px-2.5 py-1">{primaryAction}</ButtonLink>
       </div>
       {steps.length ? (
         <details className="mt-3 border-t border-line">
@@ -82,7 +82,7 @@ export function PhaseHero({
                 <Link href={step.href} className="grid min-h-9 grid-cols-[auto_1fr_auto] items-center gap-2 border-t border-line px-2.5 py-1.5 text-steel transition hover:text-ink">
                   <span className="text-[0.72rem] text-steel">{index + 1}</span>
                   <span className="min-w-0 leading-4">{step.label}</span>
-                  {step.status ? <span className="rounded border border-line bg-night px-1.5 py-0.5 text-[0.64rem] text-steel">{step.status}</span> : null}
+                  {step.status ? <span className="border border-line bg-night px-1.5 py-0.5 text-[0.64rem] text-steel">{step.status}</span> : null}
                 </Link>
               </span>
             ))}
@@ -111,10 +111,10 @@ export function GatePanel({
   actionLabel: string;
 }) {
   return (
-    <section className="grid gap-3 rounded-md border border-line bg-panel p-3 lg:grid-cols-[10rem_minmax(0,1fr)_minmax(0,1fr)_auto] lg:items-center">
+    <section className="grid gap-3 border-t border-line py-3 lg:grid-cols-[10rem_minmax(0,1fr)_minmax(0,1fr)_auto] lg:items-center">
       <div>
         <p className="text-xs font-semibold text-steel">{label}</p>
-        <span className={`mt-1 inline-flex rounded-md border px-2 py-0.5 text-xs font-semibold ${toneStyles[statusTone]}`}>{status}</span>
+        <span className={`mt-1 inline-flex border px-2 py-0.5 text-xs font-semibold ${toneStyles[statusTone]}`}>{status}</span>
       </div>
       <div>
         <p className="text-xs font-semibold text-steel">Primary risk</p>
@@ -124,7 +124,7 @@ export function GatePanel({
         <p className="text-xs font-semibold text-steel">Next action</p>
         <p className="mt-1 text-sm font-normal text-ink">{nextAction}</p>
       </div>
-      <ButtonLink href={actionHref} variant="flame" className="w-fit justify-self-start whitespace-nowrap">{actionLabel}</ButtonLink>
+      <ButtonLink href={actionHref} variant="flame" className="w-fit justify-self-start whitespace-nowrap px-2.5 py-1">{actionLabel}</ButtonLink>
     </section>
   );
 }
@@ -159,12 +159,12 @@ export function PhaseSectionTable({
 }) {
   return (
     <details className="border-t border-line bg-transparent">
-      <summary className="cursor-pointer px-4 py-3 transition hover:bg-field/50">
+      <summary className="cursor-pointer py-3 transition hover:text-ink">
         <span className="block text-base font-semibold text-ink">{title}</span>
         <span className="mt-1 block text-sm font-normal text-steel">{description}</span>
       </summary>
       <div className="overflow-hidden border-t border-line">
-        <div className="grid gap-2 border-b border-line bg-night px-2.5 py-1.5 text-[0.72rem] font-semibold text-steel max-lg:hidden lg:grid-cols-[1fr_8rem_9rem_1.05fr_9rem]">
+        <div className="grid gap-2 border-b border-line px-2.5 py-1.5 text-[0.72rem] font-semibold text-steel max-lg:hidden lg:grid-cols-[1fr_8rem_9rem_1.05fr_9rem]">
           <span>Workstream</span>
           <span>Status</span>
           <span>Owner</span>
@@ -177,7 +177,7 @@ export function PhaseSectionTable({
               <p className="text-sm font-semibold text-ink">{section.title}</p>
               <p className="mt-0.5 text-xs font-normal leading-5 text-steel">{section.description}</p>
             </div>
-            <span className={`w-fit rounded-md border px-2 py-0.5 text-xs font-semibold ${toneStyles[section.tone ?? "open"]}`}>{section.status}</span>
+            <span className={`w-fit border px-2 py-0.5 text-xs font-semibold ${toneStyles[section.tone ?? "open"]}`}>{section.status}</span>
             <p className="text-xs font-normal text-steel">{section.owner}</p>
             <p className="text-xs font-normal leading-5 text-steel">{section.evidence}</p>
             <ButtonLink href={section.href} variant="ghost" className="justify-self-start whitespace-nowrap lg:justify-self-end">{section.action ?? "Open"}</ButtonLink>
@@ -207,22 +207,15 @@ export function IssueTable({
         <p className="mt-1 text-sm font-normal text-steel">{description}</p>
       </div>
       <div className="overflow-hidden border-t border-line">
-        <div className="grid gap-2 border-b border-line px-2.5 py-1.5 text-[0.72rem] font-semibold text-steel max-lg:hidden lg:grid-cols-[6rem_1fr_8rem_7rem_1.2fr_9rem]">
-          <span>Severity</span>
-          <span>Issue</span>
-          <span>Owner</span>
-          <span>Status</span>
-          <span>Recommended action</span>
-          <span className="text-right">Action</span>
-        </div>
         {visibleIssues.map((issue, index) => (
-          <div key={issue.issue} className={`${index > 0 ? "border-t border-line" : ""} grid gap-2 px-2.5 py-2 transition hover:bg-field/70 lg:grid-cols-[6rem_1fr_8rem_7rem_1.2fr_9rem] lg:items-center`}>
-            <span className={`w-fit rounded-md border px-2 py-0.5 text-xs font-semibold ${toneStyles[issue.tone ?? "open"]}`}>{issue.severity}</span>
-            <p className="text-sm font-semibold text-ink">{issue.issue}</p>
-            <p className="text-xs font-normal text-steel">{issue.owner}</p>
-            <p className="text-xs font-normal text-steel">{issue.status}</p>
-            <p className="text-xs font-normal leading-5 text-steel">{issue.recommendation}</p>
-            <ButtonLink href={issue.href} variant={issue.tone === "risk" ? "ember" : "subtle"} className="justify-self-start whitespace-nowrap lg:justify-self-end">{issue.action}</ButtonLink>
+          <div key={issue.issue} className={`${index > 0 ? "border-t border-line" : ""} grid gap-2 px-2.5 py-2 transition hover:bg-field/50 lg:grid-cols-[6rem_1fr_9rem_8rem] lg:items-center`}>
+            <span className={`w-fit border px-2 py-0.5 text-xs font-semibold ${toneStyles[issue.tone ?? "open"]}`}>{issue.severity}</span>
+            <div>
+              <p className="text-sm font-semibold text-ink">{issue.issue}</p>
+              <p className="mt-0.5 text-xs font-normal leading-5 text-steel">{issue.recommendation}</p>
+            </div>
+            <p className="text-xs font-normal text-steel">{issue.owner} · {issue.status}</p>
+            <ButtonLink href={issue.href} variant={issue.tone === "risk" ? "ember" : "subtle"} className="justify-self-start whitespace-nowrap px-2.5 py-1 lg:justify-self-end">{issue.action}</ButtonLink>
           </div>
         ))}
         {hiddenIssues.length ? (
@@ -231,13 +224,14 @@ export function IssueTable({
               View all issues ({hiddenIssues.length} more)
             </summary>
             {hiddenIssues.map((issue, index) => (
-              <div key={issue.issue} className={`${index > 0 ? "border-t border-line" : ""} grid gap-2 px-2.5 py-2 transition hover:bg-field/70 lg:grid-cols-[6rem_1fr_8rem_7rem_1.2fr_9rem] lg:items-center`}>
-                <span className={`w-fit rounded-md border px-2 py-0.5 text-xs font-semibold ${toneStyles[issue.tone ?? "open"]}`}>{issue.severity}</span>
-                <p className="text-sm font-semibold text-ink">{issue.issue}</p>
-                <p className="text-xs font-normal text-steel">{issue.owner}</p>
-                <p className="text-xs font-normal text-steel">{issue.status}</p>
-                <p className="text-xs font-normal leading-5 text-steel">{issue.recommendation}</p>
-                <ButtonLink href={issue.href} variant={issue.tone === "risk" ? "ember" : "subtle"} className="justify-self-start whitespace-nowrap lg:justify-self-end">{issue.action}</ButtonLink>
+              <div key={issue.issue} className={`${index > 0 ? "border-t border-line" : ""} grid gap-2 px-2.5 py-2 transition hover:bg-field/50 lg:grid-cols-[6rem_1fr_9rem_8rem] lg:items-center`}>
+                <span className={`w-fit border px-2 py-0.5 text-xs font-semibold ${toneStyles[issue.tone ?? "open"]}`}>{issue.severity}</span>
+                <div>
+                  <p className="text-sm font-semibold text-ink">{issue.issue}</p>
+                  <p className="mt-0.5 text-xs font-normal leading-5 text-steel">{issue.recommendation}</p>
+                </div>
+                <p className="text-xs font-normal text-steel">{issue.owner} · {issue.status}</p>
+                <ButtonLink href={issue.href} variant={issue.tone === "risk" ? "ember" : "subtle"} className="justify-self-start whitespace-nowrap px-2.5 py-1 lg:justify-self-end">{issue.action}</ButtonLink>
               </div>
             ))}
           </details>
