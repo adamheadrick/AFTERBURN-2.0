@@ -39,7 +39,7 @@ export default function LandingPage() {
             <a href="#lifecycle" className="transition hover:text-ink">Lifecycle</a>
             <a href="#enter" className="transition hover:text-ink">Command Center</a>
           </div>
-          <ButtonLink href="/overview" variant="subtle" className="!rounded-none">
+          <ButtonLink href="/overview" variant="subtle" className="!rounded-none px-2.5 py-1">
             Open Command Center
           </ButtonLink>
         </nav>
@@ -57,12 +57,12 @@ export default function LandingPage() {
               AFTERBURN helps military, emergency management, law enforcement, and interagency teams plan exercises,
               capture reality, generate EXSUM/AAR products, and track corrective action.
             </p>
-            <div className="mt-9 flex flex-wrap gap-3">
-              <ButtonLink href="/overview" variant="flame" className="!rounded-none">
+            <div className="mt-7 flex flex-wrap items-center gap-x-4 gap-y-2">
+              <ButtonLink href="/overview" variant="flame" className="!rounded-none px-3 py-1.5">
                 Open Command Center
-                <ArrowRight size={16} />
+                <ArrowRight size={14} />
               </ButtonLink>
-              <ButtonLink href="#lifecycle" variant="ghost" className="!rounded-none">View Lifecycle</ButtonLink>
+              <a href="#lifecycle" className="text-sm font-semibold text-steel transition hover:text-ink">View Lifecycle</a>
             </div>
             <p className="mt-4 text-sm text-steel">Home explains the product. Command Center runs the active exercise.</p>
           </div>
@@ -106,16 +106,13 @@ export default function LandingPage() {
       </section>
 
       <section id="enter" className="border-b border-line">
-        <div className="mx-auto flex max-w-6xl flex-col gap-6 px-5 py-16 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h2 className="text-2xl font-semibold text-ink">Ready to work inside an exercise?</h2>
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-steel">
-              Open Command Center to see the current exercise, top risk, next best action, and priority issues.
-            </p>
-          </div>
-          <ButtonLink href="/overview" variant="flame" className="!rounded-none">
+        <div className="mx-auto flex max-w-6xl flex-col gap-3 px-5 py-7 sm:flex-row sm:items-center sm:justify-between">
+          <p className="max-w-2xl text-sm leading-6 text-steel">
+            Open Command Center to see the active exercise, top risk, next action, and priority issues.
+          </p>
+          <ButtonLink href="/overview" variant="subtle" className="!rounded-none px-3 py-1">
             Open Command Center
-            <ArrowRight size={16} />
+            <ArrowRight size={14} />
           </ButtonLink>
         </div>
       </section>
