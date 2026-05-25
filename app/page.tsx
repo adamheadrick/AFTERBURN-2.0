@@ -13,6 +13,33 @@ const lifecycle = [
 
 const learningChain = ["Objective", "Observation", "Finding", "Recommendation", "POA&M", "Lesson"];
 
+const readinessFacts = [
+  {
+    label: "Disasters are more frequent and costly.",
+    text: "NOAA counted 403 U.S. billion-dollar weather and climate disasters from 1980-2024; the most recent five-year average was 23 events per year.",
+    href: "https://www.ncei.noaa.gov/access/billions/state-summary/US",
+    source: "NOAA NCEI"
+  },
+  {
+    label: "Coordination has to be rehearsed.",
+    text: "The Lahaina fire analysis found that gaps in pre-event planning, unified command, and agency coordination contributed to insufficient communications during evacuation and firefighting operations.",
+    href: "https://governor.hawaii.gov/newsroom/2024-40-hawai%CA%BBi-attorney-general-anne-lopez-announces-results-of-lahaina-fire-investigation-analysis-no-single-factor-but-complex-interaction-of-factors-led-to-maui-fire-devastation/",
+    source: "Hawaii Attorney General"
+  },
+  {
+    label: "Interoperability breaks under stress.",
+    text: "The federal Katrina lessons learned report found that disconnected communications plans and architectures impeded coordination across federal, state, and local responders.",
+    href: "https://georgewbush-whitehouse.archives.gov/reports/katrina-lessons-learned/chapter5.html/index.html",
+    source: "White House Katrina report"
+  },
+  {
+    label: "Exercises are where gaps become visible.",
+    text: "FEMA frames exercises as the place to test plans, validate capabilities, and identify resource requirements, gaps, strengths, and areas for improvement.",
+    href: "https://www.fema.gov/emergency-managers/national-preparedness/exercises",
+    source: "FEMA"
+  }
+];
+
 function InlineChain({ items }: { items: string[] }) {
   return (
     <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-steel">
@@ -54,8 +81,8 @@ export default function LandingPage() {
               Turn exercise chaos into accountable improvement.
             </h1>
             <p className="mt-6 max-w-2xl text-base leading-7 text-steel">
-              AFTERBURN helps military, emergency management, law enforcement, and interagency teams plan exercises,
-              capture reality, generate EXSUM/AAR products, and track corrective action.
+              Exercises are where teams discover whether the plan, people, communications, evidence, and follow-through
+              will hold up under pressure. AFTERBURN keeps that readiness work connected.
             </p>
             <div className="mt-7 flex flex-wrap items-center gap-x-4 gap-y-2">
               <ButtonLink href="/overview" variant="flame" className="!rounded-none px-3 py-1.5">
@@ -72,14 +99,32 @@ export default function LandingPage() {
       <section id="story" className="border-b border-line">
         <div className="mx-auto grid max-w-6xl gap-10 px-5 py-16 lg:grid-cols-[0.82fr_1.18fr]">
           <div>
-            <h2 className="text-2xl font-semibold text-ink">Complex exercises scatter the truth.</h2>
+            <h2 className="text-2xl font-semibold text-ink">Prepared teams do not happen by accident.</h2>
           </div>
           <div className="grid gap-8">
             <p className="max-w-3xl text-base leading-7 text-steel">
-              Planning inputs, observer notes, participant feedback, evidence, findings, summaries, and corrective
-              actions often live in separate tools. AFTERBURN keeps that operational record connected so leaders can
-              brief what happened, decide what matters, and track what changes next.
+              Real incidents keep proving the same point: readiness is a chain. Plans, roles, communications, field
+              observations, leader decisions, evidence, findings, and corrective actions all have to survive contact
+              with a fast-moving event.
             </p>
+            <div className="grid gap-5 border-t border-line pt-5">
+              {readinessFacts.map((fact) => (
+                <article key={fact.label} className="grid gap-2 border-b border-line pb-5 last:border-b-0 last:pb-0 sm:grid-cols-[0.55fr_1fr]">
+                  <div>
+                    <h3 className="text-sm font-semibold text-ink">{fact.label}</h3>
+                    <a
+                      href={fact.href}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="mt-1 inline-block text-xs text-steel underline-offset-4 transition hover:text-ink hover:underline"
+                    >
+                      Source: {fact.source}
+                    </a>
+                  </div>
+                  <p className="text-sm leading-6 text-steel">{fact.text}</p>
+                </article>
+              ))}
+            </div>
             <div id="lifecycle" className="grid gap-3 border-t border-line pt-5">
               <h3 className="text-sm font-semibold text-ink">Plan → Execute → Review → Improve → Library</h3>
               <div className="grid gap-3 sm:grid-cols-5">
