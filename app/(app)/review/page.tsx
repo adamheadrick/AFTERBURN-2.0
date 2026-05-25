@@ -26,10 +26,10 @@ export default async function ReviewPage() {
   const sections = [
     {
       title: "Evidence Review",
-      description: "Review observer notes, hotwash comments, dropoff items, screenshots, documents, maps, logs, and exercise products.",
+      description: "Review observer notes, hotwash comments, participant intake items, screenshots, documents, maps, logs, and exercise products.",
       owner: "Review Cell",
       status: evidenceItems.length ? "Evidence linked" : "Needs evidence",
-      evidence: `${evidenceItems.length} evidence items; ${screenedDropoffs}/${dropoffSubmissions.length} dropoff items cleared for review`,
+      evidence: `${evidenceItems.length} evidence items; ${screenedDropoffs}/${dropoffSubmissions.length} intake items cleared for review`,
       href: "/evidence",
       action: "Map evidence",
       tone: evidenceItems.length ? "ready" as const : "friction" as const
@@ -51,7 +51,7 @@ export default async function ReviewPage() {
       status: analysis.themes.length ? "Themes drafted" : "Needs analysis",
       evidence: `${analysis.themes.length} themes; ${analysis.gaps.length} gaps; ${analysis.sustains.length} sustains`,
       href: "/analysis",
-      action: "Generate draft",
+      action: "Draft AAR section",
       tone: analysis.themes.length ? "ready" as const : "friction" as const
     },
     {
@@ -67,11 +67,11 @@ export default async function ReviewPage() {
     {
       title: "Summary Generator",
       description: "Generate commander updates, hotwash summaries, issue summaries, POA&M drafts, and lessons learned submissions.",
-      owner: "AI Review Assistant",
+      owner: "Review Assistant",
       status: analysis.recommendations.length ? "Ready" : "Needs input",
       evidence: `${analysis.recommendations.length} recommendations; ${analysis.poam_recommendations.length} POA&M draft items`,
       href: "/ask-exercise",
-      action: "Generate draft",
+      action: "Summarize hotwash",
       tone: analysis.recommendations.length ? "ready" as const : "friction" as const
     },
     {
@@ -92,7 +92,7 @@ export default async function ReviewPage() {
       issue: "Priority findings need explicit evidence links",
       owner: "AAR Lead",
       status: `${evidenceLinkedFindings} linked`,
-      recommendation: "Tie each high-impact finding to observer notes, sync rows, decision points, hotwash input, or screened dropoff records.",
+      recommendation: "Tie each high-impact finding to observer notes, sync rows, decision points, hotwash input, or screened participant intake records.",
       href: "/evidence",
       action: "Map evidence",
       tone: evidenceLinkedFindings ? "friction" as const : "risk" as const
@@ -104,7 +104,7 @@ export default async function ReviewPage() {
       status: `${analysis.gaps.length} gaps`,
       recommendation: "Describe how comms/COP friction affected field-to-EOC coordination, decision quality, and reporting tempo.",
       href: "/analysis",
-      action: "Generate draft",
+      action: "Draft AAR section",
       tone: "risk" as const
     },
     {
@@ -140,6 +140,32 @@ export default async function ReviewPage() {
         primaryAction="Build findings"
         steps={reviewSteps}
       />
+      <section className="border-t border-line pt-3">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <h2 className="text-base font-semibold text-ink">Validation Queue</h2>
+            <p className="mt-1 text-sm leading-6 text-steel">Move raw inputs into validated findings before drafting final AAR/EXSUM language.</p>
+          </div>
+          <span className="border border-line px-2 py-1 text-xs font-semibold text-steel">
+            {validatedFindingCount} validated signals
+          </span>
+        </div>
+        <div className="mt-4 grid gap-3 lg:grid-cols-5">
+          {[
+            { label: "Raw inputs", value: feedbackEntries.length, note: "observations and hotwash" },
+            { label: "Candidate findings", value: priorityFindings, note: "priority observations" },
+            { label: "Validated findings", value: validatedFindingCount, note: "evidence-backed" },
+            { label: "AAR language", value: exsum.content ? "Draft" : "Pending", note: "commander-ready copy" },
+            { label: "POA&M drafts", value: poamItems.length, note: "ready for Improve" }
+          ].map((item) => (
+            <div key={item.label} className="border-t border-line pt-3">
+              <p className="text-xs font-semibold text-steel">{item.label}</p>
+              <p className="mt-1 text-lg font-semibold text-ink">{item.value}</p>
+              <p className="mt-1 text-xs leading-5 text-steel">{item.note}</p>
+            </div>
+          ))}
+        </div>
+      </section>
       <GatePanel
         label="Review Gate"
         status={exsum.content ? "AAR draft ready" : "Findings in development"}
@@ -150,17 +176,17 @@ export default async function ReviewPage() {
         actionLabel="Map evidence"
       />
       <IssueTable title="Review Issues" description="The review workspace should make every finding traceable, actionable, and ready for improvement planning." issues={issues} />
-      <section className="rounded-md border border-line bg-night/80 px-3 py-2.5">
-        <p className="text-xs font-semibold text-steel">EXSUM / AAR path</p>
-        <p className="mt-1 text-sm leading-6 text-ink">Observations → Findings → Themes → EXSUM/AAR Draft → POA&M</p>
-      </section>
+      <details className="border-t border-line">
+        <summary className="cursor-pointer py-2 text-sm text-steel transition hover:text-ink">EXSUM / AAR path</summary>
+        <p className="border-t border-line py-3 text-sm leading-6 text-ink">Observations → Findings → Themes → EXSUM/AAR Draft → POA&M</p>
+      </details>
       <MetricStrip metrics={[
         { label: "Observations", value: feedbackEntries.length, note: "raw inputs" },
         { label: "Evidence links", value: evidenceItems.length, note: "supporting records" },
         { label: "Themes", value: analysis.themes.length, note: "analysis clusters" },
         { label: "AAR status", value: exsum.content ? "Draft" : "Build", note: "executive product" }
       ]} />
-      <PhaseSectionTable title="Review Workstreams" description="Detailed review tools remain available here after the evidence and EXSUM/AAR issue board." sections={sections} />
+      <PhaseSectionTable title="Review tools" description="Evidence map, analysis, EXSUM/AAR, package, and Ask Exercise tools stay available here without crowding the validation queue." sections={sections} />
       <LifecycleChain items={[
         { label: "Objectives", value: uniqueCount(feedbackEntries.map((entry) => entry.related_objective)), href: "/objectives" },
         { label: "Observations", value: feedbackEntries.length, href: "/feedback" },
