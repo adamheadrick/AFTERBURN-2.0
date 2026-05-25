@@ -163,6 +163,16 @@ export default async function PlanPage() {
     }
   ];
 
+  const goNoGoChecklist = [
+    { label: "Objectives confirmed", ready: objectives.length > 0, detail: `${objectives.length} objectives` },
+    { label: "Scenario/MSEL ready", ready: Boolean(scenario.generated_narrative && injects.length), detail: `${injects.length} injects` },
+    { label: "Participants confirmed", ready: agencyCount > 1, detail: `${agencyCount} agencies` },
+    { label: "Comms/COP validated", ready: commsReady, detail: commsReady ? "Drafted" : "Needs owner" },
+    { label: "Evaluator coverage assigned", ready: evaluatorGaps === 0 && objectives.length > 0, detail: evaluatorGaps ? `${evaluatorGaps} gaps` : "Covered" },
+    { label: "UAS/airspace/legal reviewed", ready: Boolean(uasRows && scenario.legal_policy_constraints), detail: uasRows ? "In plan" : "Needs coordination" },
+    { label: "Safety controls confirmed", ready: Boolean(scenario.legal_policy_constraints), detail: scenario.legal_policy_constraints ? "Drafted" : "Needs review" }
+  ];
+
   return (
     <div className="grid gap-4">
       <PhaseHero
@@ -183,6 +193,26 @@ export default async function PlanPage() {
         actionHref="/readiness"
         actionLabel="Close gap"
       />
+      <section className="rounded-md border border-line bg-panel p-4">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <h2 className="text-base font-semibold text-ink">Go / No-Go Checklist</h2>
+            <p className="mt-1 text-sm leading-6 text-steel">The readiness decision should be visible before the detailed planning package.</p>
+          </div>
+          <span className="rounded-sm border border-line bg-night px-2 py-1 text-xs font-semibold text-steel">
+            {goNoGoChecklist.filter((item) => item.ready).length}/{goNoGoChecklist.length} ready
+          </span>
+        </div>
+        <div className="mt-4 grid gap-2 md:grid-cols-2 xl:grid-cols-3">
+          {goNoGoChecklist.map((item) => (
+            <div key={item.label} className="grid grid-cols-[auto_1fr_auto] items-center gap-2 border-t border-line pt-2">
+              <span className={`size-2 rounded-full ${item.ready ? "bg-signal" : "bg-flare"}`} />
+              <span className="text-sm font-semibold text-ink">{item.label}</span>
+              <span className="text-xs text-steel">{item.detail}</span>
+            </div>
+          ))}
+        </div>
+      </section>
       <IssueTable title="Planning Issues" description="Issue/action view for what must be fixed before execution." issues={issues} />
       <MetricStrip metrics={[
         { label: "Objectives", value: objectives.length, note: "evaluation targets" },
@@ -190,7 +220,7 @@ export default async function PlanPage() {
         { label: "Agencies", value: agencyCount, note: "participating organizations" },
         { label: "Planning gaps", value: syncGaps + evaluatorGaps, note: "coverage and sync issues" }
       ]} />
-      <PhaseSectionTable title="Planning Workstreams" description="Detailed planning workstreams remain available here without crowding the readiness decision." sections={sections} />
+      <PhaseSectionTable title="Planning details" description="Exercise overview, objectives, MSEL, participants, rehearsal timeline, comms/COP, UAS/airspace, and safety/legal details remain available here." sections={sections} />
       <LifecycleChain items={[
         { label: "Objectives", value: objectives.length, href: "/objectives" },
         { label: "Observations", value: 0, href: "/feedback" },
