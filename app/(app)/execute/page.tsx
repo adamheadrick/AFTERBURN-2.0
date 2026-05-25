@@ -149,7 +149,7 @@ export default async function ExecutePage() {
         primaryAction="Capture observation"
         steps={executionSteps}
       />
-      <section className="rounded-md border border-line bg-panel p-4">
+      <section className="border-t border-line pt-3">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
             <p className="text-xs font-semibold text-steel">Active Inject</p>
@@ -162,7 +162,7 @@ export default async function ExecutePage() {
           </div>
           <ButtonLink href="/feedback" variant="flame">Capture Observation</ButtonLink>
         </div>
-        <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+        <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-5">
           <div className="border-t border-line pt-3">
             <p className="text-xs font-semibold text-steel">Expected action</p>
             <p className="mt-1 text-sm leading-6 text-ink">{latestInject?.expected_action ?? "Define expected participant action."}</p>
@@ -178,6 +178,10 @@ export default async function ExecutePage() {
           <div className="border-t border-line pt-3">
             <p className="text-xs font-semibold text-steel">Next inject</p>
             <p className="mt-1 text-sm leading-6 text-ink">{nextInject ? `${nextInject.inject_time} · ${nextInject.inject_type}` : "None queued"}</p>
+          </div>
+          <div className="border-t border-line pt-3">
+            <p className="text-xs font-semibold text-steel">Evidence signal</p>
+            <p className="mt-1 text-sm leading-6 text-ink">{latestObservation ? latestObservation.what_happened : recentDropoffs.length ? `${recentDropoffs.length} intake items` : "Awaiting capture"}</p>
           </div>
         </div>
       </section>
