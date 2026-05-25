@@ -1,6 +1,10 @@
 import { GatePanel, IssueTable, LifecycleChain, MetricStrip, PhaseHero, PhaseSectionTable } from "@/components/lifecycle-workspace";
 import { getAppData } from "@/lib/data";
 
+function formatDate(value: string) {
+  return new Intl.DateTimeFormat("en", { month: "short", day: "numeric" }).format(new Date(value));
+}
+
 export default async function ImprovePage() {
   const { analysis, poamItems, capabilityGaps, trendInsights, lessonsRepositoryItems } = await getAppData();
 
@@ -66,7 +70,7 @@ export default async function ImprovePage() {
       status: trendInsights.length ? "Inputs ready" : "Needs signals",
       evidence: `${trendInsights.length} trend signals available for future exercise design`,
       href: "/insights",
-      action: "Generate draft",
+      action: "Prepare re-test input",
       tone: trendInsights.length ? "ready" as const : "friction" as const
     },
     {
@@ -109,7 +113,7 @@ export default async function ImprovePage() {
       status: "Draft",
       recommendation: "Build a future exercise input with request flow, legal review, airspace deconfliction, product delivery, and ICP-level briefing material.",
       href: "/sync-matrix",
-      action: "Generate draft",
+      action: "Prepare re-test input",
       tone: "friction" as const
     },
     {
@@ -135,6 +139,31 @@ export default async function ImprovePage() {
         primaryAction="Convert to POA&M"
         steps={improveSteps}
       />
+      <section className="border-t border-line pt-3">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <h2 className="text-base font-semibold text-ink">POA&M Actions</h2>
+            <p className="mt-1 text-sm leading-6 text-steel">Who owns the fix, when it is due, and what is blocking movement.</p>
+          </div>
+          <span className="border border-line px-2 py-1 text-xs font-semibold text-steel">
+            {openPoam} open actions
+          </span>
+        </div>
+        <div className="mt-3 border-t border-line">
+          {poamItems.slice(0, 5).map((item) => (
+            <div key={item.id} className="grid gap-2 border-b border-line py-2 lg:grid-cols-[1fr_10rem_7rem_8rem_9rem] lg:items-center">
+              <div>
+                <p className="text-sm font-semibold leading-5 text-ink">{item.corrective_action}</p>
+                <p className="mt-0.5 text-xs leading-5 text-steel">Resources: {item.required_resources || "Not specified"} · Re-test: {item.next_update_date ? formatDate(item.next_update_date) : "Not linked"}</p>
+              </div>
+              <span className="text-xs text-steel">{item.responsible_office || "Unassigned"}</span>
+              <span className="text-xs text-steel">{formatDate(item.due_date)}</span>
+              <span className="text-xs text-steel">{item.priority}</span>
+              <span className="text-sm font-semibold text-steel lg:text-right">{item.status.replaceAll("_", " ")}</span>
+            </div>
+          ))}
+        </div>
+      </section>
       <GatePanel
         label="Improve Gate"
         status={unassignedPoam ? "Needs ownership" : "Actions assigned"}
@@ -151,7 +180,7 @@ export default async function ImprovePage() {
         { label: "Capability gaps", value: capabilityGaps.length, note: "tracked risks" },
         { label: "Trend signals", value: trendInsights.length, note: "future inputs" }
       ]} />
-      <PhaseSectionTable title="Improvement Workstreams" description="Detailed improvement tools remain available here after ownership and POA&M issues." sections={sections} />
+      <PhaseSectionTable title="More improvement tools" description="Capability gaps, doctrine/SOP updates, trend signals, and re-test planning stay available here after the accountability board." sections={sections} />
       <LifecycleChain items={[
         { label: "Objectives", value: "source", href: "/objectives" },
         { label: "Observations", value: "validated", href: "/feedback" },
