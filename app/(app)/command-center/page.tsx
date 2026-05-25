@@ -117,7 +117,7 @@ export default async function CommandCenterPage() {
       <section className="grid gap-6 border-b border-line pb-6 lg:grid-cols-[1fr_0.82fr]">
         <div>
           <p className="text-xs text-steel">Current exercise</p>
-          <h2 className="mt-1 text-3xl font-semibold tracking-tight text-ink">{shortExerciseName(exercise.name)}</h2>
+          <h2 className="mt-1 text-2xl font-semibold tracking-tight text-ink">{shortExerciseName(exercise.name)}</h2>
           <p className="mt-2 text-sm text-steel">
             Review Phase · {readinessScore.score}% Ready with Friction · Updated {formatDate(exercise.updated_at)}
           </p>
@@ -132,7 +132,9 @@ export default async function CommandCenterPage() {
           <p className="mt-2 text-sm leading-6 text-steel">Do this before generating the next commander update.</p>
           <div className="mt-4 flex flex-wrap gap-2">
             <ButtonLink href="/review" variant="flame">Open Review</ButtonLink>
-            <ButtonLink href="/plan" variant="subtle">Assign Owner</ButtonLink>
+            <ButtonLink href="/plan" variant="subtle">Open Plan</ButtonLink>
+            <ButtonLink href="/plan" variant="ghost">Assign Owner</ButtonLink>
+            <ButtonLink href="/exsum" variant="ghost">Generate Summary</ButtonLink>
           </div>
         </div>
       </section>
@@ -140,20 +142,19 @@ export default async function CommandCenterPage() {
       <section>
         <div className="flex items-end justify-between gap-4">
           <div>
-            <h2 className="text-base font-semibold text-ink">Priority Issues</h2>
-            <p className="mt-1 text-sm text-steel">Visible by default: the three issues most likely to affect exercise quality.</p>
+            <h2 className="text-base font-semibold text-ink">Priority Gaps</h2>
+            <p className="mt-1 text-sm text-steel">The three gaps most likely to affect exercise quality and AAR value.</p>
           </div>
           <Link href="/review" className="text-sm font-semibold text-steel transition hover:text-ink">View all</Link>
         </div>
         <div className="mt-3 border-t border-line">
           {priorityIssues.slice(0, 3).map((issue) => (
-            <div key={issue.issue} className="grid gap-2 border-b border-line py-3 md:grid-cols-[6rem_1fr_11rem_8rem] md:items-center">
+            <div key={issue.issue} className="grid gap-2 border-b border-line py-3 md:grid-cols-[6rem_1fr_8rem] md:items-center">
               <span className={`text-xs font-semibold ${severityClass[issue.severity as keyof typeof severityClass]}`}>{issue.severity}</span>
               <div>
                 <p className="text-sm font-semibold text-ink">{issue.issue}</p>
                 <p className="mt-0.5 text-xs text-steel">{issue.owner} · {issue.status}</p>
               </div>
-              <p className="text-xs text-steel md:text-right">{issue.status}</p>
               <Link href={issue.href} className="text-sm font-semibold text-steel transition hover:text-ink md:text-right">
                 {issue.action}
               </Link>
