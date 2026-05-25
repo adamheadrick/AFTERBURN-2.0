@@ -72,8 +72,8 @@ export default function LandingPage() {
 
       <section className="border-b border-line">
         <div className="mx-auto max-w-6xl px-5 py-16 sm:py-20">
-          <BrandWordmark className="text-[clamp(2.7rem,8vw,7.25rem)]" />
-          <div className="mt-10 grid gap-10 lg:grid-cols-[1fr_0.72fr] lg:items-end">
+          <div className="mb-8 h-px w-40 bg-gradient-to-r from-flare via-ember to-transparent" />
+          <div className="grid gap-10 lg:grid-cols-[1fr_0.72fr] lg:items-end">
             <div>
               <h1 className="max-w-4xl text-4xl font-semibold leading-tight text-ink sm:text-6xl">
                 Turn exercise chaos into accountable improvement.
