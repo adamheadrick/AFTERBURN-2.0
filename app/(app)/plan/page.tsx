@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { GatePanel, IssueTable, LifecycleChain, MetricStrip, PhaseHero, PhaseSectionTable } from "@/components/lifecycle-workspace";
 import { getAppData } from "@/lib/data";
 
@@ -164,13 +165,14 @@ export default async function PlanPage() {
   ];
 
   const goNoGoChecklist = [
-    { label: "Objectives confirmed", ready: objectives.length > 0, detail: `${objectives.length} objectives` },
-    { label: "Scenario/MSEL ready", ready: Boolean(scenario.generated_narrative && injects.length), detail: `${injects.length} injects` },
-    { label: "Participants confirmed", ready: agencyCount > 1, detail: `${agencyCount} agencies` },
-    { label: "Comms/COP validated", ready: commsReady, detail: commsReady ? "Drafted" : "Needs owner" },
-    { label: "Evaluator coverage assigned", ready: evaluatorGaps === 0 && objectives.length > 0, detail: evaluatorGaps ? `${evaluatorGaps} gaps` : "Covered" },
-    { label: "UAS/airspace/legal reviewed", ready: Boolean(uasRows && scenario.legal_policy_constraints), detail: uasRows ? "In plan" : "Needs coordination" },
-    { label: "Safety controls confirmed", ready: Boolean(scenario.legal_policy_constraints), detail: scenario.legal_policy_constraints ? "Drafted" : "Needs review" }
+    { label: "Scenario defined", ready: Boolean(scenario.generated_narrative), status: scenario.generated_narrative ? "Ready" : "Needed", owner: "Scenario Cell", action: "Build scenario", href: "/scenario-builder" },
+    { label: "Objectives set", ready: objectives.length > 0, status: `${objectives.length} objectives`, owner: "Exercise Cell", action: "Open objectives", href: "/objectives" },
+    { label: "Agencies / partners identified", ready: agencyCount > 1, status: `${agencyCount} agencies`, owner: "Planning Cell", action: "Assign roles", href: "/sync-matrix" },
+    { label: "Roles / lanes assigned", ready: syncGaps === 0 && syncMatrixEntries.length > 0, status: syncGaps ? `${syncGaps} gaps` : "Ready", owner: "Lane Leads", action: "Close gaps", href: "/sync-matrix" },
+    { label: "Communications / COP plan drafted", ready: commsReady, status: commsReady ? "Drafted" : "Needs owner", owner: "Comms Lead", action: "Close gap", href: "/mission-assignment" },
+    { label: "Safety / legal / authority issues reviewed", ready: Boolean(scenario.legal_policy_constraints), status: scenario.legal_policy_constraints ? "Reviewed" : "Needs review", owner: "Safety / Legal", action: "Review", href: "/red-team" },
+    { label: "Observers / evaluators assigned", ready: evaluatorGaps === 0 && objectives.length > 0, status: evaluatorGaps ? `${evaluatorGaps} gaps` : "Covered", owner: "Evaluator Lead", action: "Assign", href: "/evaluators" },
+    { label: "Readiness decision", ready: readinessScore.score >= 85, status: readinessScore.label, owner: "Exercise Director", action: "Assess", href: "/readiness" }
   ];
 
   return (
@@ -184,6 +186,30 @@ export default async function PlanPage() {
         primaryAction="Assess readiness"
         steps={planningSteps}
       />
+      <section className="border-t border-line pt-3">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <h2 className="text-base font-semibold text-ink">Readiness Checklist</h2>
+            <p className="mt-1 text-sm leading-6 text-steel">What is missing, who owns it, and what to do next.</p>
+          </div>
+          <span className="border border-line px-2 py-1 text-xs font-semibold text-steel">
+            {goNoGoChecklist.filter((item) => item.ready).length}/{goNoGoChecklist.length} ready
+          </span>
+        </div>
+        <div className="mt-3 border-t border-line">
+          {goNoGoChecklist.map((item) => (
+            <div key={item.label} className="grid gap-2 border-b border-line py-2 md:grid-cols-[1fr_7rem_9rem_7rem] md:items-center">
+              <div className="flex items-center gap-2">
+                <span className={`size-2 ${item.ready ? "bg-signal" : "bg-flare"}`} />
+                <span className="text-sm font-semibold text-ink">{item.label}</span>
+              </div>
+              <span className="text-xs text-steel">{item.status}</span>
+              <span className="text-xs text-steel">{item.owner}</span>
+              <Link href={item.href} className="text-sm font-semibold text-steel transition hover:text-ink md:text-right">{item.action}</Link>
+            </div>
+          ))}
+        </div>
+      </section>
       <GatePanel
         label="Planning Gate"
         status={`${readinessScore.score}% ${readinessScore.label}`}
@@ -193,26 +219,6 @@ export default async function PlanPage() {
         actionHref="/readiness"
         actionLabel="Close gap"
       />
-      <section className="rounded-md border border-line bg-panel p-4">
-        <div className="flex flex-wrap items-start justify-between gap-3">
-          <div>
-            <h2 className="text-base font-semibold text-ink">Go / No-Go Checklist</h2>
-            <p className="mt-1 text-sm leading-6 text-steel">The readiness decision should be visible before the detailed planning package.</p>
-          </div>
-          <span className="rounded-sm border border-line bg-night px-2 py-1 text-xs font-semibold text-steel">
-            {goNoGoChecklist.filter((item) => item.ready).length}/{goNoGoChecklist.length} ready
-          </span>
-        </div>
-        <div className="mt-4 grid gap-2 md:grid-cols-2 xl:grid-cols-3">
-          {goNoGoChecklist.map((item) => (
-            <div key={item.label} className="grid grid-cols-[auto_1fr_auto] items-center gap-2 border-t border-line pt-2">
-              <span className={`size-2 rounded-full ${item.ready ? "bg-signal" : "bg-flare"}`} />
-              <span className="text-sm font-semibold text-ink">{item.label}</span>
-              <span className="text-xs text-steel">{item.detail}</span>
-            </div>
-          ))}
-        </div>
-      </section>
       <IssueTable title="Planning Issues" description="Issue/action view for what must be fixed before execution." issues={issues} />
       <MetricStrip metrics={[
         { label: "Objectives", value: objectives.length, note: "evaluation targets" },
