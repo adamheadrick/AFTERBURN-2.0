@@ -213,41 +213,39 @@ select.text-ink {
 }
 
 .brand-logo {
-  min-height: 1.15em;
-  border: 1px solid rgb(255 255 255 / 0.08);
+  min-height: 1em;
+  border: 0;
   border-radius: 0;
-  background:
-    linear-gradient(90deg, #ffd166 0%, #f08a4f 46%, #c2412d 88%, #2f6f8f 100%);
+  background: transparent;
   box-shadow: none;
-  padding: 0.18em 0.42em 0.16em;
+  padding: 0;
 }
 
 .brand-logo-compact {
   min-height: 1em;
-  padding: 0.15em 0.34em 0.13em;
+  padding: 0;
 }
 
 .brand-logo-text {
-  color: #05070d;
+  color: #f8fafc;
   font-family: var(--font-brand);
-  font-size: 0.76em;
+  font-size: 1em;
   font-weight: 900;
-  letter-spacing: 0.13em;
-  line-height: 0.95;
+  letter-spacing: 0.15em;
+  line-height: 1;
   text-transform: uppercase;
   text-shadow: none;
 }
 
 .brand-mark {
-  border: 1px solid rgb(255 255 255 / 0.08);
+  border: 1px solid #252d3a;
   border-radius: 0;
-  background:
-    linear-gradient(135deg, #ffd166 0%, #f08a4f 52%, #c2412d 100%);
+  background: transparent;
   box-shadow: none;
 }
 
 .brand-mark span {
-  color: #05070d;
+  color: #f8fafc;
   font-family: var(--font-brand);
   font-size: 0.86rem;
   font-weight: 900;
