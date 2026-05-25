@@ -16,7 +16,6 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
 import { signOut } from "@/lib/actions/auth";
 import { BrandMark, BrandWordmark } from "@/components/brand-mark";
 import { BreadcrumbTrail } from "@/components/breadcrumb-trail";
@@ -30,65 +29,32 @@ const nav = [
     href: "/plan",
     label: "Plan",
     icon: Route,
-    activePaths: ["/advanced", "/plan", "/exercises/new", "/scenario-builder", "/graphic-overview", "/mission-assignment", "/objectives", "/red-team", "/briefing"],
-    children: [
-      { href: "/exercises/new", label: "Exercise Setup" },
-      { href: "/scenario-builder", label: "Scenario / MSEL" },
-      { href: "/mission-assignment", label: "Mission Assignment" },
-      { href: "/objectives", label: "Objectives" },
-      { href: "/graphic-overview", label: "Graphic Overview" },
-      { href: "/red-team", label: "AI Red Team" }
-    ]
+    activePaths: ["/advanced", "/plan", "/exercises/new", "/scenario-builder", "/graphic-overview", "/mission-assignment", "/objectives", "/red-team", "/briefing"]
   },
   {
     href: "/execute",
     label: "Execute",
     icon: RadioTower,
-    activePaths: ["/execute", "/injects", "/sync-matrix", "/evaluators", "/decision-points", "/white-cell", "/participant-portal", "/feedback"],
-    children: [
-      { href: "/injects", label: "MSEL / Injects" },
-      { href: "/sync-matrix", label: "Sync Matrix" },
-      { href: "/evaluators", label: "Evaluator Coverage" },
-      { href: "/decision-points", label: "Decisions" },
-      { href: "/white-cell", label: "White Cell" },
-      { href: "/feedback", label: "Feedback" }
-    ]
+    activePaths: ["/execute", "/injects", "/sync-matrix", "/evaluators", "/decision-points", "/white-cell", "/participant-portal", "/feedback"]
   },
   {
     href: "/review",
     label: "Review",
     icon: FileText,
-    activePaths: ["/review", "/analysis", "/exsum", "/evidence", "/exercise-package", "/ask-exercise"],
-    children: [
-      { href: "/analysis", label: "Analysis" },
-      { href: "/evidence", label: "Evidence Map" },
-      { href: "/exsum", label: "EXSUM / AAR" },
-      { href: "/exercise-package", label: "Package" },
-      { href: "/ask-exercise", label: "Ask Exercise" }
-    ]
+    activePaths: ["/review", "/analysis", "/exsum", "/evidence", "/exercise-package", "/ask-exercise"]
   },
   {
     href: "/improve",
     label: "Improve",
     icon: ClipboardCheck,
-    activePaths: ["/improve", "/poam", "/insights"],
-    children: [
-      { href: "/poam", label: "POA&M Tracker" },
-      { href: "/insights", label: "Trends" }
-    ]
+    activePaths: ["/improve", "/poam", "/insights"]
   },
   {
     href: "/library",
     label: "Library",
     icon: Archive,
     activePaths: ["/library", "/exercises", "/lessons"],
-    excludePaths: ["/exercises/new"],
-    children: [
-      { href: "/library", label: "Repository" },
-      { href: "/lessons", label: "Lessons Learned" },
-      { href: "/exercises", label: "Exercise Archive" },
-      { href: "/advanced", label: "Full Workspace" }
-    ]
+    excludePaths: ["/exercises/new"]
   }
 ];
 
@@ -101,7 +67,6 @@ export function AppShellClient({
   authEnabled: boolean;
   children: React.ReactNode;
 }) {
-  const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const labelsVisible = !collapsed;
@@ -114,15 +79,6 @@ export function AppShellClient({
   function updateCollapsed(nextValue: boolean) {
     setCollapsed(nextValue);
     localStorage.setItem(sidebarStorageKey, String(nextValue));
-  }
-
-  function isActiveHref(href: string) {
-    return pathname === href || pathname.startsWith(`${href}/`);
-  }
-
-  function isActiveItem(item: (typeof nav)[number]) {
-    const excluded = item.excludePaths?.some((path) => pathname === path || pathname.startsWith(`${path}/`));
-    return !excluded && item.activePaths.some((path) => pathname === path || pathname.startsWith(`${path}/`));
   }
 
   return (
@@ -151,32 +107,11 @@ export function AppShellClient({
             <nav className={`${mobileMenuOpen ? "grid" : "hidden"} gap-1.5 md:grid ${railCollapsed ? "p-2" : "p-3"}`}>
               {nav.map((item) => {
                 const Icon = item.icon;
-                const activeItem = isActiveItem(item);
                 return (
                   <div key={item.href}>
                     <NavLink href={item.href} label={item.label} collapsed={railCollapsed} activePaths={item.activePaths} excludePaths={item.excludePaths}>
                       <Icon size={18} />
                     </NavLink>
-                    {!railCollapsed && activeItem && item.children?.length ? (
-                      <div className="ml-[1.1rem] mt-1 grid gap-0.5 border-l border-line/80 pl-3">
-                        {item.children.map((child) => {
-                          const active = isActiveHref(child.href);
-                          return (
-                            <Link
-                              key={child.href}
-                              href={child.href}
-                              className={`rounded-md px-2 py-1.5 text-[0.78rem] font-medium transition ${
-                                active
-                                  ? "bg-field text-ink"
-                                  : "text-steel hover:bg-field hover:text-ink"
-                              }`}
-                            >
-                              {child.label}
-                            </Link>
-                          );
-                        })}
-                      </div>
-                    ) : null}
                   </div>
                 );
               })}
