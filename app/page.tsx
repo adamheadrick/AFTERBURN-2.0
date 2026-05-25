@@ -32,7 +32,7 @@ export default function LandingPage() {
       <header className="sticky top-0 z-50 border-b border-line bg-night/92 backdrop-blur-xl">
         <nav className="mx-auto flex min-h-[4.5rem] max-w-6xl items-center justify-between gap-5 px-5">
           <Link href="/" aria-label="AFTERBURN home" className="shrink-0">
-            <BrandWordmark className="text-[1.12rem]" />
+            <BrandWordmark className="text-[1.22rem]" />
           </Link>
           <div className="hidden items-center gap-7 text-sm text-steel md:flex">
             <a href="#story" className="transition hover:text-ink">Product</a>
@@ -47,10 +47,10 @@ export default function LandingPage() {
 
       <section className="border-b border-line">
         <div className="mx-auto max-w-6xl px-5 py-20 sm:py-24">
-          <BrandWordmark className="text-[clamp(2rem,5vw,4.5rem)]" />
+          <BrandWordmark className="text-[clamp(2.35rem,5vw,4.8rem)]" />
           <div className="mt-12 max-w-4xl">
             <div className="mb-8 h-px w-44 bg-gradient-to-r from-flare via-ember to-transparent" />
-            <h1 className="text-4xl font-semibold leading-tight text-ink sm:text-6xl">
+            <h1 className="text-[clamp(2rem,5vw,3.4rem)] font-semibold leading-tight text-ink">
               Turn exercise chaos into accountable improvement.
             </h1>
             <p className="mt-6 max-w-2xl text-base leading-7 text-steel">
