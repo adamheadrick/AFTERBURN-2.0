@@ -14,26 +14,26 @@ function shortExerciseName(name: string) {
 const priorityIssues = [
   {
     severity: "High",
-    issue: "Communications plan ownership",
+    issue: "Communications / COP ownership unclear",
     owner: "Comms lead",
     status: "Unassigned",
-    action: "Assign owner",
+    action: "Assign Owner",
     href: "/plan"
   },
   {
     severity: "Medium",
-    issue: "Observer coverage by lane",
+    issue: "Observer coverage gap by lane",
     owner: "Evaluator lead",
     status: "Needs coverage",
-    action: "Close gap",
+    action: "Open Execute",
     href: "/execute"
   },
   {
     severity: "Medium",
-    issue: "UAS / airspace coordination",
+    issue: "UAS / airspace coordination rehearsal incomplete",
     owner: "Air operations",
     status: "Rehearsal check",
-    action: "Fix",
+    action: "Close Gap",
     href: "/plan"
   },
   {
@@ -41,7 +41,7 @@ const priorityIssues = [
     issue: "Hotwash inputs pending validation",
     owner: "Review team",
     status: "Pending",
-    action: "Open review",
+    action: "Open Review",
     href: "/review"
   },
   {
@@ -62,37 +62,38 @@ const lifecycleSteps = [
   { label: "Library", status: "Pending", href: "/library" }
 ];
 
+const captureActions = [
+  { label: "Capture observation", href: "/feedback" },
+  { label: "Log friction", href: "/feedback" },
+  { label: "Record decision", href: "/decision-points" },
+  { label: "Participant Intake", href: "/admin/dropoff" }
+];
+
 const recentOutputs = [
   { label: "Commander Summary", status: "Draft ready", href: "/exsum" },
   { label: "Evidence Map", status: "Needs review", href: "/evidence" },
   { label: "Status Brief", status: "Exportable", href: "/command-center" }
 ];
 
-const upcomingActions = [
-  { label: "Validate top findings", owner: "Review team", href: "/review" },
-  { label: "Assign communications owner", owner: "Comms lead", href: "/plan" },
-  { label: "Convert priority recommendation", owner: "Improvement lead", href: "/improve" }
-];
-
 const severityClass = {
-  High: "border-red-400/30 bg-red-500/10 text-red-100",
-  Medium: "border-flare/25 bg-flare/10 text-flare",
-  Low: "border-line bg-field text-steel"
+  High: "text-red-100",
+  Medium: "text-flare",
+  Low: "text-steel"
 };
 
-export default async function OverviewPage() {
+export default async function CommandCenterPage() {
   const data = await getAppData();
   const { exercise, readinessScore } = data;
   const hasActiveExercise = data.exercises.length > 0 && exercise.id !== "instructional-exercise";
 
   if (!hasActiveExercise) {
     return (
-      <div className="mx-auto grid max-w-4xl gap-4">
+      <div className="mx-auto grid max-w-3xl gap-5">
         <header>
           <h1 className="text-xl font-semibold text-ink">Command Center</h1>
-          <p className="mt-1 text-sm leading-6 text-steel">Start or open an exercise to begin the lifecycle workspace.</p>
+          <p className="mt-1 text-sm leading-6 text-steel">Start or open an exercise to begin the facilitator workspace.</p>
         </header>
-        <section className="rounded-lg border border-line bg-panel p-5">
+        <section className="border-t border-line pt-5">
           <h2 className="text-base font-semibold text-ink">No active exercise</h2>
           <p className="mt-2 max-w-2xl text-sm leading-6 text-steel">
             Create a new exercise or open an existing one to begin planning, execution tracking, review, and improvement.
@@ -107,115 +108,100 @@ export default async function OverviewPage() {
   }
 
   return (
-    <div className="status-brief-print mx-auto grid max-w-6xl gap-4">
+    <div className="status-brief-print mx-auto grid max-w-5xl gap-6">
       <header className="print-hidden border-b border-line pb-4">
         <h1 className="text-xl font-semibold text-ink">Command Center</h1>
-        <p className="mt-1 text-sm leading-6 text-steel">Current exercise status, priority issues, and next action.</p>
+        <p className="mt-1 text-sm leading-6 text-steel">Active exercise status, top risk, and next action.</p>
       </header>
 
-      <section className="grid gap-4 lg:grid-cols-[1fr_0.8fr]">
-        <div className="rounded-lg border border-line bg-panel p-4">
-          <div className="flex flex-wrap items-start justify-between gap-3">
-            <div>
-              <p className="text-xs text-steel">Current exercise</p>
-              <h2 className="mt-1 text-2xl font-semibold tracking-tight text-ink">{shortExerciseName(exercise.name)}</h2>
-              <p className="mt-2 text-sm text-steel">
-                Review Phase · Updated {formatDate(exercise.updated_at)} · Exercise Date {formatDate(exercise.date)}
-              </p>
-            </div>
-            <span className="rounded-md border border-flare/25 bg-flare/10 px-2 py-1 text-xs font-semibold text-flare">
-              {readinessScore.score}% Ready with Friction
-            </span>
-          </div>
+      <section className="grid gap-6 border-b border-line pb-6 lg:grid-cols-[1fr_0.82fr]">
+        <div>
+          <p className="text-xs text-steel">Current exercise</p>
+          <h2 className="mt-1 text-3xl font-semibold tracking-tight text-ink">{shortExerciseName(exercise.name)}</h2>
+          <p className="mt-2 text-sm text-steel">
+            Review Phase · {readinessScore.score}% Ready with Friction · Updated {formatDate(exercise.updated_at)}
+          </p>
           <p className="mt-4 max-w-3xl text-sm leading-6 text-ink">
-            Review is active. Core exercise products are usable, but communications ownership, observer coverage,
-            and UAS/airspace coordination need validation before final summary generation.
+            Review is active. The briefable risk is unresolved communications/COP ownership with observer coverage and UAS coordination still affecting AAR confidence.
           </p>
         </div>
 
-        <div className="rounded-lg border border-line bg-panel p-4">
+        <div className="border-t border-line pt-4 lg:border-l lg:border-t-0 lg:pl-6 lg:pt-0">
           <p className="text-xs text-steel">Next best action</p>
-          <p className="mt-2 text-sm leading-6 text-ink">
-            Validate top findings and assign unresolved communications issues.
-          </p>
+          <h3 className="mt-1 text-lg font-semibold text-ink">Validate top findings and assign communications ownership.</h3>
+          <p className="mt-2 text-sm leading-6 text-steel">Do this before generating the next commander update.</p>
           <div className="mt-4 flex flex-wrap gap-2">
             <ButtonLink href="/review" variant="flame">Open Review</ButtonLink>
-            <ButtonLink href="/plan" variant="subtle">Fix Priority Issues</ButtonLink>
-            <ButtonLink href="/exsum" variant="ghost">Generate Commander Summary</ButtonLink>
+            <ButtonLink href="/plan" variant="subtle">Assign Owner</ButtonLink>
           </div>
         </div>
       </section>
 
-      <section className="overflow-hidden rounded-lg border border-line bg-panel">
-        <div className="border-b border-line px-3 py-3">
-          <h2 className="text-sm font-semibold text-ink">Priority Issues</h2>
-          <p className="mt-0.5 text-xs text-steel">What needs attention before the next brief.</p>
-        </div>
-        <div className="hidden grid-cols-[5rem_1fr_10rem_7rem] border-b border-line bg-night/70 px-3 py-2 text-xs text-steel md:grid">
-          <span>Severity</span>
-          <span>Issue</span>
-          <span>Owner / status</span>
-          <span className="text-right">Action</span>
-        </div>
-        {priorityIssues.map((issue) => (
-          <div key={issue.issue} className="grid gap-2 border-b border-line px-3 py-2.5 last:border-b-0 hover:bg-field/45 md:grid-cols-[5rem_1fr_10rem_7rem] md:items-center">
-            <span className={`inline-flex w-fit rounded-md border px-2 py-0.5 text-xs font-semibold ${severityClass[issue.severity as keyof typeof severityClass]}`}>
-              {issue.severity}
-            </span>
-            <p className="text-sm text-ink">{issue.issue}</p>
-            <p className="text-xs text-steel">{issue.owner} · {issue.status}</p>
-            <Link href={issue.href} className="print-hidden rounded-md px-2 py-1 text-xs font-semibold text-steel transition hover:bg-night hover:text-ink md:text-right">
-              {issue.action}
-            </Link>
+      <section>
+        <div className="flex items-end justify-between gap-4">
+          <div>
+            <h2 className="text-base font-semibold text-ink">Priority Issues</h2>
+            <p className="mt-1 text-sm text-steel">Visible by default: the three issues most likely to affect exercise quality.</p>
           </div>
-        ))}
-      </section>
-
-      <section className="rounded-lg border border-line bg-panel px-3 py-3">
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-steel">
-          <span className="text-xs text-steel">Lifecycle</span>
-          {lifecycleSteps.map((step, index) => (
-            <span key={`${step.label}-${step.status}`} className="flex items-center gap-3">
-              <Link
-                href={step.href}
-                className={`rounded-md border px-2 py-1 text-xs transition hover:bg-field hover:text-ink ${step.active ? "border-flare/25 bg-flare/10 text-flare" : "border-line bg-night text-steel"}`}
-              >
-                {step.label} <span className={step.active ? "text-flare" : "text-steel"}>{step.status}</span>
+          <Link href="/review" className="text-sm font-semibold text-steel transition hover:text-ink">View all</Link>
+        </div>
+        <div className="mt-3 border-t border-line">
+          {priorityIssues.slice(0, 3).map((issue) => (
+            <div key={issue.issue} className="grid gap-2 border-b border-line py-3 md:grid-cols-[6rem_1fr_11rem_8rem] md:items-center">
+              <span className={`text-xs font-semibold ${severityClass[issue.severity as keyof typeof severityClass]}`}>{issue.severity}</span>
+              <div>
+                <p className="text-sm font-semibold text-ink">{issue.issue}</p>
+                <p className="mt-0.5 text-xs text-steel">{issue.owner} · {issue.status}</p>
+              </div>
+              <p className="text-xs text-steel md:text-right">{issue.status}</p>
+              <Link href={issue.href} className="text-sm font-semibold text-steel transition hover:text-ink md:text-right">
+                {issue.action}
               </Link>
-              {index < lifecycleSteps.length - 1 ? <span className="hidden h-px w-4 bg-line sm:inline-block" /> : null}
-            </span>
+            </div>
           ))}
         </div>
       </section>
 
-      <section className="grid gap-4 lg:grid-cols-2">
-        <div className="rounded-lg border border-line bg-panel p-4">
-          <div className="flex items-center justify-between gap-3">
-            <h2 className="text-sm font-semibold text-ink">Recent Outputs</h2>
-            <StatusBriefExportButton />
+      <details className="print-hidden border-t border-line">
+        <summary className="cursor-pointer py-3 text-sm text-steel transition hover:text-ink">More console detail</summary>
+        <div className="grid gap-6 border-t border-line py-4 lg:grid-cols-3">
+          <div>
+            <h3 className="text-sm font-semibold text-ink">Capture</h3>
+            <div className="mt-3 grid gap-2">
+              {captureActions.map((item) => (
+                <Link key={item.label} href={item.href} className="border-t border-line pt-2 text-sm text-steel transition hover:text-ink">
+                  {item.label}
+                </Link>
+              ))}
+            </div>
           </div>
-          <div className="mt-3 grid gap-2">
-            {recentOutputs.map((item) => (
-              <Link key={item.label} href={item.href} className="flex items-center justify-between rounded-md border border-line bg-night px-3 py-2 text-sm transition hover:bg-field">
-                <span className="text-ink">{item.label}</span>
-                <span className="text-xs text-steel">{item.status}</span>
-              </Link>
-            ))}
+          <div>
+            <h3 className="text-sm font-semibold text-ink">Lifecycle</h3>
+            <div className="mt-3 grid gap-2">
+              {lifecycleSteps.map((step) => (
+                <Link key={step.label} href={step.href} className="flex justify-between border-t border-line pt-2 text-sm transition hover:text-ink">
+                  <span className={step.active ? "text-flare" : "text-ink"}>{step.label}</span>
+                  <span className="text-steel">{step.status}</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+          <div>
+            <div className="flex items-center justify-between gap-3">
+              <h3 className="text-sm font-semibold text-ink">Briefable Outputs</h3>
+              <StatusBriefExportButton />
+            </div>
+            <div className="mt-3 grid gap-2">
+              {recentOutputs.map((item) => (
+                <Link key={item.label} href={item.href} className="flex justify-between border-t border-line pt-2 text-sm transition hover:text-ink">
+                  <span className="text-ink">{item.label}</span>
+                  <span className="text-steel">{item.status}</span>
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
-
-        <div className="rounded-lg border border-line bg-panel p-4">
-          <h2 className="text-sm font-semibold text-ink">Upcoming Actions</h2>
-          <div className="mt-3 grid gap-2">
-            {upcomingActions.map((item) => (
-              <Link key={item.label} href={item.href} className="flex items-center justify-between gap-3 rounded-md border border-line bg-night px-3 py-2 text-sm transition hover:bg-field">
-                <span className="text-ink">{item.label}</span>
-                <span className="text-xs text-steel">{item.owner}</span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
+      </details>
     </div>
   );
 }
