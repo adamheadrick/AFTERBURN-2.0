@@ -103,7 +103,7 @@ export default async function LibraryPage() {
     },
     {
       severity: "Low",
-      issue: "Screened Dropoff inputs need repository disposition",
+      issue: "Screened participant intake needs repository disposition",
       owner: "Review Queue",
       status: `${repositoryCandidates} candidates`,
       recommendation: "Convert cleared submissions into lessons, best practices, capability gaps, POA&M items, future injects, or planning considerations.",
@@ -132,6 +132,28 @@ export default async function LibraryPage() {
         primaryAction="Search knowledge"
         steps={librarySteps}
       />
+      <section className="border-t border-line pt-3">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <h2 className="text-base font-semibold text-ink">Knowledge Surface</h2>
+            <p className="mt-1 text-sm leading-6 text-steel">Find reusable lessons, templates, prior outputs, and carry-forward actions.</p>
+          </div>
+          <Link href="/ask-exercise" className="text-sm font-semibold text-steel transition hover:text-ink">Ask Library</Link>
+        </div>
+        <div className="mt-3 border-t border-line">
+          {[
+            { label: "Search / Ask Library", status: repositoryCandidates ? `${repositoryCandidates} candidates` : "Ready", href: "/ask-exercise" },
+            { label: "Recent lessons", status: `${lessonsRepositoryItems.length} records`, href: "/lessons" },
+            { label: "Reusable templates", status: "Planning starters", href: "/advanced" },
+            { label: "Carry-forward actions", status: `${openPoamHistory} open`, href: "/poam" }
+          ].map((item) => (
+            <Link key={item.label} href={item.href} className="grid gap-2 border-b border-line py-2 transition hover:text-ink sm:grid-cols-[1fr_auto]">
+              <span className="text-sm font-semibold text-ink">{item.label}</span>
+              <span className="text-xs text-steel">{item.status}</span>
+            </Link>
+          ))}
+        </div>
+      </section>
       <GatePanel
         label="Library Gate"
         status={`${lessonsRepositoryItems.length} repository items`}
@@ -149,17 +171,16 @@ export default async function LibraryPage() {
         { label: "Open POA&M", value: openPoamHistory, note: "carry-forward actions" }
       ]} />
       <PhaseSectionTable title="Library Workstreams" description="Detailed repository tools stay available here without turning Library into a file dump." sections={sections} />
-      <section className="rounded-md border border-line bg-panel p-4">
-        <h2 className="text-base font-semibold text-ink">Ask Library Prompts</h2>
-        <p className="mt-1 text-sm font-semibold text-steel">Example searches should retrieve lessons, evidence, POA&M history, templates, and recurring gaps rather than static files.</p>
-        <div className="mt-3 grid gap-2 md:grid-cols-2">
+      <details className="border-t border-line">
+        <summary className="cursor-pointer py-2 text-sm text-steel transition hover:text-ink">Example Library prompts</summary>
+        <div className="grid gap-2 border-t border-line py-3 md:grid-cols-2">
           {prompts.map((prompt) => (
-            <Link key={prompt} href="/ask-exercise" className="rounded-md border border-line bg-night px-3 py-2 text-sm font-semibold text-ink transition hover:bg-field">
+            <Link key={prompt} href="/ask-exercise" className="border-t border-line px-3 py-2 text-sm font-semibold text-ink transition hover:bg-field">
               {prompt}
             </Link>
           ))}
         </div>
-      </section>
+      </details>
       <LifecycleChain items={[
         { label: "Objectives", value: "templates", href: "/objectives" },
         { label: "Observations", value: "archive", href: "/feedback" },
