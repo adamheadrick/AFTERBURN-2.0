@@ -46,11 +46,11 @@ export default function LandingPage() {
       </header>
 
       <section className="border-b border-line">
-        <div className="mx-auto max-w-6xl px-5 py-20 sm:py-24">
-          <BrandWordmark className="text-[clamp(2.35rem,5vw,4.8rem)]" />
-          <div className="mt-12 max-w-4xl">
-            <div className="mb-8 h-px w-44 bg-gradient-to-r from-flare via-ember to-transparent" />
-            <h1 className="text-[clamp(2rem,5vw,3.4rem)] font-semibold leading-tight text-ink">
+        <div className="mx-auto max-w-6xl px-5 py-14 sm:py-[4.5rem]">
+          <BrandWordmark className="text-[clamp(1.55rem,3vw,2.7rem)]" />
+          <div className="mt-8 max-w-3xl">
+            <div className="mb-6 h-px w-36 bg-gradient-to-r from-flare via-ember to-transparent" />
+            <h1 className="text-[clamp(1.75rem,3.4vw,2.65rem)] font-semibold leading-tight text-ink">
               Turn exercise chaos into accountable improvement.
             </h1>
             <p className="mt-6 max-w-2xl text-base leading-7 text-steel">
