@@ -231,7 +231,7 @@ select.text-ink {
   font-family: var(--font-brand);
   font-size: 1em;
   font-weight: 900;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.14em;
   line-height: 1;
   text-transform: uppercase;
   text-shadow: none;
@@ -255,6 +255,15 @@ select.text-ink {
 
 .brand-gradient-line {
   display: none;
+}
+
+.rounded-sm,
+.rounded-md,
+.rounded-lg,
+.rounded-xl,
+.rounded-2xl,
+.rounded-3xl {
+  border-radius: 0 !important;
 }
 
 /* Slightly calmer display type for dense operational screens. */
