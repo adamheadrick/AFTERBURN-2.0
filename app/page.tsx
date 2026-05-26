@@ -162,16 +162,18 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <footer className="border-t border-line">
+      <footer className="border-t border-[#d7ac55] bg-flare text-night">
         <div className="mx-auto flex max-w-6xl flex-col gap-5 px-5 py-8 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <BrandWordmark className="text-[0.96rem]" />
-            <p className="mt-3 text-sm text-steel">Exercise lifecycle intelligence.</p>
+            <span className="font-brand text-[0.96rem] font-black uppercase leading-none tracking-[0.14em] text-night">
+              AFTERBURN
+            </span>
+            <p className="mt-3 text-sm text-night/75">Exercise lifecycle intelligence.</p>
           </div>
-          <nav className="flex flex-wrap gap-4 text-sm text-steel" aria-label="Footer">
-            <Link href="/" className="transition hover:text-ink">Home</Link>
-            <Link href="/overview" className="transition hover:text-ink">Command Center</Link>
-            <Link href="mailto:contact@afterburn.app" className="transition hover:text-ink">Contact</Link>
+          <nav className="flex flex-wrap gap-4 text-sm font-semibold text-night/75" aria-label="Footer">
+            <Link href="/" className="transition hover:text-night">Home</Link>
+            <Link href="/overview" className="transition hover:text-night">Command Center</Link>
+            <Link href="mailto:contact@afterburn.app" className="transition hover:text-night">Contact</Link>
           </nav>
         </div>
       </footer>
