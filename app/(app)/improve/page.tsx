@@ -1,6 +1,10 @@
 import { GatePanel, IssueTable, LifecycleChain, MetricStrip, PhaseHero, PhaseSectionTable } from "@/components/lifecycle-workspace";
 import { getAppData } from "@/lib/data";
 
+function formatDate(value: string) {
+  return new Intl.DateTimeFormat("en", { month: "short", day: "numeric" }).format(new Date(value));
+}
+
 export default async function ImprovePage() {
   const { analysis, poamItems, capabilityGaps, trendInsights, lessonsRepositoryItems } = await getAppData();
 
@@ -10,9 +14,9 @@ export default async function ImprovePage() {
   const recurringGaps = capabilityGaps.filter((item) => item.recurrence_count >= 3).length;
   const doctrineUpdates = capabilityGaps.filter((item) => /sop|doctrine|checklist|procedure|minimum information/i.test(`${item.recommendation} ${item.best_practice}`)).length;
   const improveSteps = [
-    { label: "POA&M Builder", href: "/poam", status: poamItems.length ? "Open" : "Needed" },
+    { label: "POA&M Builder", href: "/poam", status: poamItems.length ? "Tracking" : "Needed" },
     { label: "Improvement Tracker", href: "/poam", status: openPoam ? "Tracking" : "Pending" },
-    { label: "Capability Gaps", href: "/lessons", status: capabilityGaps.length ? "Open" : "Needed" },
+    { label: "Capability Gaps", href: "/lessons", status: capabilityGaps.length ? "Tracking" : "Needed" },
     { label: "Doctrine / Training", href: "/lessons", status: doctrineUpdates ? "Candidates" : "Pending" },
     { label: "Re-test Planning", href: "/insights", status: trendInsights.length ? "Inputs" : "Pending" },
     { label: "Improve Gate", href: "/improve", status: unassignedPoam ? "Needs owner" : "Ready" }
@@ -26,7 +30,7 @@ export default async function ImprovePage() {
       status: poamItems.length ? "Active" : "Needs items",
       evidence: `${poamItems.length} POA&M items; ${openPoam} open`,
       href: "/poam",
-      action: "Open",
+      action: "Convert to POA&M",
       tone: poamItems.length ? "ready" as const : "friction" as const
     },
     {
@@ -36,7 +40,7 @@ export default async function ImprovePage() {
       status: leadershipFlags ? "Needs attention" : "Tracking",
       evidence: `${leadershipFlags} leadership flags; ${unassignedPoam} not started or missing owners`,
       href: "/poam",
-      action: "Track",
+      action: "Assign owner",
       tone: leadershipFlags ? "risk" as const : "friction" as const
     },
     {
@@ -46,7 +50,7 @@ export default async function ImprovePage() {
       status: recurringGaps ? "Recurring risk" : "Monitoring",
       evidence: `${capabilityGaps.length} capability gaps; ${recurringGaps} recurring across exercises`,
       href: "/lessons",
-      action: "Open",
+      action: "Close gap",
       tone: recurringGaps ? "risk" as const : "friction" as const
     },
     {
@@ -56,7 +60,7 @@ export default async function ImprovePage() {
       status: doctrineUpdates ? "Candidates" : "Needs review",
       evidence: `${doctrineUpdates} doctrine, SOP, or checklist candidates detected`,
       href: "/lessons",
-      action: "Review",
+      action: "Route to Library",
       tone: doctrineUpdates ? "friction" as const : "open" as const
     },
     {
@@ -66,7 +70,7 @@ export default async function ImprovePage() {
       status: trendInsights.length ? "Inputs ready" : "Needs signals",
       evidence: `${trendInsights.length} trend signals available for future exercise design`,
       href: "/insights",
-      action: "Open",
+      action: "Prepare re-test input",
       tone: trendInsights.length ? "ready" as const : "friction" as const
     },
     {
@@ -76,7 +80,7 @@ export default async function ImprovePage() {
       status: unassignedPoam ? "Ready with friction" : "Accountable",
       evidence: `${unassignedPoam} ownership or start-state issues; ${lessonsRepositoryItems.length} lessons preserved`,
       href: "/improve",
-      action: "Check",
+      action: "Assign owner",
       tone: unassignedPoam ? "friction" as const : "ready" as const
     }
   ];
@@ -89,7 +93,7 @@ export default async function ImprovePage() {
       status: `${unassignedPoam} open`,
       recommendation: "Assign a responsible office, supporting agencies, suspense date, resources, and success measure to each priority action.",
       href: "/poam",
-      action: "Assign",
+      action: "Assign owner",
       tone: unassignedPoam ? "risk" as const : "ready" as const
     },
     {
@@ -99,7 +103,7 @@ export default async function ImprovePage() {
       status: `${recurringGaps} recurring`,
       recommendation: "Track recurrence, affected entities, operational impact, resource requirement, and re-test plan.",
       href: "/lessons",
-      action: "Open",
+      action: "Close gap",
       tone: recurringGaps ? "risk" as const : "friction" as const
     },
     {
@@ -109,7 +113,7 @@ export default async function ImprovePage() {
       status: "Draft",
       recommendation: "Build a future exercise input with request flow, legal review, airspace deconfliction, product delivery, and ICP-level briefing material.",
       href: "/sync-matrix",
-      action: "Plan",
+      action: "Prepare re-test input",
       tone: "friction" as const
     },
     {
@@ -119,7 +123,7 @@ export default async function ImprovePage() {
       status: `${lessonsRepositoryItems.length} items`,
       recommendation: "Approve, tag, and preserve lessons as planning considerations, best practices, or future injects.",
       href: "/library",
-      action: "Route",
+      action: "Route to Library",
       tone: "open" as const
     }
   ];
@@ -130,28 +134,53 @@ export default async function ImprovePage() {
         eyebrow="Improve"
         title="Convert Findings Into Accountable Action"
         question="Who owns the fix and how will we track it?"
-        description="Improve turns validated findings into corrective action, capability gap reduction, SOP/training updates, and future exercise inputs."
+        description="Use Improve as the accountability layer: convert validated findings into owned corrective actions, milestones, evidence of completion, re-test inputs, and Library-ready lessons."
         primaryHref="/poam"
-        primaryAction="Open POA&M"
+        primaryAction="Convert to POA&M"
         steps={improveSteps}
       />
+      <section className="border-t border-line pt-3">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <h2 className="text-base font-semibold text-ink">POA&M Actions</h2>
+            <p className="mt-1 text-sm leading-6 text-steel">Who owns the fix, when it is due, and what is blocking movement.</p>
+          </div>
+          <span className="border border-line px-2 py-1 text-xs font-semibold text-steel">
+            {openPoam} open actions
+          </span>
+        </div>
+        <div className="mt-3 border-t border-line">
+          {poamItems.slice(0, 5).map((item) => (
+            <div key={item.id} className="grid gap-2 border-b border-line py-2 lg:grid-cols-[1fr_10rem_7rem_8rem_9rem] lg:items-center">
+              <div>
+                <p className="text-sm font-semibold leading-5 text-ink">{item.corrective_action}</p>
+                <p className="mt-0.5 text-xs leading-5 text-steel">Resources: {item.required_resources || "Not specified"} · Re-test: {item.next_update_date ? formatDate(item.next_update_date) : "Not linked"}</p>
+              </div>
+              <span className="text-xs text-steel">{item.responsible_office || "Unassigned"}</span>
+              <span className="text-xs text-steel">{formatDate(item.due_date)}</span>
+              <span className="text-xs text-steel">{item.priority}</span>
+              <span className="text-sm font-semibold text-steel lg:text-right">{item.status.replaceAll("_", " ")}</span>
+            </div>
+          ))}
+        </div>
+      </section>
       <GatePanel
         label="Improve Gate"
         status={unassignedPoam ? "Needs ownership" : "Actions assigned"}
         statusTone={unassignedPoam ? "friction" : "ready"}
         risk="The AAR loses value if recommendations are not assigned, resourced, tracked, re-tested, and preserved for future planners."
-        nextAction="Assign owners and due dates to open corrective actions, then route validated lessons into the Library."
+        nextAction="Assign owners and due dates to open corrective actions, then route validated lessons into Library."
         actionHref="/poam"
-        actionLabel="Fix ownership"
+        actionLabel="Assign owner"
       />
+      <IssueTable title="Improvement Issues" description="This is the accountable action layer: owner, due date, resources, risk, evidence, and re-test plan." issues={issues} />
       <MetricStrip metrics={[
         { label: "POA&M items", value: poamItems.length, note: "corrective actions" },
         { label: "Open actions", value: openPoam, note: "not complete" },
         { label: "Capability gaps", value: capabilityGaps.length, note: "tracked risks" },
         { label: "Trend signals", value: trendInsights.length, note: "future inputs" }
       ]} />
-      <PhaseSectionTable title="Improvement Workstreams" description="Every validated finding should become an owned action, a tracked gap, a reusable lesson, or a future exercise input." sections={sections} />
-      <IssueTable title="Improvement Issues" description="This is the accountable action layer: owner, due date, resources, risk, evidence, and re-test plan." issues={issues} />
+      <PhaseSectionTable title="More improvement tools" description="Capability gaps, doctrine/SOP updates, trend signals, and re-test planning stay available here after the accountability board." sections={sections} />
       <LifecycleChain items={[
         { label: "Objectives", value: "source", href: "/objectives" },
         { label: "Observations", value: "validated", href: "/feedback" },

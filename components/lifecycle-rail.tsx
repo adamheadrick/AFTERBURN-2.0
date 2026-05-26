@@ -6,10 +6,10 @@ import { Archive, BarChart3, FileCheck2, Gauge, RadioTower, Route } from "lucide
 
 const phases = [
   {
-    label: "Command",
+    label: "Command Center",
     meta: "Status + risk",
-    href: "/overview",
-    paths: ["/overview", "/dashboard", "/readiness"],
+    href: "/command-center",
+    paths: ["/command-center", "/overview", "/dashboard", "/readiness"],
     icon: Gauge
   },
   {
@@ -42,9 +42,9 @@ const phases = [
   },
   {
     label: "Library",
-    meta: "Reuse",
+    meta: "Reuse knowledge",
     href: "/library",
-    paths: ["/library", "/exercises"],
+    paths: ["/library", "/exercises", "/lessons"],
     excludePaths: ["/exercises/new"],
     icon: Archive
   }

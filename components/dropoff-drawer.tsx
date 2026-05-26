@@ -331,7 +331,7 @@ export function DropoffDrawer({ triggerVariant = "default" }: { triggerVariant?:
 
                 <div className="flex flex-wrap items-center justify-between gap-3 border-t border-line pt-4">
                   <p className="max-w-md text-xs font-semibold leading-5 text-steel">
-                    Lifecycle: Dropoff → Screening → Review → Sanitization → Repository / Library → AAR, EXSUM, improvement plan, or future exercise input.
+                    Lifecycle: Dropoff → Screening → Review → Sanitization → Library repository → AAR, EXSUM, improvement plan, or future exercise input.
                   </p>
                   <Button type="submit" variant="ember" disabled={submitting}>
                     {submitting ? "Screening..." : "Submit to Dropoff"}

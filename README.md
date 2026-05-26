@@ -42,6 +42,12 @@ NEXT_PUBLIC_SITE_URL="http://localhost:3000"
 
 When Supabase or OpenAI keys are absent, the app runs in local demo mode with mock data and deterministic AI outputs.
 
+## Public Demo Mode
+
+The current AFTERBURN demo is configured to open publicly for stakeholder review. No username/password or Supabase login gate is required for the main demo routes.
+
+No secrets should be committed. Future production access control should use full account-based auth and roles through Supabase Auth, Auth.js, Clerk, enterprise SSO, or a similar identity system.
+
 ## Database
 
 Run `supabase/schema.sql` in the Supabase SQL editor. It creates:
@@ -83,7 +89,7 @@ The global `Dropoff` button is available in the application header from every wo
 
 Each submission follows this lifecycle:
 
-`Dropoff → Screening → Review → Sanitization → Repository / Library → AAR, EXSUM, POA&M, or future exercise input`
+`Dropoff → Screening → Review → Sanitization → Library repository → AAR, EXSUM, POA&M, or future exercise input`
 
 Dropoff screening is AI-assisted when `OPENAI_API_KEY` is configured and falls back to deterministic local screening in demo mode. AI screening is advisory only; items are never auto-published to the repository.
 
