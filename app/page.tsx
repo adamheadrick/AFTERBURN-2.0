@@ -18,52 +18,48 @@ import { ButtonLink } from "@/components/button";
 const capabilityCards = [
   {
     title: "Plan",
-    body: "Build objectives, scenarios, injects, participants, communications plans, and readiness gates.",
+    body: "Set objectives, evaluation criteria, roles, and readiness gates. Bring previous lessons into the plan.",
     icon: Route
   },
   {
     title: "Execute",
-    body: "Capture observer input, live friction, lane activity, hotwash comments, and evidence.",
+    body: "Capture what actually happens: observations, decisions, coordination gaps, and supporting evidence.",
     icon: RadioTower
   },
   {
     title: "Review",
-    body: "Turn observations into validated findings, themes, AAR content, and executive summaries.",
+    body: "Connect evidence, identify recurring themes, and validate findings with human judgment.",
     icon: FileCheck2
   },
   {
     title: "Improve",
-    body: "Convert findings into POA&M items, owners, due dates, milestones, and capability gaps.",
+    body: "Turn recommendations into accountable actions with owners, deadlines, and evidence of improvement.",
     icon: ClipboardCheck
   },
   {
-    title: "Preserve",
-    body: "Store lessons, templates, exercise archives, and reusable institutional knowledge.",
+    title: "Learn",
+    body: "Carry validated lessons into the next operation or exercise. Build organizational memory over time.",
     icon: BookOpen
   }
 ];
 
 const audienceTags = [
-  "National Guard",
+  "Defense",
   "Emergency Management",
-  "Law Enforcement",
-  "Fire/Rescue",
-  "Homeland Defense",
+  "Public Safety",
   "Critical Infrastructure",
-  "Interagency Exercises",
-  "UAS/Airspace Integration",
-  "ICS",
-  "Common Operating Picture Workflows"
+  "Multinational Organizations",
+  "Complex Operational Environments"
 ];
 
-const learningChain = ["Objective", "Observation", "Finding", "Recommendation", "POA&M", "Lesson"];
+const learningChain = ["Objective", "Observation", "Finding", "Recommendation", "Action", "Lesson"];
 
 const outputs = [
   { title: "Commander Summary", note: "Leader-ready status and risk brief" },
   { title: "Exercise Placemat", note: "One-page operational snapshot" },
   { title: "AAR Draft", note: "Structured after-action narrative" },
   { title: "Executive Summary", note: "Concise senior-level synthesis" },
-  { title: "POA&M Tracker", note: "Owners, dates, milestones, evidence" },
+  { title: "Action Tracker", note: "Owners, dates, milestones, evidence" },
   { title: "Findings Matrix", note: "Validated issues tied to evidence" },
   { title: "Lessons Learned Library", note: "Reusable institutional knowledge" },
   { title: "Capability Gap Report", note: "Recurring risk and resourcing signals" }
@@ -78,7 +74,7 @@ const heroIssues = [
 const topNavLinks = [
   { label: "Home", href: "#home" },
   { label: "Lifecycle", href: "#lifecycle" },
-  { label: "Outputs", href: "#outputs" },
+  { label: "Proving Ground", href: "#proving-ground" },
   { label: "FAQ", href: "#faq" },
   { label: "Contact", href: "#contact" }
 ];
@@ -93,8 +89,8 @@ const footerPlatformLinks = [
 const footerOutputLinks = [
   { label: "Commander Summary", href: "/exsum" },
   { label: "Exercise Placemat", href: "/overview" },
-  { label: "AAR Generator", href: "/review" },
-  { label: "POA&M Tracker", href: "/poam" }
+  { label: "After-Action Review", href: "/review" },
+  { label: "Action Tracker", href: "/poam" }
 ];
 
 const footerContactLinks = [
@@ -109,12 +105,12 @@ const faqs = [
     answer: "No. Home explains the product. Command Center runs the active exercise and shows status, risk, issues, and next actions."
   },
   {
-    question: "What does AFTERBURN generate?",
-    answer: "It supports commander summaries, exercise placemats, AAR drafts, executive summaries, findings matrices, POA&M items, and lessons learned records."
+    question: "Is AFTERBURN primarily an AAR generator?",
+    answer: "AFTERBURN connects objectives, observations, validated findings, recommendations, actions, and lessons. Reports are useful outputs; operational memory and accountable improvement are the purpose."
   },
   {
     question: "Who is AFTERBURN designed for?",
-    answer: "Military, emergency management, law enforcement, homeland defense, critical infrastructure, and interagency response organizations."
+    answer: "Defense, emergency management, public safety, critical infrastructure, multinational organizations, and other teams operating in complex environments."
   }
 ];
 
@@ -132,8 +128,8 @@ function OperationalMapPanel() {
       <div className="relative grid gap-3">
         <div className="flex items-start justify-between gap-3 border-b border-line pb-3">
           <div>
-            <p className="text-sm font-semibold text-ink">LIGHTNING STRIKE</p>
-            <p className="mt-1 text-xs text-steel">Review Phase · 82% Ready with Friction</p>
+            <p className="text-sm font-semibold text-ink">COMMAND CENTER</p>
+            <p className="mt-1 text-xs text-steel">Illustrative workspace · Review phase</p>
           </div>
           <span className="rounded-md border border-flare/25 bg-flare/10 px-2 py-1 text-xs font-semibold text-flare">Placemat</span>
         </div>
@@ -222,15 +218,14 @@ export default function LandingPage() {
         <div className="relative mx-auto grid max-w-6xl gap-10 px-5 py-16 sm:py-20 lg:grid-cols-[1fr_0.86fr] lg:items-center">
           <div>
             <div className="flex flex-wrap items-center gap-2">
-              <span className="rounded-full border border-line bg-panel/70 px-2.5 py-1 text-xs text-steel">Demo mode · no external keys required</span>
-              <span className="text-sm font-semibold text-flare">Exercise lifecycle intelligence</span>
+              <span className="rounded-full border border-line bg-panel/70 px-2.5 py-1 text-xs text-steel">Explore the platform</span>
+              <span className="text-sm font-semibold text-flare">Operational learning & readiness</span>
             </div>
             <h1 className="mt-4 max-w-3xl text-4xl font-semibold leading-tight text-ink sm:text-5xl">
-              Exercise lifecycle intelligence for modern response operations.
+              The operational memory of high-readiness organizations.
             </h1>
             <p className="mt-5 max-w-[39rem] text-base leading-7 text-steel">
-              AFTERBURN helps military, emergency management, law enforcement, and interagency teams plan exercises,
-              capture observations, validate findings, generate summaries, and track improvements from one streamlined platform.
+              Plan operations and exercises. Capture what actually happens. Turn observations into validated findings and accountable improvements. Carry what you learn into what comes next.
             </p>
             <div className="mt-7 flex flex-wrap gap-2">
               <ButtonLink href="/overview" variant="flame">
@@ -247,14 +242,15 @@ export default function LandingPage() {
       <section id="product" className="mx-auto max-w-6xl scroll-mt-24 px-5 py-14">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div className="max-w-2xl">
-            <h2 className="text-2xl font-semibold text-ink">What AFTERBURN does</h2>
+            <h2 className="text-2xl font-semibold text-ink">Most organizations capture what happened. AFTERBURN remembers what it means.</h2>
             <p className="mt-3 text-sm leading-6 text-steel">
-              A minimal surface for the full exercise lifecycle, with operational depth available when the team needs it.
+              An organization-agnostic operational learning and readiness platform that connects experience to improvement across events, teams, and time.
             </p>
           </div>
           <Sparkles size={18} className="text-flare" />
         </div>
-        <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+        <p className="mt-6 text-sm font-semibold text-flare">Plan → Execute → Review → Improve → Learn</p>
+        <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
           {capabilityCards.map((card) => (
             <article key={card.title} className="rounded-md border border-line bg-panel p-4 transition hover:-translate-y-0.5 hover:border-[#3a4658]">
               <card.icon size={18} className="text-flare" />
@@ -268,9 +264,9 @@ export default function LandingPage() {
       <section id="use-cases" className="scroll-mt-24 border-y border-line bg-panel/35">
         <div className="mx-auto grid max-w-6xl gap-8 px-5 py-12 lg:grid-cols-[0.72fr_1fr] lg:items-start">
           <div>
-            <h2 className="text-2xl font-semibold text-ink">Built for complex response environments.</h2>
+            <h2 className="text-2xl font-semibold text-ink">Built for complex operational environments.</h2>
             <p className="mt-3 text-sm leading-6 text-steel">
-              AFTERBURN is built for exercises where agencies, authorities, communications paths, evidence, and improvement actions all have to stay connected.
+              Across organizations and countries, readiness depends on how people, authorities, decisions, and actions work together. AFTERBURN provides a common learning foundation while respecting each organization’s operating model.
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -285,7 +281,7 @@ export default function LandingPage() {
 
       <section id="lifecycle" className="mx-auto max-w-6xl scroll-mt-24 px-5 py-14">
         <div className="max-w-2xl">
-          <h2 className="text-2xl font-semibold text-ink">From observation to action.</h2>
+          <h2 className="text-2xl font-semibold text-ink">Objective → Observation → Finding → Recommendation → Action → Lesson</h2>
           <p className="mt-3 text-sm leading-6 text-steel">
             AFTERBURN keeps the learning chain intact — connecting what was planned, what happened, what was learned,
             who owns the fix, and what should be reused next time.
@@ -304,12 +300,44 @@ export default function LandingPage() {
         </div>
       </section>
 
+      <section id="configuration" className="scroll-mt-24 border-t border-line">
+        <div className="mx-auto grid max-w-6xl gap-8 px-5 py-14 lg:grid-cols-[0.7fr_1fr]">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-widest text-flare">A shared core. Your operating model.</p>
+            <h2 className="mt-3 text-2xl font-semibold text-ink">Your terminology. Your workflows.</h2>
+          </div>
+          <div className="space-y-4 text-sm leading-6 text-steel">
+            <p>AFTERBURN’s configuration approach separates the learning process from organizational vocabulary. Different organizations and countries can define terminology, structures, review stages, and document templates around their own doctrine and ways of working.</p>
+            <p>An action may appear as a POA&amp;M item, an improvement-plan task, or a corrective action. Organizations may work by unit, agency, department, or multinational team. The underlying connection from objective to lesson stays consistent.</p>
+            <p className="border-t border-line pt-4">Organization-specific configuration is part of the platform direction; the current demonstration uses example terminology and workflows.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="proving-ground" className="scroll-mt-24 border-y border-line bg-panel/35">
+        <div className="mx-auto grid max-w-6xl gap-8 px-5 py-14 lg:grid-cols-[0.7fr_1fr]">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-widest text-flare">Upcoming operational validation</p>
+            <h2 className="mt-3 text-2xl font-semibold text-ink">Proving Ground — Lightning Strike 2.0</h2>
+            <p className="mt-4 text-sm font-semibold text-ink">6–8 April 2027</p>
+            <p className="mt-1 text-sm text-steel">Camp Gruber, Oklahoma</p>
+          </div>
+          <div className="space-y-4 text-sm leading-6 text-steel">
+            <p>AFTERBURN will be used to assess Lightning Strike 2.0, a complex multi-agency exercise spanning civil disturbance response, wildfire operations, critical infrastructure, route clearance, CBRNE/SAR, and UAS/C-UAS integration.</p>
+            <p>Chemical, biological, radiological, nuclear, and explosive response and search and rescue will sit alongside uncrewed aircraft systems and counter-UAS integration—testing coordination across distinct operational problems.</p>
+            <p className="text-lg font-semibold text-ink">Seams matter more than systems.</p>
+            <p>The assessment will focus on handoffs, shared understanding, and accountability across agencies and lanes: connecting observations to validated findings, identifying recurring coordination issues, and tracking improvements beyond the exercise.</p>
+            <p className="border-t border-line pt-4">Lightning Strike 2.0 is a proving ground for a platform built to serve many organizations and countries. Findings and lessons will follow the exercise and human validation.</p>
+          </div>
+        </div>
+      </section>
+
       <section id="outputs" className="scroll-mt-24 border-y border-line bg-panel/35">
         <div className="mx-auto grid max-w-6xl gap-8 px-5 py-12 lg:grid-cols-[0.7fr_1fr] lg:items-start">
           <div>
-            <h2 className="text-2xl font-semibold text-ink">Outputs that matter</h2>
+            <h2 className="text-2xl font-semibold text-ink">Useful outputs. Lasting memory.</h2>
             <p className="mt-3 text-sm leading-6 text-steel">
-              The platform is organized around practical products planners can brief, edit, export, assign, and reuse.
+              AARs, executive summaries, and improvement plans are outputs of a connected learning process. The lasting value is the evidence, decisions, actions, and lessons that remain linked after a report is delivered.
             </p>
           </div>
           <div className="grid gap-3 sm:grid-cols-2">
@@ -328,9 +356,9 @@ export default function LandingPage() {
 
       <section className="mx-auto grid max-w-6xl gap-6 px-5 py-14 lg:grid-cols-[1fr_auto] lg:items-center">
         <div>
-          <h2 className="text-2xl font-semibold text-ink">Move from exercise activity to operational improvement.</h2>
+          <h2 className="text-2xl font-semibold text-ink">Make the next operation smarter than the last.</h2>
           <p className="mt-3 max-w-3xl text-sm leading-6 text-steel">
-            Use AFTERBURN to preserve evidence, generate leader-ready outputs, assign corrective action, and carry knowledge forward into future exercises.
+            Preserve evidence, validate findings, assign accountable improvements, and carry organizational knowledge into future operations and exercises.
           </p>
         </div>
         <div className="flex flex-wrap gap-2 lg:justify-end">
@@ -354,7 +382,7 @@ export default function LandingPage() {
           <div>
             <h2 className="text-2xl font-semibold text-ink">FAQ</h2>
             <p className="mt-3 text-sm leading-6 text-steel">
-              Quick answers for leaders, planners, and partners evaluating how AFTERBURN fits the exercise lifecycle.
+              Quick answers for leaders, planners, and partners evaluating operational learning and readiness.
             </p>
           </div>
           <div className="grid gap-3">
@@ -373,7 +401,7 @@ export default function LandingPage() {
           <div>
             <BrandWordmark className="text-[1.05rem]" />
             <p className="mt-3 max-w-sm text-sm leading-6 text-steel">
-              Exercise lifecycle intelligence for modern response operations.
+              The operational memory of high-readiness organizations.
             </p>
             <p className="mt-2 text-xs text-steel">Plan better. Capture reality. Drive improvement.</p>
           </div>
@@ -409,7 +437,7 @@ export default function LandingPage() {
         <div className="border-t border-line">
           <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-5 py-4 text-xs text-steel">
             <p>© 2026 AFTERBURN. All rights reserved.</p>
-            <p>Built for military, emergency management, homeland defense, and interagency response organizations.</p>
+            <p>Operational learning across organizations, countries, and complex environments.</p>
           </div>
         </div>
       </footer>
