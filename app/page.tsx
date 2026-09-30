@@ -8,8 +8,7 @@ import {
   MapPinned,
   RadioTower,
   Route,
-  Search,
-  Sparkles
+  Search
 } from "lucide-react";
 import Link from "next/link";
 import { BrandWordmark } from "@/components/brand-mark";
@@ -18,27 +17,27 @@ import { ButtonLink } from "@/components/button";
 const capabilityCards = [
   {
     title: "Plan",
-    body: "Set objectives, evaluation criteria, roles, and readiness gates. Bring previous lessons into the plan.",
+    body: "Set objectives and roles. Start with what you already know.",
     icon: Route
   },
   {
     title: "Execute",
-    body: "Capture what actually happens: observations, decisions, coordination gaps, and supporting evidence.",
+    body: "Capture observations, decisions, and evidence as events unfold.",
     icon: RadioTower
   },
   {
     title: "Review",
-    body: "Connect evidence, identify recurring themes, and validate findings with human judgment.",
+    body: "Find patterns. Validate findings against the evidence.",
     icon: FileCheck2
   },
   {
     title: "Improve",
-    body: "Turn recommendations into accountable actions with owners, deadlines, and evidence of improvement.",
+    body: "Give every action an owner, a deadline, and a clear outcome.",
     icon: ClipboardCheck
   },
   {
     title: "Learn",
-    body: "Carry validated lessons into the next operation or exercise. Build organizational memory over time.",
+    body: "Carry lessons forward. Make the next plan stronger.",
     icon: BookOpen
   }
 ];
@@ -72,10 +71,9 @@ const heroIssues = [
 ];
 
 const topNavLinks = [
-  { label: "Home", href: "#home" },
+  { label: "Platform", href: "#product" },
   { label: "Lifecycle", href: "#lifecycle" },
   { label: "Proving Ground", href: "#proving-ground" },
-  { label: "FAQ", href: "#faq" },
   { label: "Contact", href: "#contact" }
 ];
 
@@ -218,10 +216,9 @@ export default function LandingPage() {
         <div className="relative mx-auto grid max-w-6xl gap-10 px-5 py-16 sm:py-20 lg:grid-cols-[1fr_0.86fr] lg:items-center">
           <div>
             <div className="flex flex-wrap items-center gap-2">
-              <span className="rounded-full border border-line bg-panel/70 px-2.5 py-1 text-xs text-steel">Explore the platform</span>
-              <span className="text-sm font-semibold text-flare">Operational learning & readiness</span>
+              <span className="text-xs font-semibold uppercase tracking-[0.14em] text-flare">Operational learning & readiness</span>
             </div>
-            <h1 className="mt-4 max-w-3xl text-4xl font-semibold leading-tight text-ink sm:text-5xl">
+            <h1 className="mt-4 max-w-3xl text-[clamp(2.25rem,3.5vw,3.4rem)] font-semibold leading-[1.08] tracking-[-0.035em] text-ink">
               The operational memory of high-readiness organizations.
             </h1>
             <p className="mt-5 max-w-[39rem] text-base leading-7 text-steel">
@@ -247,13 +244,11 @@ export default function LandingPage() {
               An organization-agnostic operational learning and readiness platform that connects experience to improvement across events, teams, and time.
             </p>
           </div>
-          <Sparkles size={18} className="text-flare" />
         </div>
-        <p className="mt-6 text-sm font-semibold text-flare">Plan → Execute → Review → Improve → Learn</p>
+        <p id="lifecycle" className="mt-8 scroll-mt-24 text-sm font-semibold text-flare">Plan → Execute → Review → Improve → Learn</p>
         <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
           {capabilityCards.map((card) => (
-            <article key={card.title} className="rounded-md border border-line bg-panel p-4 transition hover:-translate-y-0.5 hover:border-[#3a4658]">
-              <card.icon size={18} className="text-flare" />
+            <article key={card.title} className="border-t border-line pb-2 pt-4">
               <h3 className="mt-3 text-sm font-semibold text-ink">{card.title}</h3>
               <p className="mt-2 text-[0.82rem] leading-5 text-steel">{card.body}</p>
             </article>
@@ -271,7 +266,7 @@ export default function LandingPage() {
           </div>
           <div className="flex flex-wrap gap-2">
             {audienceTags.map((item) => (
-              <span key={item} className="rounded-md border border-line bg-night px-3 py-2 text-sm text-ink">
+              <span key={item} className="border-l border-line px-3 py-2 text-sm text-ink">
                 {item}
               </span>
             ))}
@@ -279,18 +274,18 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section id="lifecycle" className="mx-auto max-w-6xl scroll-mt-24 px-5 py-14">
+      <section id="learning-chain" className="mx-auto max-w-6xl scroll-mt-24 px-5 py-14">
         <div className="max-w-2xl">
-          <h2 className="text-2xl font-semibold text-ink">Objective → Observation → Finding → Recommendation → Action → Lesson</h2>
+          <h2 className="text-2xl font-semibold text-ink">One connected record.</h2>
           <p className="mt-3 text-sm leading-6 text-steel">
             AFTERBURN keeps the learning chain intact — connecting what was planned, what happened, what was learned,
             who owns the fix, and what should be reused next time.
           </p>
         </div>
-        <div className="mt-8 rounded-lg border border-line bg-panel p-3">
+        <div className="mt-8 border-y border-line py-5">
           <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-6">
             {learningChain.map((item, index) => (
-              <div key={item} className="relative rounded-md border border-line bg-night px-3 py-3">
+              <div key={item} className="relative px-3 py-3">
                 <span className="flex h-7 w-7 items-center justify-center rounded-full border border-line bg-panel text-xs text-steel">{index + 1}</span>
                 <p className="mt-3 text-sm font-semibold text-ink">{item}</p>
                 {index < learningChain.length - 1 ? <div className="absolute left-[calc(100%-0.2rem)] top-6 hidden h-px w-4 bg-line lg:block" /> : null}
@@ -307,9 +302,9 @@ export default function LandingPage() {
             <h2 className="mt-3 text-2xl font-semibold text-ink">Your terminology. Your workflows.</h2>
           </div>
           <div className="space-y-4 text-sm leading-6 text-steel">
-            <p>AFTERBURN’s configuration approach separates the learning process from organizational vocabulary. Different organizations and countries can define terminology, structures, review stages, and document templates around their own doctrine and ways of working.</p>
-            <p>An action may appear as a POA&amp;M item, an improvement-plan task, or a corrective action. Organizations may work by unit, agency, department, or multinational team. The underlying connection from objective to lesson stays consistent.</p>
-            <p className="border-t border-line pt-4">Organization-specific configuration is part of the platform direction; the current demonstration uses example terminology and workflows.</p>
+            <p>A common learning process, adapted to how your organization works. The configuration model covers terminology, organizational structures, review stages, and document templates across countries and doctrine.</p>
+            <p>A defense team may use POA&amp;M. An emergency manager may use an improvement plan. Both connect the same evidence to accountable action.</p>
+            <details className="border-t border-line pt-4"><summary className="cursor-pointer font-semibold text-ink">Configuration in the current demo</summary><p className="mt-3">Organization-specific configuration is part of the platform direction. The current demonstration uses example terminology and workflows.</p></details>
           </div>
         </div>
       </section>
@@ -324,10 +319,9 @@ export default function LandingPage() {
           </div>
           <div className="space-y-4 text-sm leading-6 text-steel">
             <p>AFTERBURN will be used to assess Lightning Strike 2.0, a complex multi-agency exercise spanning civil disturbance response, wildfire operations, critical infrastructure, route clearance, CBRNE/SAR, and UAS/C-UAS integration.</p>
-            <p>Chemical, biological, radiological, nuclear, and explosive response and search and rescue will sit alongside uncrewed aircraft systems and counter-UAS integration—testing coordination across distinct operational problems.</p>
             <p className="text-lg font-semibold text-ink">Seams matter more than systems.</p>
-            <p>The assessment will focus on handoffs, shared understanding, and accountability across agencies and lanes: connecting observations to validated findings, identifying recurring coordination issues, and tracking improvements beyond the exercise.</p>
-            <p className="border-t border-line pt-4">Lightning Strike 2.0 is a proving ground for a platform built to serve many organizations and countries. Findings and lessons will follow the exercise and human validation.</p>
+            <p>The assessment will focus on handoffs and coordination across agencies and lanes—then connect those observations to validated findings and accountable improvements.</p>
+            <p className="border-t border-line pt-4">One proving ground. A platform built for many organizations and countries. Validated lessons will follow the exercise.</p>
           </div>
         </div>
       </section>
@@ -342,7 +336,7 @@ export default function LandingPage() {
           </div>
           <div className="grid gap-3 sm:grid-cols-2">
             {outputs.map((output) => (
-              <div key={output.title} className="rounded-md border border-line bg-panel p-3">
+              <div key={output.title} className="border-t border-line py-3">
                 <div className="flex items-center gap-2">
                   <CheckCircle2 size={15} className="text-flare" />
                   <p className="text-sm font-semibold text-ink">{output.title}</p>
@@ -387,10 +381,10 @@ export default function LandingPage() {
           </div>
           <div className="grid gap-3">
             {faqs.map((faq) => (
-              <article key={faq.question} className="rounded-md border border-line bg-panel p-4">
-                <h3 className="text-sm font-semibold text-ink">{faq.question}</h3>
-                <p className="mt-2 text-sm leading-6 text-steel">{faq.answer}</p>
-              </article>
+              <details key={faq.question} className="border-b border-line py-4">
+                <summary className="cursor-pointer text-sm font-semibold text-ink">{faq.question}</summary>
+                <p className="mt-3 text-sm leading-6 text-steel">{faq.answer}</p>
+              </details>
             ))}
           </div>
         </div>
