@@ -112,16 +112,9 @@ const faqs = [
   }
 ];
 
-function OperationalMapPanel() {
+function CommandCenterPreview() {
   return (
     <div className="relative overflow-hidden rounded-lg border border-line bg-panel p-4 shadow-panel">
-      <div className="absolute inset-0 opacity-[0.24] [background-image:linear-gradient(rgba(203,213,225,0.075)_1px,transparent_1px),linear-gradient(90deg,rgba(203,213,225,0.075)_1px,transparent_1px)] [background-size:26px_26px]" />
-      <svg className="absolute inset-0 h-full w-full opacity-[0.16]" viewBox="0 0 520 420" aria-hidden="true">
-        <path d="M-20 95 C75 42 148 142 238 82 S405 18 540 82" stroke="#cbd5e1" strokeWidth="1" fill="none" />
-        <path d="M-34 164 C84 111 170 214 270 148 S430 92 548 154" stroke="#cbd5e1" strokeWidth="1" fill="none" />
-        <path d="M-12 238 C112 178 182 288 304 218 S438 162 552 235" stroke="#cbd5e1" strokeWidth="1" fill="none" />
-        <path d="M-20 316 C78 265 196 356 296 298 S432 244 538 308" stroke="#cbd5e1" strokeWidth="1" fill="none" />
-      </svg>
 
       <div className="relative grid gap-3">
         <div className="flex items-start justify-between gap-3 border-b border-line pb-3">
@@ -132,31 +125,16 @@ function OperationalMapPanel() {
           <span className="rounded-md border border-flare/25 bg-flare/10 px-2 py-1 text-xs font-semibold text-flare">Placemat</span>
         </div>
 
-        <div className="relative h-64 overflow-hidden rounded-md border border-line bg-night/80">
-          <svg className="absolute inset-0 h-full w-full" viewBox="0 0 420 230" aria-hidden="true">
-            <path
-              d="M92 50 260 49 302 84 286 115 324 141 292 178 160 170 140 151 105 160 78 128 98 108 82 86Z"
-              fill="rgba(246,199,104,0.045)"
-              stroke="rgba(246,199,104,0.5)"
-              strokeWidth="1.5"
-            />
-            <path d="M110 137 C154 106 208 98 272 76" stroke="rgba(91,214,178,0.72)" strokeWidth="1.5" fill="none" strokeDasharray="4 5" />
-            <path d="M144 78 C190 126 226 148 290 164" stroke="rgba(240,138,79,0.68)" strokeWidth="1.5" fill="none" />
-            <path d="M84 130 C130 150 206 162 292 177" stroke="rgba(203,213,225,0.35)" strokeWidth="1" fill="none" />
-            <circle cx="122" cy="139" r="5" fill="#f6c768" />
-            <circle cx="272" cy="82" r="5" fill="#5bd6b2" />
-            <circle cx="286" cy="164" r="5" fill="#f08a4f" />
-            <circle cx="146" cy="79" r="4" fill="#cbd5e1" />
-          </svg>
-          <div className="absolute left-4 top-4 max-w-[12rem] rounded-md border border-line bg-panel/95 px-3 py-2">
+        <div className="grid gap-4 bg-night/80 p-4">
+          <div className="border-b border-line pb-3">
             <p className="text-xs text-steel">Current status</p>
             <p className="mt-0.5 text-sm font-semibold text-ink">Ready with friction</p>
           </div>
-          <div className="absolute right-4 top-4 rounded-md border border-line bg-panel/95 px-3 py-2">
+          <div className="pb-1">
             <p className="text-xs text-steel">Next action</p>
             <p className="mt-0.5 text-xs font-semibold text-ink">Assign comms lead</p>
           </div>
-          <div className="absolute bottom-4 left-4 right-4 overflow-hidden rounded-md border border-line bg-panel/95">
+          <div className="overflow-hidden border-t border-line">
             <div className="border-b border-line px-3 py-2 text-xs font-semibold text-ink">Priority issues</div>
             {heroIssues.map(([severity, issue]) => (
               <div key={issue} className="grid grid-cols-[4.5rem_1fr] gap-2 border-b border-line px-3 py-2 text-xs last:border-b-0">
@@ -232,7 +210,7 @@ export default function LandingPage() {
               <ButtonLink href="#lifecycle" variant="ghost">View Lifecycle</ButtonLink>
             </div>
           </div>
-          <OperationalMapPanel />
+          <CommandCenterPreview />
         </div>
       </section>
 
