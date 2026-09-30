@@ -64,12 +64,6 @@ const outputs = [
   { title: "Capability Gap Report", note: "Recurring risk and resourcing signals" }
 ];
 
-const heroIssues = [
-  ["High", "Communications plan ownership"],
-  ["Medium", "Observer coverage by lane"],
-  ["Medium", "UAS / airspace coordination"]
-];
-
 const topNavLinks = [
   { label: "Platform", href: "#product" },
   { label: "Lifecycle", href: "#lifecycle" },
@@ -112,51 +106,6 @@ const faqs = [
   }
 ];
 
-function CommandCenterPreview() {
-  return (
-    <div className="relative overflow-hidden rounded-lg border border-line bg-panel p-4 shadow-panel">
-
-      <div className="relative grid gap-3">
-        <div className="flex items-start justify-between gap-3 border-b border-line pb-3">
-          <div>
-            <p className="text-sm font-semibold text-ink">COMMAND CENTER</p>
-            <p className="mt-1 text-xs text-steel">Illustrative workspace · Review phase</p>
-          </div>
-          <span className="rounded-md border border-flare/25 bg-flare/10 px-2 py-1 text-xs font-semibold text-flare">Placemat</span>
-        </div>
-
-        <div className="grid gap-4 bg-night/80 p-4">
-          <div className="border-b border-line pb-3">
-            <p className="text-xs text-steel">Current status</p>
-            <p className="mt-0.5 text-sm font-semibold text-ink">Ready with friction</p>
-          </div>
-          <div className="pb-1">
-            <p className="text-xs text-steel">Next action</p>
-            <p className="mt-0.5 text-xs font-semibold text-ink">Assign comms lead</p>
-          </div>
-          <div className="overflow-hidden border-t border-line">
-            <div className="border-b border-line px-3 py-2 text-xs font-semibold text-ink">Priority issues</div>
-            {heroIssues.map(([severity, issue]) => (
-              <div key={issue} className="grid grid-cols-[4.5rem_1fr] gap-2 border-b border-line px-3 py-2 text-xs last:border-b-0">
-                <span className={severity === "High" ? "text-flare" : "text-steel"}>{severity}</span>
-                <span className="text-ink">{issue}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="grid gap-2 text-xs text-steel sm:grid-cols-4">
-          {["Plan complete", "Execute complete", "Review active", "Improve started"].map((item, index) => (
-            <span key={item} className={`rounded-md border px-2 py-1 text-center ${index === 2 ? "border-flare/25 bg-flare/10 text-flare" : "border-line bg-night"}`}>
-              {item}
-            </span>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export default function LandingPage() {
   return (
     <main id="home" className="min-h-screen bg-night pt-[65px] text-ink">
@@ -190,8 +139,7 @@ export default function LandingPage() {
       </header>
 
       <section className="relative scroll-mt-24 overflow-hidden border-b border-line">
-        <div className="absolute inset-0 opacity-[0.16] [background-image:radial-gradient(circle_at_30%_20%,rgba(246,199,104,0.18),transparent_30%),linear-gradient(rgba(203,213,225,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(203,213,225,0.04)_1px,transparent_1px)] [background-size:auto,46px_46px,46px_46px]" />
-        <div className="relative mx-auto grid max-w-6xl gap-10 px-5 py-16 sm:py-20 lg:grid-cols-[1fr_0.86fr] lg:items-center">
+        <div className="relative mx-auto max-w-6xl px-5 py-16 sm:py-20">
           <div>
             <div className="flex flex-wrap items-center gap-2">
               <span className="text-xs font-semibold uppercase tracking-[0.14em] text-flare">Operational learning & readiness</span>
@@ -210,7 +158,6 @@ export default function LandingPage() {
               <ButtonLink href="#lifecycle" variant="ghost">View Lifecycle</ButtonLink>
             </div>
           </div>
-          <CommandCenterPreview />
         </div>
       </section>
 
@@ -260,17 +207,9 @@ export default function LandingPage() {
             who owns the fix, and what should be reused next time.
           </p>
         </div>
-        <div className="mt-8 border-y border-line py-5">
-          <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-6">
-            {learningChain.map((item, index) => (
-              <div key={item} className="relative px-3 py-3">
-                <span className="flex h-7 w-7 items-center justify-center rounded-full border border-line bg-panel text-xs text-steel">{index + 1}</span>
-                <p className="mt-3 text-sm font-semibold text-ink">{item}</p>
-                {index < learningChain.length - 1 ? <div className="absolute left-[calc(100%-0.2rem)] top-6 hidden h-px w-4 bg-line lg:block" /> : null}
-              </div>
-            ))}
-          </div>
-        </div>
+        <p className="mt-6 max-w-3xl text-sm leading-7 text-steel">
+          {learningChain.join(" → ")}
+        </p>
       </section>
 
       <section id="configuration" className="scroll-mt-24 border-t border-line">
