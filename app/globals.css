@@ -6,6 +6,10 @@
   color-scheme: dark;
   background: #07090d;
   color: #f8fafc;
+  --surface: #0d1118;
+  --border: #252d3a;
+  --accent: #f6c768;
+  --radius: 0.75rem;
   --font-sans: "Acumin", "Acumin Pro", "Acumin Variable Concept", Arial, Helvetica, sans-serif;
   --font-brand: "Acumin", "Acumin Pro Wide", "Acumin Pro", "Acumin Variable Concept", Arial, Helvetica, sans-serif;
 }
@@ -21,18 +25,6 @@ body {
   font-family: var(--font-sans);
 }
 
-body::before {
-  content: none;
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background:
-    linear-gradient(rgba(148, 163, 184, 0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(148, 163, 184, 0.025) 1px, transparent 1px);
-  background-size: 44px 44px, 44px 44px, auto;
-  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.92), rgba(0, 0, 0, 0.38) 58%, transparent);
-}
 
 a {
   color: inherit;
@@ -61,112 +53,14 @@ select {
 }
 
 select {
-  background: #ffffff;
-  color: #05070d;
-  color-scheme: light;
+  background: #111722;
+  color: #f8fafc;
+  color-scheme: dark;
 }
 
 ::selection {
   background: #ff7a3d;
   color: #05070d;
-}
-
-/* High-contrast text overrides for the operational dark theme. */
-.text-ink,
-.hover\:text-ink:hover {
-  color: #f8fafc !important;
-}
-
-.text-steel {
-  color: #cbd5e1 !important;
-}
-
-.text-night {
-  color: #05070d !important;
-}
-
-.hover\:text-night:hover {
-  color: #05070d !important;
-}
-
-.text-flare {
-  color: #f6c768 !important;
-}
-
-select,
-select.text-ink {
-  background: #ffffff !important;
-  color: #05070d !important;
-  color-scheme: light;
-}
-
-.bg-field {
-  background-color: #111722 !important;
-}
-
-.hover\:bg-field:hover {
-  background-color: #111722 !important;
-  color: #f8fafc !important;
-}
-
-.hover\:bg-field:hover * {
-  color: #f8fafc !important;
-}
-
-.bg-flare {
-  background-color: #f6c768 !important;
-}
-
-.bg-panel {
-  background-color: #0d1118 !important;
-}
-
-.bg-night {
-  background-color: #07090d !important;
-}
-
-.border-line {
-  border-color: #252d3a !important;
-}
-
-.border-flare,
-.focus\:border-flare:focus {
-  border-color: #f6c768 !important;
-}
-
-.border-flare\/30 {
-  border-color: rgba(255, 209, 102, 0.3) !important;
-}
-
-.border-flare\/40 {
-  border-color: rgba(255, 209, 102, 0.4) !important;
-}
-
-.border-flare\/60,
-.hover\:border-flare\/60:hover {
-  border-color: rgba(255, 209, 102, 0.6) !important;
-}
-
-.border-flare\/70,
-.hover\:border-flare\/70:hover {
-  border-color: rgba(255, 209, 102, 0.7) !important;
-}
-
-.bg-flare\/10 {
-  background-color: rgba(246, 199, 104, 0.09) !important;
-}
-
-.bg-flare\/15 {
-  background-color: rgba(246, 199, 104, 0.12) !important;
-}
-
-.bg-gradient-to-r.from-ember.to-flare {
-  background-image: linear-gradient(to right, #f08a4f, #f6c768) !important;
-}
-
-.focus\:ring-flare:focus,
-.focus\:ring-flare\/20:focus {
-  box-shadow: 0 0 0 2px rgba(255, 209, 102, 0.2) !important;
 }
 
 .on-light,
@@ -190,26 +84,6 @@ select.text-ink {
 .hover\:bg-\[\#ffe08a\]:hover,
 .hover\:bg-\[\#ffe08a\]:hover * {
   color: #05070d !important;
-}
-
-.hover\:bg-white:hover,
-.hover\:bg-slate-100:hover {
-  background-color: #111722 !important;
-  color: #f8fafc !important;
-}
-
-.hover\:bg-white:hover *,
-.hover\:bg-slate-100:hover * {
-  color: #f8fafc !important;
-}
-
-.hover\:bg-\[\#142033\]:hover {
-  background-color: #151c28 !important;
-  color: #f8fafc !important;
-}
-
-.hover\:bg-\[\#142033\]:hover * {
-  color: #f8fafc !important;
 }
 
 .brand-type {
@@ -236,62 +110,6 @@ select.text-ink {
   color: currentColor;
   transform: translateY(-0.04em);
   overflow: visible;
-}
-
-/* Slightly calmer display type for dense operational screens. */
-h1.font-black,
-h2.font-black,
-h3.font-black,
-.text-xl.font-black,
-.text-2xl.font-black,
-.text-3xl.font-black,
-.text-4xl.font-black,
-.text-5xl.font-black,
-.text-6xl.font-black,
-.text-7xl.font-black {
-  font-weight: 800 !important;
-}
-
-.text-7xl.font-black {
-  font-size: 4rem !important;
-  line-height: 1.08 !important;
-}
-
-.text-6xl.font-black {
-  font-size: 3.25rem !important;
-  line-height: 1.08 !important;
-}
-
-.text-5xl.font-black {
-  font-size: 2.75rem !important;
-  line-height: 1.08 !important;
-}
-
-.text-4xl.font-black {
-  font-size: 2.05rem !important;
-  line-height: 1.12 !important;
-}
-
-.text-3xl.font-black {
-  font-size: 1.72rem !important;
-  line-height: 1.16 !important;
-}
-
-.text-2xl.font-black {
-  font-size: 1.38rem !important;
-  line-height: 1.22 !important;
-}
-
-@media (min-width: 640px) {
-  .text-5xl.font-black.sm\:text-6xl {
-    font-size: 3.15rem !important;
-  }
-}
-
-@media (min-width: 1024px) {
-  .text-5xl.font-black.sm\:text-6xl.lg\:text-7xl {
-    font-size: 4rem !important;
-  }
 }
 
 .nav-tooltip {
@@ -496,15 +314,51 @@ textarea::selection {
 
 select option,
 select optgroup {
-  background: #ffffff !important;
-  color: #05070d !important;
-  color-scheme: light;
+  background: #111722;
+  color: #f8fafc;
+  color-scheme: dark;
 }
 
 select option:checked,
 select option:hover {
   background: #ffd166 !important;
   color: #05070d !important;
+}
+
+
+/* Shared workspace hierarchy. Component modules use the same surfaces and scale. */
+:where(a, button, input, textarea, select, summary):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+button:not(:disabled), summary { cursor: pointer; }
+button:disabled { cursor: not-allowed; }
+.app-workspace h1 {
+  font-size: clamp(1.65rem, 2.8vw, 2.1rem);
+  font-weight: 650;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+.page-heading { padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); }
+.page-heading h1 { margin-top: 0.5rem; }
+.page-description { max-width: 48rem; margin-top: 0.75rem; font-size: 0.9375rem; line-height: 1.7; color: #cbd5e1; }
+.workspace-eyebrow { color: var(--accent); font-size: 0.75rem; line-height: 1.5; font-weight: 600; letter-spacing: 0.06em; }
+.workspace-next { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; padding: 1.5rem; background: var(--surface); border: 1px solid #48402e; border-radius: var(--radius); }
+.workspace-tool { display: flex; min-width: 0; flex-direction: column; padding: 1.5rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); transition: border-color 150ms, background 150ms; }
+.workspace-tool:hover { background: #111722; border-color: #66583b; }
+.workspace-details { border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); overflow: hidden; }
+.workspace-details summary { padding: 1rem 1.5rem; font-size: 0.875rem; font-weight: 600; }
+.workspace-context { display: flex; align-items: baseline; flex-wrap: wrap; gap: 0.5rem 1rem; margin-bottom: 1.75rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem; font-size: 0.75rem; line-height: 1.6; color: #cbd5e1; }
+.workspace-context p { flex: 1 1 24rem; }
+.context-label { border: 1px solid var(--border); border-radius: 999px; padding: 0.2rem 0.65rem; color: #f8fafc; background: #111722; font-weight: 600; }
+.skip-link { position: fixed; left: 1rem; top: -6rem; z-index: 100; border-radius: 0.5rem; background: var(--accent); color: #07090d; padding: 0.75rem 1rem; }
+.skip-link:focus { top: 1rem; }
+@media (max-width: 767px) {
+  .workspace-next { align-items: flex-start; flex-direction: column; padding: 1.25rem; }
+  .workspace-tool { padding: 1.25rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
 }
 
 @media print {

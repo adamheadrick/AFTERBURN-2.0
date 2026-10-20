@@ -4,7 +4,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "AFTERBURN",
-  description: "The operational memory of high-readiness organizations. Plan, execute, review, improve, and learn with an operational learning and readiness platform."
+  description: "Plan, execute, review, and improve response exercises. A workspace for military and civilian exercise planners."
 };
 
 export default function RootLayout({

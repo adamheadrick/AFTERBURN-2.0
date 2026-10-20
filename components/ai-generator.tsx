@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Brain, Clipboard, RotateCcw, Save } from "lucide-react";
+import { Brain, Clipboard, Download } from "lucide-react";
 import { Button } from "@/components/button";
 
 export function AiGenerator({
@@ -49,8 +49,15 @@ export function AiGenerator({
   }
 
   async function copyToClipboard() {
-    await navigator.clipboard.writeText(output);
-    setStatus("Copied to clipboard");
+    try { await navigator.clipboard.writeText(output); setStatus("Copied to clipboard"); }
+    catch { setStatus("Copy unavailable. Select the text or download a copy."); }
+  }
+
+  function download() {
+    const url = URL.createObjectURL(new Blob([output], { type: "text/plain;charset=utf-8" }));
+    const anchor = document.createElement("a"); anchor.href = url; anchor.download = "afterburn-draft.txt"; anchor.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    setStatus("Downloaded a copy. Edits here are not saved to the workspace.");
   }
 
   return (
@@ -60,21 +67,18 @@ export function AiGenerator({
           <Brain size={18} />
           {isLoading ? "Generating..." : buttonLabel}
         </Button>
-        <Button variant="subtle" type="button" onClick={generate} disabled={isLoading}>
-          <RotateCcw size={17} />
-          Regenerate
-        </Button>
         <Button variant="ghost" type="button" onClick={copyToClipboard}>
           <Clipboard size={17} />
           Copy
         </Button>
-        <Button variant="ghost" type="button">
-          <Save size={17} />
-          Save
+        <Button variant="ghost" type="button" onClick={download} disabled={!output}>
+          <Download size={17} />
+          Download draft
         </Button>
-        <span className="text-sm font-semibold text-steel">{status}</span>
+        <span role="status" className="text-sm text-steel">{status}</span>
       </div>
-      <label className="grid gap-2 text-sm font-black text-ink">
+      <p className="text-xs leading-5 text-steel">Edits stay on this page. Download a copy before leaving.</p>
+      <label className="grid gap-2 text-sm font-semibold text-ink">
         {outputLabel}
         <textarea
           className={`rounded-md border border-line bg-night p-4 text-sm leading-7 text-ink outline-none focus:border-flare focus:ring-2 focus:ring-flare/20 ${large ? "min-h-[620px]" : "min-h-[300px]"}`}

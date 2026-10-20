@@ -1,3 +1,4 @@
+import { requireWorkspaceAccess } from "@/lib/access/server";
 import { cache } from "react";
 import { hasSupabaseConfig } from "@/lib/config";
 import { demoAfterburnData } from "@/lib/demo-data";
@@ -23,6 +24,7 @@ export const getCurrentUser = cache(async () => {
 });
 
 export const getAppData = cache(async () => {
+  await requireWorkspaceAccess();
   if (!hasSupabaseConfig()) {
     return {
       ...demoAfterburnData,
