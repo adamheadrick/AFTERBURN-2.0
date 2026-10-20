@@ -72,3 +72,16 @@ export async function denyApiAccess(request: Request): Promise<Response | null> 
     status: 401, headers: { "Cache-Control": "private, no-store", "X-Robots-Tag": "noindex, nofollow" }
   });
 }
+
+// Compare the browser Origin with the actual Host, not Next's internal server URL.
+export function verifiedRequestOrigin(request: Request): string | null {
+  const origin = request.headers.get("origin");
+  const host = request.headers.get("host");
+  if (!origin || !host) return null;
+  try {
+    const url = new URL(origin);
+    const local = url.hostname === "localhost" || url.hostname === "127.0.0.1" || url.hostname === "[::1]";
+    if (url.origin !== origin || url.host !== host || (url.protocol !== "https:" && !(local && url.protocol === "http:"))) return null;
+    return url.origin;
+  } catch { return null; }
+}

@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { accessPassword, accessAllowed, createAccessSession, verifyAccessSession, passwordMatches, safeReturnPath, SESSION_SECONDS } from "../lib/access/session.ts";
+import { accessPassword, accessAllowed, createAccessSession, verifyAccessSession, passwordMatches, safeReturnPath, verifiedRequestOrigin, SESSION_SECONDS } from "../lib/access/session.ts";
 import { allowAccessAttempt } from "../lib/access/attempts.ts";
 const password = "test-fixture-only-not-a-deployment-password";
 
@@ -43,4 +43,14 @@ test("per-instance attempt budget blocks excessive attempts and recovers after i
   for (let i = 0; i < 10; i++) assert.equal(allowAccessAttempt("unit-test", 1000), true);
   assert.equal(allowAccessAttempt("unit-test", 1000), false);
   assert.equal(allowAccessAttempt("unit-test", 601001), true);
+});
+
+
+test("login origin uses the public host, rejects foreign origins and insecure nonlocal requests", () => {
+  const request = (origin, host) => new Request("http://internal-server/api/access", { headers: { origin, host } });
+  assert.equal(verifiedRequestOrigin(request("https://preview.example", "preview.example")), "https://preview.example");
+  assert.equal(verifiedRequestOrigin(request("http://127.0.0.1:3118", "127.0.0.1:3118")), "http://127.0.0.1:3118");
+  assert.equal(verifiedRequestOrigin(request("https://foreign.example", "preview.example")), null);
+  assert.equal(verifiedRequestOrigin(request("http://preview.example", "preview.example")), null);
+  assert.equal(verifiedRequestOrigin(request("null", "preview.example")), null);
 });

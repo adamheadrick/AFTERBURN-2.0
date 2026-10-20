@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { ACCESS_COOKIE, SESSION_SECONDS, accessPassword, createAccessSession, passwordMatches, safeReturnPath } from "@/lib/access/session";
+import { verifiedRequestOrigin, ACCESS_COOKIE, SESSION_SECONDS, accessPassword, createAccessSession, passwordMatches, safeReturnPath } from "@/lib/access/session";
 import { allowAccessAttempt } from "@/lib/access/attempts";
 
 export const dynamic = "force-dynamic";
@@ -21,8 +21,8 @@ async function readSmallForm(request: Request): Promise<URLSearchParams | null> 
 }
 
 export async function POST(request: Request) {
-  const origin = new URL(request.url).origin;
-  if (request.headers.get("origin") !== origin) return new Response("Invalid request origin.", { status: 403 });
+  const origin = verifiedRequestOrigin(request);
+  if (!origin) return new Response("Invalid request origin.", { status: 403 });
   const password = accessPassword();
   if (!password) return new Response("Private preview access has not been configured. Contact the site owner.", { status: 503, headers: { "Cache-Control": "no-store" } });
   const ip = (request.headers.get("x-forwarded-for")?.split(",")[0] ?? "unknown").trim().slice(0, 100);
