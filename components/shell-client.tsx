@@ -8,6 +8,7 @@ import {
   FileText,
   Gauge,
   LogOut,
+  LockKeyhole,
   Menu,
   Plus,
   RadioTower,
@@ -104,6 +105,11 @@ export function AppShellClient({
                   </span>
                 ) : null}
               </Link>
+              <form action="/api/access/logout" method="post">
+                <Button type="submit" variant="ghost" className={`w-full ${railCollapsed ? "px-2" : ""}`} title="Lock workspace">
+                  <LockKeyhole size={16} />{labelsVisible ? "Lock workspace" : null}
+                </Button>
+              </form>
               {authEnabled ? (
                 <form action={signOut}>
                   <Button variant="ghost" className={`w-full ${railCollapsed ? "px-2" : ""}`} title="Sign out">

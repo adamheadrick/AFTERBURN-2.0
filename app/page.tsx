@@ -1,10 +1,12 @@
+import { requireWorkspaceAccess } from "@/lib/access/server";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { BrandWordmark } from "@/components/brand-mark";
 import { ButtonLink } from "@/components/button";
 import { workspaceSections } from "@/lib/workspace-navigation";
 
-export default function LandingPage() {
+export default async function LandingPage() {
+  await requireWorkspaceAccess();
   return <div className="min-h-screen bg-night text-ink">
     <header className="border-b border-line">
       <nav aria-label="Main" className="mx-auto flex min-h-20 max-w-6xl flex-wrap items-center justify-between gap-4 px-5 py-4">

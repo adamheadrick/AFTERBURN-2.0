@@ -1,3 +1,4 @@
+import { denyApiAccess } from "@/lib/access/session";
 import OpenAI from "openai";
 import { NextResponse } from "next/server";
 import { hasSupabaseConfig } from "@/lib/config";
@@ -7,6 +8,8 @@ import { buildExampleDraft, studioRequestSchema, validateDraftForBrief } from "@
 export const maxDuration = 60;
 
 export async function POST(request: Request) {
+  const denied = await denyApiAccess(request);
+  if (denied) return denied;
   let body: unknown;
   try {
     const raw = await request.text();

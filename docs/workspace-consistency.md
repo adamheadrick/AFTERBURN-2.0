@@ -15,16 +15,10 @@ Shared dark palette, amber primary actions, 44px shared buttons and form control
 Legacy generator Save is now an actual text download. Timeline CSV downloads visible rows and neutralizes leading spreadsheet formula characters. Unimplemented package and timeline PDF exports are explicitly unavailable. No PowerPoint export is added.
 
 ## Access protection
-Application middleware currently permits public access. This commit does not enable or claim password protection.
 
-Recommended development access control: in the AFTERBURN Vercel project, open Security > Deployment Protection, enable Vercel Authentication, select All Deployments, and save. This protects production and preview URLs. Vercel announced this is free on all plans on September 9, 2026:
-https://vercel.com/changelog/protect-production-deployments-for-free-on-every-plan
+A shared-password gate now protects deployments containing the password-gate change. See docs/private-access.md for configuration, activation, security scope, and verification. It fails closed until AFTERBURN_ACCESS_PASSWORD is configured with at least 20 characters. Vercel's paid Password Protection add-on is not used.
 
-Password Protection is an alternative for reviewers who should not need Vercel accounts; check the project's available plan and pricing before enabling paid protection. Do not commit passwords or bypass tokens.
-
-After activation, use a signed-out/private browser to confirm both production and preview pages AND direct API requests are blocked. Review protection exceptions and shared bypass links. Hosting protection does not change public GitHub repository visibility or replace per-user authorization and Supabase policies.
-
-Vercel settings were not accessible in this session. Activation and signed-out verification are pending.
+Production and legacy deployment URLs still require this code to be deployed (or hosting-layer protection). Setting an environment variable does not change older deployments. Vercel settings and the actual password remain user-managed.
 
 ## Reference material
 User supplied Lightning Strike 1.0 Executive Summary (PDF) during this pass. Review is pending because the local execution/file-reading environment was unavailable. Do not claim the changes reflect that document's contents. It should inform evidence-to-finding-to-action traceability and carry-forward into LS 2.0 planning; do not bundle private source documents in the public repository.

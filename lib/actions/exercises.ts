@@ -1,5 +1,7 @@
 "use server";
 
+import { requireWorkspaceAccess } from "@/lib/access/server";
+
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
@@ -17,6 +19,7 @@ const schema = z.object({
 });
 
 export async function createExercise(formData: FormData) {
+  await requireWorkspaceAccess();
   if (!hasSupabaseConfig()) {
     redirect(`/exercises/new?message=${encodeURIComponent("Add Supabase credentials in .env.local to create live exercises.")}`);
   }

@@ -3,11 +3,14 @@ import assert from "node:assert/strict";
 import { createRequire } from "node:module";
 import test from "node:test";
 
+import { createAccessSession } from "../lib/access/session.ts";
+process.env.AFTERBURN_ACCESS_PASSWORD = "test-fixture-only-not-a-deployment-password";
+const gateCookie = "afterburn_access=" + await createAccessSession(process.env.AFTERBURN_ACCESS_PASSWORD);
 delete process.env.OPENAI_API_KEY;
 const require = createRequire(import.meta.url);
 const { POST } = require("../.next/server/app/api/scenario-studio/route.js").routeModule.userland;
 const brief = { goal: "Practice requesting and acknowledging mutual aid.", setting: "Fictional county", participants: "County EM and Guard liaison", hazard: "Infrastructure outage", format: "Tabletop", duration: "60" };
-const request = (body) => new Request("http://localhost/api/scenario-studio", { method: "POST", body: typeof body === "string" ? body : JSON.stringify(body) });
+const request = (body) => new Request("http://localhost/api/scenario-studio", { method: "POST", headers: { cookie: gateCookie }, body: typeof body === "string" ? body : JSON.stringify(body) });
 
 test("invalid JSON, oversized requests, and incomplete briefs fail cleanly", async () => {
   assert.equal((await POST(request("{"))).status, 400);
