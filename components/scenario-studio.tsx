@@ -58,7 +58,7 @@ export function ScenarioStudio() {
   function changeStory(key: "title" | "story", value: string) {
     setDraft((previous) => previous ? { ...previous, [key]: value } : previous); setDirty(true);
   }
-  async function generate(action: "build" | "refine" | "plan") {
+  async function generate(action: "build" | "refine" | "plan", example = false) {
     if (requestInFlight.current) return;
     if (action === "plan" && draft && !dirty) { setError(""); setStep(3); return; }
     if (!briefSchema.safeParse(brief).success) { setError("Add your training goal, setting, and participating teams before generating."); return; }
@@ -69,7 +69,7 @@ export function ScenarioStudio() {
     try {
       const response = await fetch("/api/scenario-studio", {
         method: "POST", headers: { "Content-Type": "application/json" }, signal: controller.signal,
-        body: JSON.stringify({ brief, action, ...(action !== "build" ? { current: draft } : {}), ...(action === "refine" ? { revision } : {}) })
+        body: JSON.stringify({ brief, action, example: example || (action !== "build" && mode === "example"), ...(action !== "build" ? { current: draft } : {}), ...(action === "refine" ? { revision } : {}) })
       });
       const result = await response.json();
       if (!response.ok) throw new Error(result.error ?? "Could not generate a scenario. Please try again.");
@@ -158,7 +158,7 @@ export function ScenarioStudio() {
           </>}
         </fieldset>
         {busy && <div className={styles.loading} role="status"><LoaderCircle size={19} className={styles.spin} /> Connecting your story, objectives, and evidence…</div>}
-        {error && <div className={styles.error} role="alert">{error}{error.startsWith("Sign in") && <> <Link href="/login">Go to sign in</Link></>}</div>}
+        {error && <div className={styles.error} role="alert">{error}{error.startsWith("Sign in") && <> <Link href="/login">Go to sign in</Link></>}{step === 1 && <div className={styles.actions}><button type="button" disabled={busy} className={styles.secondary} onClick={() => void generate("build", true)}>Try an illustrative example</button></div>}</div>}
       </section>
       <aside className={styles.sidebar} aria-label="Exercise concept summary">
         <div className={styles.sideCard}><span className={styles.eyebrow}>The throughline</span><h2>Purpose first.<br />The story follows.</h2><p>A good scenario creates the right decisions. Every inject should test an objective. Every assessment should rest on evidence.</p><div className={styles.thread}><span>Training goal</span><span>Scenario & decisions</span><span>Objectives & injects</span><span>Evidence & improvement</span></div></div>

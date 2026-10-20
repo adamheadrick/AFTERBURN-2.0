@@ -19,7 +19,7 @@ export async function POST(request: Request) {
   if (!input.success) return NextResponse.json({ error: "Check your goal, exercise frame, and scenario before continuing." }, { status: 400 });
   const { brief, action, current, revision } = input.data;
 
-  if (!process.env.OPENAI_API_KEY) {
+  if (!process.env.OPENAI_API_KEY || input.data.example) {
     if (action === "refine") return NextResponse.json({ error: "AI refinement is unavailable in example mode. You can edit the story directly." }, { status: 400 });
     const draft = buildExampleDraft(brief);
     if (action === "plan" && current) {

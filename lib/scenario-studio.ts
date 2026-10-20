@@ -62,6 +62,7 @@ export const editableDraftSchema = scenarioDraftSchema.innerType().extend({
 export const studioRequestSchema = z.object({
   brief: briefSchema,
   action: z.enum(["build", "refine", "plan"]),
+  example: z.boolean().optional(),
   current: editableDraftSchema.optional(),
   revision: z.string().trim().max(1500).optional()
 }).superRefine((input, ctx) => {

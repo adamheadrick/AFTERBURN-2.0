@@ -32,3 +32,12 @@ test("example generation and plan handoff preserve the planner's exact edited st
   assert.equal(refine.status, 400);
   assert.match((await refine.json()).error, /example mode/);
 });
+
+test("an explicitly requested example never requires a paid AI call or sign-in", async () => {
+  process.env.OPENAI_API_KEY = "not-a-real-key-test-must-not-call-ai";
+  try {
+    const response = await POST(request({ action: "build", brief, example: true }));
+    assert.equal(response.status, 200);
+    assert.equal((await response.json()).mode, "example");
+  } finally { delete process.env.OPENAI_API_KEY; }
+});
