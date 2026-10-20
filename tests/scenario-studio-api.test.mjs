@@ -11,7 +11,7 @@ const request = (body) => new Request("http://localhost/api/scenario-studio", { 
 
 test("invalid JSON, oversized requests, and incomplete briefs fail cleanly", async () => {
   assert.equal((await POST(request("{"))).status, 400);
-  assert.equal((await POST(request("x".repeat(65001)))).status, 413);
+  assert.equal((await POST(request("x".repeat(120001)))).status, 413);
   assert.equal((await POST(request({ action: "build", brief: {} }))).status, 400);
 });
 
@@ -40,4 +40,19 @@ test("an explicitly requested example never requires a paid AI call or sign-in",
     assert.equal(response.status, 200);
     assert.equal((await response.json()).mode, "example");
   } finally { delete process.env.OPENAI_API_KEY; }
+});
+
+test("reviewed sources create connected multi-day drafts without converting proposals to confirmations", async () => {
+  const imported = { ...brief, days: 3, duration: "240", source: { filename: "synthetic.pptx", reference: "Slide 2", scenario: "A reviewed scenario with two connected lanes." }, lanes: [
+    { id: "LANE-1", name: "Coordination", problem: "Information needs verification.", status: "proposed" },
+    { id: "LANE-2", name: "Response", problem: "A second team needs the same resource.", status: "proposed" }
+  ] };
+  const response = await POST(request({ action: "build", brief: imported, example: true }));
+  assert.equal(response.status, 200);
+  const result = await response.json();
+  assert.equal(result.mode, "source");
+  assert.equal(result.draft.story, imported.source.scenario);
+  assert.ok(result.draft.injects.every((inject) => inject.day === 3));
+  assert.ok(result.draft.objectives.some((objective) => objective.laneId === "LANE-1"));
+  assert.ok(result.draft.objectives.some((objective) => objective.laneId === "LANE-2"));
 });

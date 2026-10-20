@@ -1,6 +1,6 @@
 # Guided scenario studio — first review
 
-The new `/exercises/new` experience replaces the disconnected setup form with a four-step concept workflow: training purpose, exercise frame, editable story, and linked objectives/injects/evidence. The existing scenario builder and other lifecycle modules are unchanged.
+The new `/exercises/new` experience replaces the disconnected setup form with a four-step concept workflow: training purpose, exercise frame, editable story, and linked objectives/injects/evidence. The existing scenario builder is unchanged. The briefing route now prefers the current browser concept, while other lifecycle modules retain their existing behavior.
 
 ## Review path
 
@@ -38,3 +38,18 @@ Local verification: six model/export/storage tests cover all 36 example combinat
 ## Next integration pass
 
 Resolve exercise-specific data selection before saving concepts to shared tables. The current data loader reads several globally latest records, including scenario and mission assignment, so simply inserting a new exercise would not guarantee a coherent selected-exercise workspace. Connect the reviewed concept to persisted objectives/injects only after exercise selection and ownership are consistent. Then continue the same traceability into evaluator evidence, findings, improvement owners, and retests.
+
+
+## Document import and briefing generation
+
+The same concept now supports starting from scratch or reviewing an existing PPTX, DOCX, TXT, or Markdown file. The parser runs in the browser and extracts text and speaker notes with source labels. It does not upload the original file. Supported limits are 8 MB, 100 slides, and 160,000 extracted characters. Images, charts, and image-only pages require manual review; PDF import is not implemented.
+
+Extraction is deterministic and intentionally conservative. It recognizes common exercise headings, individual lane descriptions, day labels, and requested decisions. It is not a general semantic interpretation of arbitrary slides. The planner reviews suggestions before applying them; absent fields remain blank, draft standards remain draft, and lane leads start proposed. Only reviewed fields travel to the AI endpoint when the planner chooses AI generation. A source-based, non-AI draft remains available.
+
+Concepts support up to six lanes and seven days with a daily activity window. Each lane has a problem, draft standard, proposed or confirmed lead, evaluator, evidence method, source reference, and dependencies. Editable decisions/RFIs track ownership, due dates, and status. Each objective and inject references a valid lane; every lane is covered. The deterministic source path copies reviewed narrative and standards and clearly labels generated controller prompts as proposed scaffolding.
+
+The planning brief is derived from the current concept rather than maintained as a second copy. It includes purpose, scenario, lanes, standards and evidence, schedule, assumptions, and open decisions with owners. The briefing route uses the saved browser concept when available and blocks a stale brief when setup/story edits need regeneration. Without a local concept, the existing workspace briefing remains available.
+
+Review the brief in the planner or at `/briefing`. Print/save as PDF from a separate print window, or download a self-contained HTML briefing. Controller annexes and injects are excluded by default and can be included explicitly. Editable PowerPoint export and shared database saving remain future integration work.
+
+Validation uses synthetic fixtures for slide order, speaker notes, draft status, multi-day lane coverage, missing fields, malicious XML, HTML escaping, and live updates to briefing content. The supplied reference deck was used locally to verify extraction of 39 slides, five proposed lanes, a three-day schedule, and source-linked standards. Its contents and file are not committed to this public repository. Browser visual/interaction QA and authenticated live AI remain unverified.

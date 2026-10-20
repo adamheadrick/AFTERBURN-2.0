@@ -1,3 +1,4 @@
+import { CurrentConceptBrief } from "@/components/current-concept-brief";
 import { Presentation } from "lucide-react";
 import { ButtonLink } from "@/components/button";
 import { PageTitle } from "@/components/page-title";
@@ -9,7 +10,7 @@ export default async function BriefingPage() {
   const personnel = syncMatrixEntries.reduce((sum, row) => sum + row.boots_on_ground, 0);
 
   return (
-    <div className="grid gap-6">
+    <CurrentConceptBrief><div className="grid gap-6">
       <PageTitle
         eyebrow="Leadership view"
         title="Leadership Brief"
@@ -70,6 +71,6 @@ export default async function BriefingPage() {
           </div>
         </div>
       </Panel>
-    </div>
+    </div></CurrentConceptBrief>
   );
 }

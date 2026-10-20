@@ -96,3 +96,24 @@
 @media (max-width: 1150px) { .layout { grid-template-columns: minmax(0, 1fr); gap: 30px; } .sidebar { grid-template-columns: 1fr 1fr; } .sideCard { display: none; } .storage { align-self: end; } }
 @media (max-width: 600px) { .steps { grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 28px; } .step { font-size: 11px; } .topline { gap: 8px; } .eyebrow { font-size: 9px; } .heading { font-size: 28px; } .intro { font-size: 14px; } .formGrid { grid-template-columns: 1fr; } .sidebar { grid-template-columns: 1fr; } .actions { align-items: stretch; } .actions > button { flex: 1; } .planTitle { flex-direction: column; } .objective { padding: 16px; } .groupHeading { flex-wrap: wrap; } .studio textarea.goal { font-size: 16px; } }
 @media (prefers-reduced-motion: reduce) { .spin { animation: none; } }
+
+.importBox { margin-bottom: 28px; border: 1px solid #3d4550; border-radius: 9px; overflow: hidden; }
+.importBox .choice { border: 0; border-radius: 0; padding: 18px; background: #1b211f; }
+.importBox .choice > span { display: flex; gap: 10px; align-items: center; }
+.importBody { padding: 22px; background: #0f161d; }
+.importBody h2 { font-size: 20px; margin-bottom: 12px; }
+.importBody > .hint { margin: 12px 0 20px; }
+.sourceSection { padding: 18px 0; border-bottom: 1px solid #2b3543; }
+.sourceSection h3, .sourceSection h4 { color: #f6c768; font-size: 12px; margin: 14px 0; }
+.sourceSection p { white-space: pre-wrap; font-size: 12px; line-height: 1.7; color: #b4c2d3; }
+.briefingBox { padding: 22px; margin: 30px 0; border: 1px solid #77613c; background: #171c21; border-radius: 10px; }
+.briefingBox .groupHeading { margin-top: 0; }
+.briefingBox > .hint { margin-bottom: 20px; }
+.checkbox { display: flex; gap: 12px; align-items: center; margin: 24px 0; font-size: 12px; }
+.studio .checkbox input { width: 18px; height: 18px; }
+.briefSlide { background: #0b1119; padding: 30px; border-top: 3px solid #c19a54; border-radius: 5px; min-height: 330px; }
+.briefSlide h2 { font-size: 25px; margin: 18px 0; line-height: 1.25; }
+.briefSlide p, .briefSlide li { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 14px; line-height: 1.8; color: #d0dae7; margin: 14px 0; }
+.briefSlide ul { padding-left: 20px; list-style: disc; }
+.briefSlide .eyebrow { font-size: 10px; color: #f6c768; }
+@media (max-width: 600px) { .importBody, .briefingBox, .briefSlide { padding: 16px; } }
