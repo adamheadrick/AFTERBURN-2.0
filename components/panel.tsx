@@ -5,7 +5,7 @@ export function Panel({
   children: React.ReactNode;
   className?: string;
 }) {
-  return <section className={`rounded-md border border-line bg-panel ${className}`}>{children}</section>;
+  return <section className={`rounded-xl border border-line bg-panel ${className}`}>{children}</section>;
 }
 
 export function PanelHeader({
@@ -18,7 +18,7 @@ export function PanelHeader({
   action?: React.ReactNode;
 }) {
   return (
-    <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-4 py-3">
+    <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-5 py-4">
       <div>
         {eyebrow ? <p className="text-xs font-semibold text-steel">{eyebrow}</p> : null}
         <h2 className="text-base font-semibold text-ink">{title}</h2>
@@ -44,4 +44,4 @@ export function Field({
 }
 
 export const inputStyles =
-  "min-h-9 rounded-md border border-line bg-night px-3 py-1.5 text-sm font-normal text-ink placeholder:font-normal placeholder:text-steel/70 outline-none transition focus:border-flare/60 focus:ring-1 focus:ring-flare/20";
+  "min-h-11 rounded-lg border border-line bg-night px-3 py-2 text-sm font-normal text-ink placeholder:font-normal placeholder:text-steel/70 outline-none transition focus:border-flare/60 focus:ring-1 focus:ring-flare/20";

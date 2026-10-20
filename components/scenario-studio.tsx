@@ -49,6 +49,7 @@ export function ScenarioStudio() {
     if (!hydrated || (!draft && !brief.goal && !brief.setting && !brief.participants)) return;
     try {
       localStorage.setItem(studioStorageKey, JSON.stringify({ version: 1, brief, draft, mode, step, dirty, updatedAt: new Date().toISOString() }));
+      window.dispatchEvent(new Event("afterburn:concept-updated"));
       setStorageStatus("Saved in this browser · not in the shared exercise database");
     } catch { setStorageStatus("Browser saving is unavailable. Export your draft before leaving."); }
   }, [brief, draft, mode, step, dirty, hydrated]);
@@ -92,7 +93,7 @@ export function ScenarioStudio() {
   }
   function startOver() {
     if (!window.confirm("Start a new concept? Export first if you want to keep this browser draft.")) return;
-    try { localStorage.removeItem(studioStorageKey); } catch { /* Storage may be unavailable. */ }
+    try { localStorage.removeItem(studioStorageKey); window.dispatchEvent(new Event("afterburn:concept-updated")); } catch { /* Storage may be unavailable. */ }
     setDraft(null); setBrief(initialBrief); setStep(0); setDirty(false); setError(""); setRevision(""); setRestored(false);
     setStorageStatus("Drafts stay in this browser. Export a copy to keep or share.");
   }

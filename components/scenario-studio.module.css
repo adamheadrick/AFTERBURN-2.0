@@ -1,6 +1,6 @@
-.studio { --accent: #f6c768; padding: 8px 0 36px; }
+.studio { --accent: var(--workspace-accent, #f6c768); padding: 8px 0 36px; }
 .topline { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 24px; }
-.eyebrow { color: var(--accent); font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+.eyebrow { color: var(--accent); font-size: 12px; font-weight: 600; letter-spacing: .06em; }
 .preview, .pill { border: 1px solid #3d3a2d; border-radius: 5px; padding: 5px 9px; color: #f6d58e; background: #221e15; font-size: 11px; white-space: nowrap; }
 .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; border-bottom: 1px solid #29313d; padding-bottom: 20px; margin-bottom: 38px; }
 .step { display: flex; align-items: center; gap: 9px; color: #98a4b6; font-size: 12px; text-align: left; min-height: 40px; border-radius: 6px; }
@@ -13,7 +13,7 @@
 .fields { border: 0; margin: 0; padding: 0; }
 .fields:disabled { opacity: .65; }
 .sectionIntro { margin-bottom: 30px; }
-.heading { font-size: clamp(26px, 3vw, 38px); line-height: 1.14; letter-spacing: -.035em; max-width: 640px; margin: 12px 0 16px; }
+.heading { font-size: clamp(26px, 2.8vw, 34px); line-height: 1.14; letter-spacing: -.035em; max-width: 640px; margin: 12px 0 16px; }
 .heading:focus { outline: none; }
 .intro { color: #b9c4d4; font-size: 15px; line-height: 1.75; max-width: 620px; }
 .label { display: flex; flex-direction: column; gap: 9px; margin: 0 0 20px; font-size: 12px; font-weight: 600; color: #dbe3ee; }

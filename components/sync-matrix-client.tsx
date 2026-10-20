@@ -159,6 +159,19 @@ export function SyncMatrixClient({
     { label: "Items needing review", value: gapEntries.length }
   ];
 
+  function exportCsv() {
+    const columns: Array<keyof SyncMatrixEntry> = ["time_block", "organization", "task", "purpose", "location_lane", "supported_objective", "inject_trigger", "external_effect", "boots_on_ground", "equipment_assets", "communications_reporting", "expected_output", "status", "notes"];
+    const cell = (value: unknown) => {
+      const text = String(value ?? "");
+      const safe = /^\s*[=+@-]/.test(text) ? "'" + text : text;
+      return '"' + safe.replace(/"/g, '""') + '"';
+    };
+    const csv = [columns.map(cell).join(","), ...filteredEntries.map(entry => columns.map(key => cell(entry[key])).join(","))].join("\r\n");
+    const url = URL.createObjectURL(new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8" }));
+    const anchor = document.createElement("a"); anchor.href = url; anchor.download = "afterburn-exercise-timeline.csv"; anchor.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
   function updateEntry(id: string, patch: Partial<SyncMatrixEntry>) {
     setEntries((current) => current.map((entry) => (entry.id === id ? { ...entry, ...patch, updated_at: new Date().toISOString() } : entry)));
   }
@@ -317,14 +330,11 @@ export function SyncMatrixClient({
           <Sparkles size={17} />
           {isGenerating ? "Generating..." : "Generate Timeline"}
         </Button>
-        <Button variant="ghost" type="button">
+        <Button variant="ghost" type="button" onClick={exportCsv}>
           <Download size={17} />
-          Export CSV
+          Download visible rows
         </Button>
-        <Button variant="ghost" type="button">
-          <Download size={17} />
-          Export PDF
-        </Button>
+        <span className="text-xs leading-5 text-steel">Edits stay on this page. Download the visible rows before leaving. PDF export is not available yet.</span>
       </div>
 
       {aiOutput ? (

@@ -27,11 +27,12 @@ export function NavLink({
     <Link
       href={href}
       title={label}
-      className={`nav-tooltip-host relative flex items-center rounded-md border px-3 py-2 text-sm font-semibold transition duration-150 ${collapsed ? "justify-center" : "gap-3"} ${
+      aria-current={isActive ? "page" : undefined}
+      className={`nav-tooltip-host relative flex min-h-11 items-center rounded-md border px-3 py-2 text-sm font-semibold transition duration-150 ${collapsed ? "justify-center" : "gap-3"} ${
         isActive
           ? collapsed
-            ? "border-line bg-field text-ink"
-            : "border-line bg-field text-ink"
+            ? "border-flare/30 bg-flare/10 text-flare"
+            : "border-flare/30 bg-flare/10 text-flare"
           : "border-transparent text-steel hover:border-line hover:bg-field hover:text-ink"
       }`}
     >

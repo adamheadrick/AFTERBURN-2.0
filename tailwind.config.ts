@@ -13,7 +13,7 @@ const config: Config = {
         brand: ["var(--font-brand)"]
       },
       colors: {
-        ink: "#111827",
+        ink: "#f8fafc",
         ember: "#f08a4f",
         flare: "#f6c768",
         steel: "#cbd5e1",
