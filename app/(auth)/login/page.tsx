@@ -1,4 +1,3 @@
-import { requireWorkspaceAccess } from "@/lib/access/server";
 import { BrandWordmark } from "@/components/brand-mark";
 import { ButtonLink } from "@/components/button";
 import { signInWithOtp } from "@/lib/actions/auth";
@@ -10,7 +9,6 @@ export default async function LoginPage({
 }: {
   searchParams: Promise<{ message?: string }>;
 }) {
-  await requireWorkspaceAccess();
   const { message } = await searchParams;
   const authEnabled = hasSupabaseConfig();
 

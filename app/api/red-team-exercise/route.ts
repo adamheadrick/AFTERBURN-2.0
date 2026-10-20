@@ -1,4 +1,3 @@
-import { denyApiAccess } from "@/lib/access/session";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { asPrompt, generateText } from "@/lib/ai/generate";
@@ -34,8 +33,6 @@ The exercise check will be generated after planning inputs and OPENAI_API_KEY ar
 Add scenario, objectives, tasking, injects, sync matrix rows, evaluator coverage, decision points, communications plan, and safety/legal inputs.`;
 
 export async function POST(request: Request) {
-  const denied = await denyApiAccess(request);
-  if (denied) return denied;
   const parsed = schema.safeParse(await request.json());
 
   if (!parsed.success) {

@@ -1,4 +1,3 @@
-import { denyApiAccess } from "@/lib/access/session";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { asPrompt, generateText } from "@/lib/ai/generate";
@@ -27,8 +26,6 @@ Each item should include:
 - Related future exercise`;
 
 export async function POST(request: Request) {
-  const denied = await denyApiAccess(request);
-  if (denied) return denied;
   const parsed = schema.safeParse(await request.json());
 
   if (!parsed.success) {

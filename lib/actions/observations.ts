@@ -1,7 +1,5 @@
 "use server";
 
-import { requireWorkspaceAccess } from "@/lib/access/server";
-
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
@@ -31,7 +29,6 @@ const schema = z.object({
 });
 
 export async function createObservation(formData: FormData) {
-  await requireWorkspaceAccess();
   if (!hasSupabaseConfig()) {
     redirect(`/observations/new?message=${encodeURIComponent("Add Supabase credentials in .env.local to submit live observations.")}`);
   }

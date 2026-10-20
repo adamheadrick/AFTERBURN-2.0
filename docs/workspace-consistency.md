@@ -14,11 +14,11 @@ Shared dark palette, amber primary actions, 44px shared buttons and form control
 
 Legacy generator Save is now an actual text download. Timeline CSV downloads visible rows and neutralizes leading spreadsheet formula characters. Unimplemented package and timeline PDF exports are explicitly unavailable. No PowerPoint export is added.
 
-## Access protection
+## Public partner review
 
-A shared-password gate now protects deployments containing the password-gate change. See docs/private-access.md for configuration, activation, security scope, and verification. It fails closed until AFTERBURN_ACCESS_PASSWORD is configured with at least 20 characters. Vercel's paid Password Protection add-on is not used.
+The owner requested removal of the shared-password requirement on October 20, 2026. Pages and review workflows are public. The shared gate, its API endpoints, and the Lock workspace control have been removed. Existing service-level user checks remain in place. AFTERBURN_ACCESS_PASSWORD is no longer used.
 
-Production and legacy deployment URLs still require this code to be deployed (or hosting-layer protection). Setting an environment variable does not change older deployments. Vercel settings and the actual password remain user-managed.
+The public review version retains the guided scenario studio, document import, derived briefings, and unified workspace. Old /access bookmarks redirect to /overview. Middleware retains no-store and noindex headers; these are not access controls.
 
 ## Reference material
 User supplied Lightning Strike 1.0 Executive Summary (PDF) during this pass. Review is pending because the local execution/file-reading environment was unavailable. Do not claim the changes reflect that document's contents. It should inform evidence-to-finding-to-action traceability and carry-forward into LS 2.0 planning; do not bundle private source documents in the public repository.

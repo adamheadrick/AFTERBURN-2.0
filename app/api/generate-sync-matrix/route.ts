@@ -1,4 +1,3 @@
-import { denyApiAccess } from "@/lib/access/session";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { asPrompt, generateText } from "@/lib/ai/generate";
@@ -31,8 +30,6 @@ Each row should include:
 - Likely friction point`;
 
 export async function POST(request: Request) {
-  const denied = await denyApiAccess(request);
-  if (denied) return denied;
   const parsed = schema.safeParse(await request.json());
 
   if (!parsed.success) {

@@ -1,7 +1,5 @@
-import { requireWorkspaceAccess } from "@/lib/access/server";
 import { AppShell } from "@/components/shell";
 
-export default async function ProtectedLayout({ children }: { children: React.ReactNode }) {
-  await requireWorkspaceAccess();
+export default function ProtectedLayout({ children }: { children: React.ReactNode }) {
   return <AppShell>{children}</AppShell>;
 }

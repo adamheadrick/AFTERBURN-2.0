@@ -1,13 +1,10 @@
 "use server";
 
-import { requireWorkspaceAccess } from "@/lib/access/server";
-
 import { redirect } from "next/navigation";
 import { hasSupabaseConfig } from "@/lib/config";
 import { createClient } from "@/lib/supabase/server";
 
 export async function signInWithOtp(formData: FormData) {
-  await requireWorkspaceAccess();
   if (!hasSupabaseConfig()) {
     redirect("/overview");
   }
@@ -31,7 +28,6 @@ export async function signInWithOtp(formData: FormData) {
 }
 
 export async function signOut() {
-  await requireWorkspaceAccess();
   if (!hasSupabaseConfig()) {
     redirect("/overview");
   }
