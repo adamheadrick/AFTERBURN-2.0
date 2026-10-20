@@ -18,7 +18,7 @@ function present(value: unknown) {
 
 function phaseStatus(done: number, total: number) {
   if (done === total) {
-    return { label: "Ready", icon: CheckCircle2, color: "text-signal" };
+    return { label: "Inputs present", icon: CheckCircle2, color: "text-signal" };
   }
 
   if (done === 0) {
@@ -57,19 +57,13 @@ export function PhaseReadiness({
     checks: Array<[string, boolean]>;
   }> = [
     {
-      label: "Concept",
-      href: "/exercises/new",
+      label: "Plan",
+      href: "/plan",
       checks: [
         ["Exercise name", present(exercise.name)],
         ["Date and location", present(exercise.date) && present(exercise.location)],
         ["Lead organization", present(exercise.lead_org)],
-        ["Participating organizations", exercise.supporting_orgs.length > 0]
-      ]
-    },
-    {
-      label: "Plan",
-      href: "/scenario-builder",
-      checks: [
+        ["Participating organizations", exercise.supporting_orgs.length > 0],
         ["Scenario inputs", present(scenario.situation) && present(scenario.operational_problem)],
         ["Scenario narrative", present(scenario.generated_narrative)],
         ["Tasking / mission assignment", present(missionAssignment.mission_statement)],
@@ -87,7 +81,7 @@ export function PhaseReadiness({
       ]
     },
     {
-      label: "Assess",
+      label: "Review",
       href: "/analysis",
       checks: [
         ["Feedback analyzed", analysis.themes.length > 0],
@@ -109,7 +103,8 @@ export function PhaseReadiness({
   ];
 
   return (
-    <section className="grid gap-3 lg:grid-cols-5">
+    <section aria-label="Workspace input coverage" className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <p className="text-sm leading-6 text-steel sm:col-span-2 lg:col-span-4">Input coverage shows which records contain information. It does not confirm exercise readiness or approval.</p>
       {phases.map((phase) => {
         const done = phase.checks.filter(([, isDone]) => isDone).length;
         const status = phaseStatus(done, phase.checks.length);

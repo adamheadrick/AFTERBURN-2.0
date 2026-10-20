@@ -19,17 +19,17 @@ export default async function LoginPage({
           <div className="flex items-center gap-3">
             <BrandWordmark className="text-sm" />
           </div>
-          <h1 className="mt-16 max-w-xl text-4xl font-black leading-tight text-ink sm:text-5xl">
-            Concept to planning. Execution to evaluation. Intelligence throughout.
+          <h1 className="mt-16 max-w-xl text-4xl font-semibold leading-tight text-ink sm:text-5xl">
+            Plan. Execute. Review. Improve.
           </h1>
           <p className="mt-5 max-w-lg text-base leading-7 text-steel">
             Scenario design, partner tasking, rehearsal timelines, evaluator feedback, executive summaries, AARs, and improvement plans for operational teams.
           </p>
         </div>
         <div className="p-8 sm:p-10">
-          <h2 className="text-2xl font-black text-ink">Sign in</h2>
+          <h2 className="text-2xl font-semibold text-ink">Sign in</h2>
           <p className="mt-2 text-sm text-steel">
-            {authEnabled ? "Use a magic link to access the workspace." : "Supabase is not configured, so local preview mode does not require sign-in."}
+            {authEnabled ? "Request an email link to sign in." : "Workspace accounts are not configured in this preview."}
           </p>
           {message ? (
             <div className="mt-5 rounded-md border border-flare/40 bg-flare/10 p-3 text-sm font-semibold text-ink">
@@ -58,7 +58,7 @@ export default async function LoginPage({
                 Continue Preview
               </ButtonLink>
               <p className="text-sm leading-6 text-steel">
-                Add Supabase credentials later when you want real user accounts, saved records, and live auth.
+                The guided planner stores drafts in your browser. Export a copy to keep your work.
               </p>
             </div>
           )}
