@@ -1,11 +1,14 @@
 "use client";
-import { useState } from "react";
+import { useId, useRef, useState } from "react";
 import { FileUp, ArrowRight } from "lucide-react";
 import type { ScenarioBrief } from "@/lib/scenario-studio";
 import type { PlanningDocument } from "@/lib/import/planning-document";
 import styles from "./scenario-studio.module.css";
 
 export function PlanningDocumentImport({ onApply }: { onApply: (brief: Partial<ScenarioBrief>) => void }) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const panelId = useId();
+  const [filename, setFilename] = useState("");
   const [open, setOpen] = useState(false);
   const [document, setDocument] = useState<PlanningDocument | null>(null);
   const [proposal, setProposal] = useState<Partial<ScenarioBrief> | null>(null);
@@ -13,6 +16,7 @@ export function PlanningDocumentImport({ onApply }: { onApply: (brief: Partial<S
   const [busy, setBusy] = useState(false);
   async function readFile(file: File | undefined) {
     if (!file) return;
+    setOpen(true); setFilename(file.name);
     setBusy(true); setError(""); setDocument(null); setProposal(null);
     try {
       if (file.size > 8 * 1024 * 1024) throw new Error("Choose a file smaller than 8 MB.");
@@ -23,11 +27,13 @@ export function PlanningDocumentImport({ onApply }: { onApply: (brief: Partial<S
     finally { setBusy(false); }
   }
   return <section className={styles.importBox}>
-    <button type="button" className={styles.choice} aria-expanded={open} onClick={() => setOpen(!open)}><span><FileUp size={17} aria-hidden="true" /> Start from my planning documents</span><ArrowRight size={16} /></button>
-    {open && <div className={styles.importBody}>
+    <button type="button" className={styles.choice} aria-expanded={open} aria-controls={panelId} disabled={busy} onClick={() => { setOpen(true); inputRef.current?.click(); }}><span><FileUp size={17} aria-hidden="true" /> Start from my planning documents</span><ArrowRight size={16} /></button>
+    <input ref={inputRef} type="file" accept=".pptx,.docx,.txt,.md" hidden aria-label="Planning document" disabled={busy} onChange={(event) => { const file = event.target.files?.[0]; event.target.value = ""; void readFile(file); }} />
+    {open && <div id={panelId} className={styles.importBody}>
       <h2>Bring the planning you’ve already done.</h2>
       <p className={styles.hint}>PowerPoint, Word, or text · up to 8 MB. Reading happens in this browser. Review the extraction before adding it to your concept.</p>
-      <label className={styles.label}>Choose a planning brief<input type="file" accept=".pptx,.docx,.txt,.md" disabled={busy} onChange={(event) => void readFile(event.target.files?.[0])} /></label>
+      <button type="button" className={styles.secondary} disabled={busy} onClick={() => inputRef.current?.click()}>{filename ? "Choose another document" : "Choose a planning brief"}</button>
+      {filename && <p className={styles.hint}>{filename}</p>}
       {busy && <p role="status">Reading document text and speaker notes…</p>}
       {error && <p role="alert" className={styles.error}>{error}</p>}
       {document && proposal && <>
