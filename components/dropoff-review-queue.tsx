@@ -2,6 +2,7 @@
 
 import { CheckCircle2, FileSearch, Filter, GitMerge, ShieldAlert, XCircle } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
+import { readSavedDropoffs, downloadAttachment, type SavedAttachment } from "@/lib/dropoff-files";
 import { Button } from "@/components/button";
 import { inputStyles } from "@/components/panel";
 import {
@@ -23,6 +24,7 @@ type StoredDropoff = {
 type QueueItem = {
   submission: DropoffSubmission;
   screeningReport?: DropoffScreeningReport;
+  attachments?: SavedAttachment[];
 };
 
 function readStoredDropoffs(): QueueItem[] {
@@ -62,6 +64,7 @@ export function DropoffReviewQueue({
   demoReports: DropoffScreeningReport[];
   demoRepositoryItems: LessonsRepositoryItem[];
 }) {
+  const [fileError, setFileError] = useState("");
   const [items, setItems] = useState<QueueItem[]>(() =>
     demoSubmissions.map((submission) => ({
       submission,
@@ -76,8 +79,11 @@ export function DropoffReviewQueue({
   const [convertedItems, setConvertedItems] = useState<LessonsRepositoryItem[]>(demoRepositoryItems);
 
   useEffect(() => {
-    function loadStored() {
-      const storedItems = readStoredDropoffs();
+    async function loadStored() {
+      let savedItems: QueueItem[] = [];
+      try { savedItems = await readSavedDropoffs() as unknown as QueueItem[]; }
+      catch (error) { setFileError(error instanceof Error ? error.message : "Saved files could not be loaded."); }
+      const storedItems = [...savedItems, ...readStoredDropoffs()];
       const demoItems = demoSubmissions.map((submission) => ({
         submission,
         screeningReport: demoReports.find((report) => report.submission_id === submission.id)
@@ -176,6 +182,7 @@ export function DropoffReviewQueue({
 
   return (
     <div className="grid gap-5">
+      {fileError ? <p role="alert" className="text-sm text-red-200">{fileError}</p> : null}
       <section className="rounded-md border border-line bg-panel p-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
@@ -264,6 +271,13 @@ export function DropoffReviewQueue({
               </div>
 
               <div className="grid gap-5 p-5">
+                {selectedItem.attachments?.length ? <div className="border-b border-line pb-4">
+                  <h3 className="text-sm font-semibold text-ink">Attached files</h3>
+                  <p className="mt-2 text-xs text-steel">Saved in this browser. File contents have not been analyzed by AI.</p>
+                  <ul className="mt-3 grid gap-2">{selectedItem.attachments.map((file) => <li key={file.id}>
+                    <button className="break-all text-left text-sm text-flare underline" onClick={async () => { setFileError(""); try { await downloadAttachment(file); } catch (error) { setFileError(error instanceof Error ? error.message : "Download failed."); } }}>Download {file.file_name}</button>
+                  </li>)}</ul>
+                </div> : null}
                 <div>
                   <h3 className="text-sm font-black uppercase tracking-[0.12em] text-flare">Submission</h3>
                   <p className="mt-2 text-sm font-semibold leading-6 text-ink">{selectedItem.submission.body}</p>

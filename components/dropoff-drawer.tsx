@@ -2,6 +2,8 @@
 
 import { Archive, ChevronDown, Inbox, ShieldCheck, UploadCloud, X } from "lucide-react";
 import { FormEvent, useEffect, useMemo, useState } from "react";
+import Link from "next/link";
+import { saveDropoffFiles, validateFiles, type SavedAttachment } from "@/lib/dropoff-files";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/button";
 import { inputStyles } from "@/components/panel";
@@ -13,19 +15,11 @@ import {
   dropoffVisibilityRecommendations
 } from "@/lib/dropoff-options";
 
-const storageKey = "afterburn.dropoffSubmissions";
-
-type AttachmentMetadata = {
-  file_name: string;
-  file_type: string;
-  file_size: number;
-};
-
 type DropoffResponse = {
   message: string;
-  submission: Record<string, unknown>;
+  submission: Record<string, unknown> & { id: string };
   screeningReport: Record<string, unknown>;
-  attachments: AttachmentMetadata[];
+  attachments: SavedAttachment[];
   persistenceWarning?: string;
 };
 
@@ -57,19 +51,13 @@ function moduleFromPath(pathname: string) {
   return "Planning";
 }
 
-function storeSubmission(result: DropoffResponse) {
-  const existing = JSON.parse(localStorage.getItem(storageKey) ?? "[]") as DropoffResponse[];
-  localStorage.setItem(storageKey, JSON.stringify([result, ...existing].slice(0, 50)));
-  window.dispatchEvent(new CustomEvent("afterburn-dropoff-updated"));
-}
-
 export function DropoffDrawer({ triggerVariant = "default" }: { triggerVariant?: "default" | "quiet" }) {
   const pathname = usePathname();
   const inferredModule = useMemo(() => moduleFromPath(pathname), [pathname]);
   const [open, setOpen] = useState(false);
   const [advancedOpen, setAdvancedOpen] = useState(false);
   const [form, setForm] = useState({ ...initialForm, module_context: inferredModule, phase: inferredModule });
-  const [attachments, setAttachments] = useState<AttachmentMetadata[]>([]);
+  const [attachments, setAttachments] = useState<File[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [result, setResult] = useState<DropoffResponse | null>(null);
   const [error, setError] = useState("");
@@ -86,6 +74,18 @@ export function DropoffDrawer({ triggerVariant = "default" }: { triggerVariant?:
     setForm((current) => ({ ...current, [name]: value }));
   }
 
+  function addFiles(files: File[]) {
+    const combined = [...attachments];
+    for (const file of files) {
+      if (!combined.some((existing) => existing.name === file.name && existing.size === file.size && existing.lastModified === file.lastModified)) combined.push(file);
+    }
+    const validation = validateFiles(combined);
+    if (validation) { setError(validation); return; }
+    setError("");
+    setAttachments(combined);
+    if (!form.title.trim() && combined[0]) updateField("title", combined[0].name);
+  }
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setSubmitting(true);
@@ -99,7 +99,8 @@ export function DropoffDrawer({ triggerVariant = "default" }: { triggerVariant?:
         body: JSON.stringify({
           ...form,
           tags: form.tags.split(",").map((tag) => tag.trim()).filter(Boolean),
-          attachments
+          body: form.body.trim() || "Attached files for human review. File contents have not been analyzed.",
+          attachments: attachments.map((file) => ({ file_name: file.name, file_type: file.type || "application/octet-stream", file_size: file.size }))
         })
       });
 
@@ -109,8 +110,9 @@ export function DropoffDrawer({ triggerVariant = "default" }: { triggerVariant?:
         throw new Error(payload.error ?? "Dropoff submission failed.");
       }
 
-      setResult(payload);
-      storeSubmission(payload);
+      const saved = { ...payload, attachments: attachments.map((file) => ({ id: crypto.randomUUID(), file_name: file.name, file_type: file.type || "application/octet-stream", file_size: file.size, storage: "browser" as const })) };
+      await saveDropoffFiles(saved, attachments);
+      setResult(saved);
       setForm({ ...initialForm, module_context: inferredModule, phase: inferredModule });
       setAttachments([]);
     } catch (submissionError) {
@@ -124,6 +126,7 @@ export function DropoffDrawer({ triggerVariant = "default" }: { triggerVariant?:
     <>
       <button
         type="button"
+        aria-label="Dropoff"
         onClick={() => setOpen(true)}
         className={
           triggerVariant === "quiet"
@@ -151,7 +154,7 @@ export function DropoffDrawer({ triggerVariant = "default" }: { triggerVariant?:
                     <Archive size={16} className="text-steel" />
                   </span>
                   <div>
-                    <p className="text-xs font-semibold text-steel">Secure intake tray</p>
+                    <p className="text-xs font-semibold text-steel">Intake tray</p>
                     <h2 className="text-base font-semibold text-ink">Dropoff</h2>
                   </div>
                 </div>
@@ -174,20 +177,22 @@ export function DropoffDrawer({ triggerVariant = "default" }: { triggerVariant?:
                 <div className="flex items-start gap-3">
                   <ShieldCheck size={18} className="mt-0.5 shrink-0 text-steel" />
                   <p className="text-sm font-semibold leading-6 text-steel">
-                    Do not submit classified information. Submissions are automatically screened for potential sensitive, controlled, or classified content before being added to the repository.
+                    Do not submit classified information. Submission text is screened for potential sensitive content. Attached file contents require human review and are not yet analyzed by AI.
                   </p>
                 </div>
               </div>
 
               {result ? (
                 <div className="mb-4 rounded-md border border-signal/40 bg-signal/10 p-3">
-                  <p className="text-sm font-semibold text-signal">Received for screening</p>
+                  <p className="text-sm font-semibold text-signal">Saved to this browser</p>
                   <p className="mt-2 text-sm font-semibold leading-6 text-steel">
-                    Status: {String(result.submission.status)}. Risk recommendation: {String(result.screeningReport.risk_level)}. This item is not published and requires review before repository use.
+                    Text screening status: {String(result.submission.status)}. Text risk recommendation: {String(result.screeningReport.risk_level)}. This item is not published and requires review before repository use.
                   </p>
+                  <p className="mt-2 text-sm text-steel">{result.attachments.length} file(s) saved. Files stay on this device and browser; clearing site data removes them.</p>
+                  <Link href="/admin/dropoff" onClick={() => setOpen(false)} className="mt-3 inline-block text-sm font-semibold underline">Review submissions and download files</Link>
                   {result.persistenceWarning ? (
                     <p className="mt-2 text-xs font-semibold leading-5 text-steel">
-                      Local preview note: saved to this browser session. Update Supabase schema to persist it in the live repository.
+                      The shared repository did not save this submission. Your browser copy is available in Review submissions.
                     </p>
                   ) : null}
                 </div>
@@ -199,7 +204,7 @@ export function DropoffDrawer({ triggerVariant = "default" }: { triggerVariant?:
                 </div>
               ) : null}
 
-              <form className="grid gap-4" onSubmit={handleSubmit}>
+              <form onSubmit={handleSubmit}><fieldset disabled={submitting} className="grid min-w-0 gap-4">
                 <label className="grid gap-2 text-sm font-semibold text-ink">
                   Title
                   <input
@@ -207,6 +212,7 @@ export function DropoffDrawer({ triggerVariant = "default" }: { triggerVariant?:
                     value={form.title}
                     onChange={(event) => updateField("title", event.target.value)}
                     placeholder="Short title for the observation, issue, lesson, or reference"
+                    minLength={3}
                     required
                   />
                 </label>
@@ -243,9 +249,28 @@ export function DropoffDrawer({ triggerVariant = "default" }: { triggerVariant?:
                     value={form.body}
                     onChange={(event) => updateField("body", event.target.value)}
                     placeholder="What happened, why it matters, who was affected, and what should be considered for AAR, lessons learned, or future planning?"
-                    required
+                    minLength={5}
+                    required={attachments.length === 0}
                   />
                 </label>
+
+                <div className="grid gap-3">
+                  <label
+                    className="grid gap-2 border border-dashed border-line bg-panel p-4 text-sm font-semibold text-ink"
+                    onDragOver={(event) => { event.preventDefault(); event.dataTransfer.dropEffect = "copy"; }}
+                    onDrop={(event) => { event.preventDefault(); if (!submitting) addFiles(Array.from(event.dataTransfer.files)); }}
+                  >
+                    <span className="flex items-center gap-2"><UploadCloud size={18} /> Attach files or drop them here</span>
+                    <input type="file" multiple disabled={submitting} className="w-full text-sm file:mr-3 file:border-0 file:bg-flare file:px-3 file:py-2 file:text-night" onChange={(event) => { addFiles(Array.from(event.currentTarget.files ?? [])); event.currentTarget.value = ""; }} />
+                  </label>
+                  <p className="text-xs leading-5 text-steel">Preview: files are saved in this browser, not uploaded to a shared repository. Up to 10 files, 25 MB each, 50 MB total. AI does not read attached file contents yet.</p>
+                  <ul className="grid gap-2" aria-label="Selected attachments">
+                    {attachments.map((file, index) => <li key={`${file.name}-${index}`} className="flex items-center justify-between gap-3 text-sm text-ink">
+                      <span className="min-w-0 break-words">{file.name} ({Math.max(1, Math.ceil(file.size / 1024))} KB)</span>
+                      <button type="button" disabled={submitting} aria-label={`Remove ${file.name}`} onClick={() => setAttachments((current) => current.filter((_, i) => i !== index))} className="p-2"><X size={16} /></button>
+                    </li>)}
+                  </ul>
+                </div>
 
                 <button
                   type="button"
@@ -296,36 +321,7 @@ export function DropoffDrawer({ triggerVariant = "default" }: { triggerVariant?:
                       <input className={inputStyles} value={form.tags} onChange={(event) => updateField("tags", event.target.value)} placeholder="Separate tags with commas" />
                     </label>
 
-                    <label className="grid gap-2 text-sm font-semibold text-ink">
-                      Optional file upload
-                      <span className="flex items-center gap-2 rounded-md border border-dashed border-line bg-panel px-3 py-3 text-sm font-semibold text-ink">
-                        <UploadCloud size={18} className="text-flare" />
-                        <input
-                          type="file"
-                          multiple
-                          className="w-full text-sm text-ink file:mr-3 file:rounded-md file:border-0 file:bg-flare file:px-3 file:py-2 file:text-sm file:font-black file:text-night"
-                          onChange={(event) => {
-                            const files = Array.from(event.currentTarget.files ?? []);
-                            setAttachments(files.map((file) => ({
-                              file_name: file.name,
-                              file_type: file.type || "unknown",
-                              file_size: file.size
-                            })));
-                          }}
-                        />
-                      </span>
-                    </label>
 
-                    {attachments.length > 0 ? (
-                      <div className="rounded-md border border-line bg-panel p-3">
-                        <p className="text-xs font-black uppercase tracking-[0.12em] text-flare">Attachments queued for metadata screening</p>
-                        <ul className="mt-2 grid gap-1 text-sm font-semibold text-ink">
-                          {attachments.map((file) => (
-                            <li key={`${file.file_name}-${file.file_size}`}>{file.file_name} · {Math.ceil(file.file_size / 1024)} KB</li>
-                          ))}
-                        </ul>
-                      </div>
-                    ) : null}
                   </div>
                 ) : null}
 
@@ -337,7 +333,7 @@ export function DropoffDrawer({ triggerVariant = "default" }: { triggerVariant?:
                     {submitting ? "Screening..." : "Submit to Dropoff"}
                   </Button>
                 </div>
-              </form>
+              </fieldset></form>
             </div>
           </aside>
         </div>
