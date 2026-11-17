@@ -13,10 +13,11 @@ export const workspaceSections: WorkspaceSection[] = [
     primary: tool("/exercises/new", "Open guided planner", "Build or continue your exercise concept."),
     tools: [], more: [] },
   { id: "plan", label: "Plan", href: "/plan",
-    description: "Turn a training need into a scenario, measurable objectives, and a brief your team can use.",
+    description: "Understand the problem, compare options, and build a plan your team can use.",
     outcome: "An agreed exercise plan with objectives, responsibilities, and decisions to resolve.",
-    primary: tool("/exercises/new", "Open guided planner", "Start with a few essentials, or import a planning document."),
+    primary: tool("/planning-guide", "Start a guided plan", "Work through seven plain-language steps with recorded decisions."),
     tools: [
+      tool("/planning-guide", "Plain-language planning", "Full or Fast planning with decision reviews and exportable products."),
       tool("/exercises/new", "Guided planner", "Define the purpose, shape the story, and review objectives and proposed events."),
       tool("/briefing", "Planning brief", "Build a briefing from your browser draft, with open decisions and responsibilities."),
       tool("/readiness", "Readiness review", "Check the workspace plan for gaps before committing to execution.")

@@ -1,5 +1,3 @@
+import Link from "next/link";
 import { ScenarioStudio } from "@/components/scenario-studio";
-
-export default function NewExercisePage() {
-  return <ScenarioStudio />;
-}
+export default function NewExercisePage() { return <><section className="mb-8 rounded-lg border border-[#51462f] bg-[#191d1d] p-5"><p className="text-xs text-[#f6c768]">Planning profiles</p><h2 className="mt-2 text-xl font-semibold">Need a complete operational plan?</h2><p className="my-3 text-sm leading-6 text-slate-300">Start with the problem, build options, record decisions, and write the plan. Choose the full process or a faster session.</p><Link className="inline-block rounded-md bg-[#f6c768] px-4 py-3 text-sm font-semibold text-[#171813]" href="/planning-guide">Start a guided plan →</Link><p className="mt-3 text-xs text-slate-400">Or continue below to build an exercise concept from your planning documents.</p></section><ScenarioStudio /></>; }
