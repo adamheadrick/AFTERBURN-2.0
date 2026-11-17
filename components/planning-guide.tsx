@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import { PlanningAnalysisPanel } from './planning-analysis';
 import { DesignChoice, PlanningDesign, ReframeControl } from './planning-design';
 import { approachCriterion, emptyDesign } from '@/lib/planning-design';
 import { canAccess, emptyPlan, exportPlan, gateErrors, glossary, invalidate, optionCount, productText, questionsFor, steps, timeSplit, totals, value, type Answer, type Decision, type Plan } from '@/lib/planning-profile';
@@ -60,6 +61,7 @@ export function PlanningGuide(){
  {step===7&&plan.confirmed.includes(7)&&<section className={styles.summary}><h2>Carry this into the work.</h2><p>Share the exported timeline and decision guide with your teams. These products are saved in this browser, not automatically copied into shared workspace records.</p><p>During execution, record when triggers occur and what was decided. During review ask: What was supposed to happen? What actually happened? Why was there a difference? What should we sustain or improve?</p>{plan.design?.choice==='use'&&<p>Also ask: Did we frame the right problem? Check the rethink triggers before reusing this plan.</p>}<p>Give every improvement an owner and due date. Bring lessons into the next plan’s risks and assumptions.</p><div className={styles.controls}><Link href="/execute">Execute</Link><Link href="/review">Review</Link><Link href="/improve">Improve</Link></div></section>}
  </>}
  </>}
+ <PlanningAnalysisPanel plan={plan}/>
  <ReframeControl plan={plan} onChange={edit} onRevisit={()=>setDesignOpen(true)}/>
  {error&&<p className={styles.error} role="alert">{error}</p>}
  <details className={styles.product}><summary>What does a planning term mean?</summary><label className={styles.label}>Choose a term<select value={term} onChange={e=>setTerm(e.target.value)}><option value="">Select a term</option>{Object.keys(glossary).map(t=><option key={t}>{t}</option>)}</select></label>{term&&<p>{glossary[term]}</p>}</details>

@@ -1,27 +1,8 @@
-import { PageTitle } from "@/components/page-title";
-import { Field, inputStyles, Panel, PanelHeader } from "@/components/panel";
-
-export default function SettingsPage() {
-  return (
-    <div>
-      <PageTitle
-        eyebrow="Configuration"
-        title="Settings"
-        description="Environment and integration readiness for Supabase, OpenAI, storage, and future geospatial views."
-      />
-      <Panel>
-        <PanelHeader title="Integration Checklist" />
-        <div className="grid gap-5 p-5 md:grid-cols-2">
-          <Field label="NEXT_PUBLIC_SUPABASE_URL"><input className={inputStyles} placeholder="https://your-project.supabase.co" /></Field>
-          <Field label="NEXT_PUBLIC_SUPABASE_ANON_KEY"><input className={inputStyles} placeholder="Supabase anon key" /></Field>
-          <Field label="OPENAI_API_KEY"><input className={inputStyles} placeholder="sk-..." /></Field>
-          <Field label="Mapbox / Map Integration"><input className={inputStyles} placeholder="Future MAPBOX_TOKEN" /></Field>
-        </div>
-        <div className="border-t border-line p-5 text-sm leading-6 text-steel">
-          The MVP runs in preview mode until Supabase and OpenAI credentials are added in `.env.local`. Server-side API routes
-          use `OPENAI_API_KEY` when available and return instructional scaffolds when generation is not connected.
-        </div>
-      </Panel>
-    </div>
-  );
+import Link from 'next/link';
+import { PageTitle } from '@/components/page-title';
+import { hasOpenAIConfig, hasSupabaseConfig } from '@/lib/config';
+export const dynamic='force-dynamic';
+export default function SettingsPage(){
+ const checks=[['Workspace sign-in',hasSupabaseConfig()],['AI service key',hasOpenAIConfig()],['Approved AI users',!!process.env.PLANNING_AI_ALLOWED_USERS?.trim()]] as const;
+ return <div className="max-w-3xl"><PageTitle eyebrow="Workspace setup" title="Connect AI review" description="Your planning drafts work now. These connections enable private, signed-in AI analysis."/><section className="my-8 rounded-lg border border-line p-6"><h2 className="text-xl font-semibold">Connection settings</h2><ul className="my-5 space-y-4">{checks.map(([name,configured])=><li className="flex justify-between gap-4" key={name}><span>{name}</span><span className={configured?'text-emerald-300':'text-flare'}>{configured?'Configured':'Not configured'}</span></li>)}</ul><p className="text-sm leading-6 text-steel">Configured means the setting exists; a successful signed-in review confirms that the connection works. Keys belong in the hosting provider’s private settings, never in this page or a chat.</p></section><ol className="list-decimal space-y-4 pl-5 text-sm leading-7 text-steel"><li>Create a Supabase project for workspace sign-in. Set this site as the allowed destination for email sign-in links.</li><li>Create an OpenAI API project, arrange API billing, and create a project key. Set spending alerts or controls appropriate to your account.</li><li>Add the connection settings in Vercel, restrict AI review to the intended accounts, and redeploy.</li><li>Sign in and run an AI review with a short, non-sensitive test plan.</li></ol><p className="mt-6 text-sm text-steel">AI suggestions are advisory. They cannot approve decisions or silently change the plan.</p><div className="mt-7 flex gap-6"><Link className="text-flare underline" href="/planning-guide">Return to planning</Link><Link className="text-flare underline" href="/login">Sign in</Link></div></div>;
 }

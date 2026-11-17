@@ -1,4 +1,5 @@
 import OpenAI from "openai";
+import { claimAiUser } from "@/lib/ai/access";
 import { NextResponse } from "next/server";
 import { hasSupabaseConfig } from "@/lib/config";
 import { createClient } from "@/lib/supabase/server";
@@ -39,10 +40,12 @@ export async function POST(request: Request) {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return NextResponse.json({ error: "Sign in to generate an AI scenario. Your draft remains in this browser." }, { status: 401 });
 
+    claimAiUser(user);
     const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY, timeout: 45000, maxRetries: 0 });
     const response = await client.chat.completions.create({
       model: process.env.OPENAI_MODEL ?? "gpt-4.1-mini",
       response_format: { type: "json_object" },
+      store: false,
       temperature: 0.45,
       max_tokens: 7500,
       messages: [

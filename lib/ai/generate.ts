@@ -1,4 +1,5 @@
 import OpenAI from "openai";
+import { requireAiAccess } from "@/lib/ai/access";
 
 export async function generateText({
   system,
@@ -15,9 +16,13 @@ export async function generateText({
     return fallback;
   }
 
-  const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+  await requireAiAccess();
+  if (system.length + prompt.length > 100000) throw new Error("Shorten the planning text before generating.");
+  const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY, timeout: 45000, maxRetries: 0 });
   const completion = await client.chat.completions.create({
     model: process.env.OPENAI_MODEL ?? "gpt-4.1-mini",
+    store: false,
+    max_tokens: 4000,
     messages: [
       { role: "system", content: system },
       { role: "user", content: prompt }
