@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { PlanningRethink } from "@/components/planning-rethink";
 import { ArrowRight } from "lucide-react";
 import { ButtonLink } from "@/components/button";
 import { PageTitle } from "@/components/page-title";
@@ -8,6 +9,7 @@ export function PhaseWorkspace({ phase }: { phase: WorkspaceId }) {
   const section = workspaceSections.find(item => item.id === phase)!;
   return <div className="grid gap-6">
     <PageTitle eyebrow="Exercise workspace" title={section.label} description={section.description} />
+    {(phase === "execute" || phase === "review") && <PlanningRethink phase={phase} />}
     <section className="workspace-next">
       <div><p className="workspace-eyebrow">Start here</p>
         <h2 className="mt-2 text-lg font-semibold">{section.primary.label}</h2>
