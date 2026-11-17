@@ -41,3 +41,5 @@ assert.throws(()=>reopenDesign(designPlan,'','County lead','2026-11-16T13:00',tr
 assert.match(designExport(reopened),/DRAFT: decision-maker review required/);assert.match(exportPlan(designPlan),/Profile v1.1/);assert.match(exportPlan(designPlan),/Big-picture handoff/);
 const legacy={...emptyPlan()};delete legacy.design;assert.equal(validSaved(legacy),true);assert.equal(designReady(legacy),false);assert.equal(validSaved({...legacy,design:{choice:'use'}}),false);
 console.log('ADM checks passed: legacy preservation, skip/use gates, handoff provenance, option alignment, criterion, rethink history and invalidation.');
+
+const six={...designPlan,criteria:Array.from({length:6},(_,i)=>({name:'Custom '+i,weight:1,scores:[0,0,0]}))};const seven=approveDesign(six);assert.equal(seven.criteria.length,7);assert.equal(seven.criteria.filter(c=>c.name.startsWith('Custom')).length,6);assert.equal(gateErrors(seven,4).some(s=>s.includes('three to six')),true);assert.equal(validSaved(seven),true);
