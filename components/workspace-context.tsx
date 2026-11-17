@@ -6,12 +6,12 @@ import { useBrowserConcept } from "@/components/use-browser-concept";
 export function WorkspaceContext({ connected }: { connected: boolean }) {
   const path = usePathname();
   const { concept, loaded, unavailable } = useBrowserConcept();
-  const draftView = path === "/exercises/new" || (path === "/briefing" && !!concept?.draft);
+  const draftView = path === "/exercises/new" || path === "/planning-guide" || (path === "/briefing" && !!concept?.draft);
   const hub = ["/overview", "/plan", "/execute", "/review", "/improve", "/library"].includes(path);
   if (!loaded) return <div className="workspace-context print-hidden" role="status">Loading workspace context…</div>;
   return <div className="workspace-context print-hidden">
     <span className="context-label">{draftView ? "Browser draft" : connected ? "Workspace records" : "Demonstration"}</span>
-    <p>{unavailable ? "Your browser draft could not be read. Open the planner to check your work." :
+    <p>{unavailable && path !== "/planning-guide" ? "Your browser draft could not be read. Open the planner to check your work." :
       draftView ? "Saved on this device. Export a copy to keep or share." :
       hub ? "The guided planner and its briefing use your browser draft. Other tools currently use separate workspace records." :
       connected ? "These records are separate from the guided planner draft." :
